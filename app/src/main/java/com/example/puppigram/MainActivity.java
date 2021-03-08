@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
         FeedFragment feed_fragment = new FeedFragment();
         FragmentManager feed_manager = getSupportFragmentManager();
         FragmentTransaction feed_tran = feed_manager.beginTransaction();
-        feed_tran.add(R.id.main_container, feed_fragment);
         feed_tran.commit();
     }
 }

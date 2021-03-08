@@ -5,7 +5,6 @@ public class Comment {
     /**
      * @param content: what the user comment.
      * @param user_id: User wrote the comment.
-     * @
      */
     public int content;
     public int user_id;
