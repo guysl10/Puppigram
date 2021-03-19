@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.puppigram.model.ImagePost;
@@ -25,6 +26,7 @@ import java.util.List;
 public class FeedActivity extends AppCompatActivity {
     RecyclerView posts;
     List<ImagePost> imagePosts;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,9 @@ public class FeedActivity extends AppCompatActivity {
 
         PostRecyclerAdapter adapter = new PostRecyclerAdapter();
         posts.setAdapter(adapter);
+
+        ProgressBar spinner = findViewById(R.id.feed_spinner);
+        spinner.setVisibility(View.INVISIBLE);
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder{
@@ -61,6 +66,9 @@ public class FeedActivity extends AppCompatActivity {
             username = itemView.findViewById(R.id.post_username);
             user_img = itemView.findViewById(R.id.post_user_img);
             post_img = itemView.findViewById(R.id.post_img);
+
+            ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
+            spinner.setVisibility(View.INVISIBLE);
         }
     }
 

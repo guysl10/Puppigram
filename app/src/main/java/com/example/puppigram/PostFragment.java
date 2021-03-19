@@ -1,10 +1,8 @@
 package com.example.puppigram;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,6 +27,7 @@ public class PostFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mainActivity = (MainActivity) getActivity();
+
     }
 
     @Override
@@ -47,7 +46,7 @@ public class PostFragment extends Fragment {
         this.post_img = view.findViewById(R.id.post_img);
         this.post_liker_img = view.findViewById(R.id.post_liker_img);
         this.post_user_img = view.findViewById(R.id.post_user_img);
-        this.post_progressBar = view.findViewById(R.id.post_progressBar);
+        this.post_progressBar = view.findViewById(R.id.post_spinner);
 
 
         return view;
