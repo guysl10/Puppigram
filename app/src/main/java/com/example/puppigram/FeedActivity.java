@@ -34,7 +34,6 @@ public class FeedActivity extends AppCompatActivity {
 
         posts = findViewById(R.id.feed_posts_recycler_list);
         posts.setHasFixedSize(true);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         posts.setLayoutManager(layoutManager);
 
@@ -49,11 +48,15 @@ public class FeedActivity extends AppCompatActivity {
         PostRecyclerAdapter adapter = new PostRecyclerAdapter();
         posts.setAdapter(adapter);
 
+        // After finish configure, disable the spinner
         ProgressBar spinner = findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder{
+        /***
+         * Responsible of setting all post info for post items in the recycler list.
+         */
         TextView username;
         TextView description;
         TextView likers;
@@ -67,6 +70,7 @@ public class FeedActivity extends AppCompatActivity {
             user_img = itemView.findViewById(R.id.post_user_img);
             post_img = itemView.findViewById(R.id.post_img);
 
+            // After finish configure, disable the spinner
             ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
             spinner.setVisibility(View.INVISIBLE);
         }
@@ -76,6 +80,9 @@ public class FeedActivity extends AppCompatActivity {
         @NonNull
         @Override
         public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            /***
+             * Responsible of recycling posts.
+             */
             View view = getLayoutInflater().inflate(R.layout.feed_post_row, null);
             PostViewHolder holder = new PostViewHolder(view);
 
@@ -84,6 +91,9 @@ public class FeedActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+            /**
+             * Set the holder info for the post in the recycled post.
+             */
             ImagePost post = imagePosts.get(position);
             holder.description.setText(post.getDescription());
             //TODO: add all posts items to set for the recyclerview feed.
