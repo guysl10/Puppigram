@@ -13,9 +13,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FeedFragment feed_fragment = new FeedFragment();
+        FeedActivity feed_fragment = new FeedActivity();
         FragmentManager feed_manager = getSupportFragmentManager();
         FragmentTransaction feed_tran = feed_manager.beginTransaction();
         feed_tran.commit();
     }
+
+
 }
