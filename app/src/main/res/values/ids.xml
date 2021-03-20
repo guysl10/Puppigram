@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="email" type="id" />
+    <item name="pass" type="id" />
+    <item name="progressBar" type="id" />
+    <item name="newAccount" type="id" />
+    <item name="button" type="id" />
+    <item name="loginButton" type="id" />
+    <item name="userPhoto" type="id" />
+    <item name="userName" type="id" />
+    <item name="userEmail" type="id" />
+    <item name="userPassword" type="id" />
+    <item name="userRePassword" type="id" />
+    <item name="registerButton" type="id" />
+    <item name="loadingProgress" type="id" />
+    <item name="go_to_all_user_posts" type="id" />
+    <item name="profile_progressBar" type="id" />
+    <item name="profile_image" type="id" />
+    <item name="profile_full_name" type="id" />
+    <item name="profile_email" type="id" />
+</resources>
