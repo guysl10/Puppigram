@@ -1,10 +1,12 @@
-package com.example.puppigram;
+package com.example.puppigram.activities;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Bundle;
+import com.example.puppigram.R;
 
 public class MainActivity extends AppCompatActivity {
 
