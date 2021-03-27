@@ -1,7 +1,7 @@
 package com.example.puppigram.repos;
 
 import com.example.puppigram.model.Profile;
-import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.tasks.Task;
 
 public interface ProfileRepo {
 
@@ -9,9 +9,9 @@ public interface ProfileRepo {
 
     String createNewProfile();
 
-    Task addProfile(Profile profile);
+//    Task addProfile(Profile profile);
 
-    Task getDownloadUserPhotoUrl(String path);
+//    Task getDownloadUserPhotoUrl(String path);
 
     void changeName(String uid, String name);
 
