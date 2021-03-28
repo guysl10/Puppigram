@@ -8,7 +8,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_input_text"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:textColorHint="#000000"
         app:helperText="Serch"
