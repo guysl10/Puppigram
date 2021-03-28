@@ -18,9 +18,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final TabBarFragment tabBar = new TabBarFragment();
+//        FeedFragment feed = new FeedFragment();
         FragmentManager feed_manager = getSupportFragmentManager();
         FragmentTransaction tran = feed_manager.beginTransaction();
         tran.add(R.id.appmain_frg_container, tabBar);
+//        tran.add(R.id.appmain_frg_container, feed);
         tran.commit();
     }
 }

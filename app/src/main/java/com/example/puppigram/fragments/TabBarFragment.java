@@ -43,12 +43,17 @@ public class TabBarFragment extends Fragment implements View.OnClickListener {
         tabs[2] = new SearchFragment();
         tabs[3] = new ProfileFragment();
 
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.tabbar_container, tabs[0]);
+        transaction.commit();
+
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        int selected = (int)getView().getTag();
+        int selected = (int)v.getTag();
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.tabbar_container, tabs[selected]);
