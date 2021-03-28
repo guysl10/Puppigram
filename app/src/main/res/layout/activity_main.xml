@@ -5,29 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF0D6"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.MainActivity" >
 
-    <ProgressBar
-        android:id="@+id/welcome_spinner"
-        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
-        android:layout_width="109dp"
-        android:layout_height="87dp"
-        android:progressDrawable="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_img" />
+    <FrameLayout
+        android:id="@+id/appmain_frg_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/welcome_img"
-        android:layout_width="0dp"
-        android:layout_height="427dp"
-        android:rotation="0"
-        android:rotationX="0"
-        android:rotationY="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_foreground" />
-
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

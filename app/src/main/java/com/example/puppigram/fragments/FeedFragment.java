@@ -1,6 +1,7 @@
-package com.example.puppigram.activities;
 
+package com.example.puppigram.fragments;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -9,7 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,18 +22,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 //Responsible to handle all feed issues.
-public class FeedActivity extends AppCompatActivity {
+public class FeedFragment extends Fragment {
     RecyclerView posts;
     List<ImagePost> imagePosts;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_feed);
+    }
 
-        posts = findViewById(R.id.feed_posts_recycler_list);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+
+        posts = view.findViewById(R.id.feed_posts_recycler_list);
         posts.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
 
         imagePosts = new LinkedList<ImagePost>();
@@ -46,8 +54,9 @@ public class FeedActivity extends AppCompatActivity {
         posts.setAdapter(adapter);
 
         // After finish configure, disable the spinner
-        ProgressBar spinner = findViewById(R.id.feed_spinner);
+        ProgressBar spinner = view.findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
+        return view;
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder{
