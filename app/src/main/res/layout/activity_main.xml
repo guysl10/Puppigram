@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D0EDD1"
+    android:background="#FAF0D6"
     tools:context=".activities.MainActivity">
 
     <ProgressBar
@@ -19,7 +19,7 @@
 
     <ImageView
         android:id="@+id/welcome_img"
-        android:layout_width="414dp"
+        android:layout_width="0dp"
         android:layout_height="427dp"
         android:rotation="0"
         android:rotationX="0"
