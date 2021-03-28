@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.puppigram.R;
+import com.example.puppigram.fragments.FeedFragment;
+import com.example.puppigram.fragments.TabBarFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,11 +17,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FeedActivity feed_fragment = new FeedActivity();
+        final TabBarFragment tabBar = new TabBarFragment();
+//        FeedFragment feed = new FeedFragment();
         FragmentManager feed_manager = getSupportFragmentManager();
-        FragmentTransaction feed_tran = feed_manager.beginTransaction();
-        feed_tran.commit();
+        FragmentTransaction tran = feed_manager.beginTransaction();
+        tran.add(R.id.appmain_frg_container, tabBar);
+//        tran.add(R.id.appmain_frg_container, feed);
+        tran.commit();
     }
-
-
 }

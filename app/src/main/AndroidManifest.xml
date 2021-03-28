@@ -11,8 +11,6 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
 <!--        android:theme="@style/Theme.Puppigram">-->
 
-        <activity android:name=".activities.FeedActivity">
-        </activity>
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
