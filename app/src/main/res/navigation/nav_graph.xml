@@ -3,38 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/tabBarFragment">
-    <fragment
-        android:id="@+id/tabBarFragment"
-        android:label="fragment_tab_bar"
-        tools:layout="@layout/fragment_tab_bar">
-        <action
-            android:id="@+id/action_tabBarFragment_to_feedFragment"
-            app:destination="@id/feedFragment" />
-        <action
-            android:id="@+id/action_tabBarFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_tabBarFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_tabBarFragment_to_uploadPostFragment"
-            app:destination="@id/uploadPostFragment" />
-    </fragment>
+    app:startDestination="@id/feedFragment">
+
     <fragment
         android:id="@+id/feedFragment"
         android:name="com.example.puppigram.fragments.FeedFragment"
-        android:label="FeedFragment" />
+        android:label="FeedFragment"
+        tools:layout="@layout/fragment_feed"/>
     <fragment
         android:id="@+id/uploadPostFragment"
         android:name="com.example.puppigram.fragments.UploadPostFragment"
-        android:label="UploadPostFragment" />
+        android:label="UploadPostFragment"
+        tools:layout="@layout/fragment_upload_post"
+        />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.puppigram.fragments.SearchFragment"
-        android:label="SearchFragment" />
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search"/>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.puppigram.fragments.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
 </navigation>

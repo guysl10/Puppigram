@@ -52,12 +52,6 @@ public class PostFragment extends Fragment {
         this.post_progressBar = view.findViewById(R.id.post_spinner);
 
         ImageView edit_post = view.findViewById(R.id.edit_post_img);
-        edit_post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(view).navigate(R.id.action_tabBarFragment_to_feedFragment);
-            }
-        });
 
         return view;
 
