@@ -12,8 +12,6 @@
         android:layout_height="61dp"
         android:layout_marginTop="8dp"
         android:textColorHint="#000000"
-        app:helperText="Serch"
-        app:layout_constraintBottom_toTopOf="@+id/search_recycler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +19,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Search" />
+            android:hint="Search"
+            android:textColorHint="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
