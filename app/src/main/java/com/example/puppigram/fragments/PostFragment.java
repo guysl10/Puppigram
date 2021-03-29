@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
@@ -50,6 +51,7 @@ public class PostFragment extends Fragment {
         this.post_user_img = view.findViewById(R.id.post_user_img);
         this.post_progressBar = view.findViewById(R.id.post_spinner);
 
+        ImageView edit_post = view.findViewById(R.id.edit_post_img);
 
         return view;
 

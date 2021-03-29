@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.ImageView;
 
 import com.example.puppigram.R;
 
-public class TabBarFragment extends Fragment implements View.OnClickListener {
+public class TabBarFragment extends Fragment{
     Fragment[] tabs = new Fragment[4];
 
     @Override
@@ -27,36 +28,16 @@ public class TabBarFragment extends Fragment implements View.OnClickListener {
         ImageView search = view.findViewById(R.id.tabbar_search_img);
         ImageView profile = view.findViewById(R.id.tabbar_profile_img);
 
-        feed.setTag(0);
-        upload_post.setTag(1);
-        search.setTag(2);
-        profile.setTag(3);
+//        feed.setTag(0);
+//        upload_post.setTag(1);
+//        search.setTag(2);
+//        profile.setTag(3);
 
-        feed.setOnClickListener(this);
-        upload_post.setOnClickListener(this);
-        search.setOnClickListener(this);
-        profile.setOnClickListener(this);
-
-
-        tabs[0] = new FeedFragment();
-        tabs[1] = new UploadPostFragment();
-        tabs[2] = new SearchFragment();
-        tabs[3] = new ProfileFragment();
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.tabbar_container, tabs[0]);
-        transaction.commit();
+//        feed.setOnClickListener(this);
+//        upload_post.setOnClickListener(this);
+//        search.setOnClickListener(this);
+//        profile.setOnClickListener(this);
 
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        int selected = (int)v.getTag();
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.tabbar_container, tabs[selected]);
-        transaction.commit();
     }
 }

@@ -9,7 +9,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_input_text"
         android:layout_width="0dp"
-        android:layout_height="63dp"
+        android:layout_height="61dp"
         android:layout_marginTop="8dp"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         android:id="@+id/search_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

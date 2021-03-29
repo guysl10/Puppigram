@@ -51,16 +51,4 @@
         app:layout_constraintStart_toEndOf="@+id/tabbar_feed_img"
         app:layout_constraintTop_toTopOf="@+id/tabbar_upload_img" />
 
-    <FrameLayout
-        android:id="@+id/tabbar_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tabbar_upload_img"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
