@@ -1,10 +1,16 @@
 package com.example.puppigram.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.HashSet;
+
 
 /**
  * Represent a general post.
  */
+@Entity
 public abstract class AbstractPost {
     /**
      *
@@ -13,10 +19,12 @@ public abstract class AbstractPost {
      * @param title: Title of the post.
      * @param likers: Users liked the post.
      */
+    @PrimaryKey
+    @NonNull
     private int id;
     private int owner_id;
     private String description;
-    private HashSet<Integer> likers;
+    private Integer likers;
 
 
     public AbstractPost(int id, int owner_id, String description){
@@ -26,16 +34,18 @@ public abstract class AbstractPost {
         this.likers = null;
     }
 
-    public int getNumLikers(){
-        return this.likers.size();
-    }
+//    public int getNumLikers(){
+//        return this.likers.size();
+//    }
+
+    public Integer getLikers(){return this.likers;}
 
     public void removeLiker(int liker_id){
-        this.likers.remove(liker_id);
+        this.likers--;
     }
 
     public void addLiker(int liker_id){
-        this.likers.add(liker_id);
+        this.likers++;
     }
 
     public int getId() {
@@ -58,11 +68,7 @@ public abstract class AbstractPost {
         this.description = description;
     }
 
-    public HashSet<Integer> getLikers() {
-        return likers;
-    }
-
-    public void setLikers(HashSet<Integer> likers) {
+    public void setLikers(Integer likers) {
         this.likers = likers;
     }
 }

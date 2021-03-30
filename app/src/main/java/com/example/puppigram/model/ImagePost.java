@@ -1,5 +1,13 @@
 package com.example.puppigram.model;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
+
+import androidx.room.Entity;
+
+import java.util.List;
+
+@Entity
 /**
  * Represent a image kind of post.
  */

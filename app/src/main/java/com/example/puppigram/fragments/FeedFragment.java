@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
+import com.example.puppigram.model.Feed;
 import com.example.puppigram.model.ImagePost;
 
 import java.util.LinkedList;
@@ -42,16 +43,16 @@ public class FeedFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
 
-        imagePosts = new LinkedList<ImagePost>();
-
-        //TODO: to remove after connecting to db and apply getting all posts.
-        for(int i=0;i<100;i++) {
-            ImagePost post = new ImagePost(12,13,"bla", "bla2");
-            imagePosts.add(post);
+        Feed.instance.getAllPosts(db_posts -> imagePosts = db_posts);
+        if (imagePosts == null){
+            posts.setVisibility(0);
+            TextView no_posts = view.findViewById(R.id.feed_no_posts_text);
+            no_posts.setVisibility(1);
         }
-
-        PostRecyclerAdapter adapter = new PostRecyclerAdapter();
-        posts.setAdapter(adapter);
+        else{
+            PostRecyclerAdapter adapter = new PostRecyclerAdapter();
+            posts.setAdapter(adapter);
+        }
 
         // After finish configure, disable the spinner
         ProgressBar spinner = view.findViewById(R.id.feed_spinner);
