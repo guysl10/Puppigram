@@ -31,7 +31,7 @@ public abstract class AbstractPost {
         this.id = id;
         this.owner_id = owner_id;
         this.description = description;
-        this.likers = null;
+        this.likers = 0;
     }
 
 //    public int getNumLikers(){
@@ -52,8 +52,9 @@ public abstract class AbstractPost {
         return id;
     }
 
-    public int getOwner_id() {
-        return owner_id;
+    public Integer getOwner_id() {
+        Integer b = Integer.valueOf(owner_id);
+        return b;
     }
 
     public void setOwner_id(int owner_id) {

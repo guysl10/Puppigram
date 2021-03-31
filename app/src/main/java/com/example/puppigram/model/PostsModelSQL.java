@@ -5,9 +5,9 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-public class Feed {
-    public final static Feed instance = new Feed();
-    private Feed(){}
+public class PostsModelSQL {
+    public final static PostsModelSQL instance = new PostsModelSQL();
+    private PostsModelSQL(){}
     public interface GetAllPostsListener{
         void onComplete(List<ImagePost> posts);
     }
@@ -49,6 +49,7 @@ public class Feed {
                 }
             }
         };
+        task.execute();
     }
 
 }

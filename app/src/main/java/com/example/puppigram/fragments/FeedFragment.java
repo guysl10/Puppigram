@@ -1,9 +1,11 @@
 
 package com.example.puppigram.fragments;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,17 +18,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.Feed;
+import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.model.ImagePost;
 
-import java.util.LinkedList;
 import java.util.List;
 
 //Responsible to handle all feed issues.
 public class FeedFragment extends Fragment {
     RecyclerView posts;
     List<ImagePost> imagePosts;
-
+    ProgressBar spinner;
+    TextView no_posts;
+    PostRecyclerAdapter adapter;
+    int i;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,28 +40,46 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-
-
+        adapter = new PostRecyclerAdapter();
+        spinner = view.findViewById(R.id.feed_spinner);
+        no_posts = view.findViewById(R.id.feed_no_posts_text);
         posts = view.findViewById(R.id.feed_posts_recycler_list);
         posts.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
+        i = 0;
+        reloadData();
+        // After finish configure, disable the spinner
+        spinner.setVisibility(View.INVISIBLE);
+        view.invalidate();
+        return view;
+    }
 
-        Feed.instance.getAllPosts(db_posts -> imagePosts = db_posts);
+    @Override
+    public void onStart() {
+        super.onStart();
+        reloadData();
+    }
+
+    public void reloadData(){
+        spinner.setVisibility(View.VISIBLE);
+        PostsModelSQL.instance.getAllPosts(new PostsModelSQL.GetAllPostsListener() {
+            @Override
+            public void onComplete(List<ImagePost> db_posts) {
+                imagePosts = db_posts;
+            }
+        });
         if (imagePosts == null){
-            posts.setVisibility(0);
-            TextView no_posts = view.findViewById(R.id.feed_no_posts_text);
-            no_posts.setVisibility(1);
+            no_posts.setVisibility(View.VISIBLE);
         }
         else{
-            PostRecyclerAdapter adapter = new PostRecyclerAdapter();
             posts.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            no_posts.setVisibility(View.INVISIBLE);
+
         }
 
-        // After finish configure, disable the spinner
-        ProgressBar spinner = view.findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
-        return view;
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder{
@@ -103,13 +125,18 @@ public class FeedFragment extends Fragment {
              */
             ImagePost post = imagePosts.get(position);
             holder.description.setText(post.getDescription());
+            holder.likers.setText(post.getLikers().toString());
+            holder.username.setText(post.getOwner_id().toString());
+//            holder.user_img.setImageDrawable(post.getImage());
+//            holder.post_img.setImageDrawable(post.getImage());
             //TODO: add all posts items to set for the recyclerview feed.
-
         }
+
 
         @Override
         public int getItemCount() {
             return imagePosts.size();
         }
+
     }
 }

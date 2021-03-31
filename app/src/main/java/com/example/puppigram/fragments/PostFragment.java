@@ -51,8 +51,10 @@ public class PostFragment extends Fragment {
         this.post_user_img = view.findViewById(R.id.post_user_img);
         this.post_progressBar = view.findViewById(R.id.post_spinner);
 
-        ImageView edit_post = view.findViewById(R.id.edit_post_img);
-
+        ImageView edit_post = view.findViewById(R.id.upload_post_img);
+        edit_post.setOnClickListener(Navigation.createNavigateOnClickListener(
+                R.id.action_postFragment_to_editPostFragment
+        ));
         return view;
 
     }

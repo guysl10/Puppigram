@@ -16,9 +16,12 @@ public interface PostDao {
     @Query("select * from ImagePost")
     List<ImagePost> getAllPosts();
 
+    @Query("select * from ImagePost where userid == "+ userid)
+    List<ImagePost> getAllPostsUser(int userid);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAllPosts(ImagePost... abstractPosts);
+    void insertAllPosts(ImagePost... posts);
 
     @Delete
-    void deletePost(ImagePost post);
+    void delete(ImagePost post);
 }
