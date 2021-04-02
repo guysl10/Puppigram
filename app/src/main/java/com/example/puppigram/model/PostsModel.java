@@ -3,28 +3,38 @@ package com.example.puppigram.model;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class PostsModel {
-    public interface GetAllPostsListener{
-        void onComplete(List<ImagePost> posts);
-    }
-    public void getAllPosts(PostsModelSQL.GetAllPostsListener listener){
-        @SuppressLint("StaticFieldLeak") AsyncTask task = new AsyncTask() {
-            List<ImagePost> posts;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                posts = AppLocalDb.db.postDao().getAllPosts();
-                return null;
-            }
+    public final static PostsModel instance = new PostsModel();
 
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(posts);
-            }
-        };
-        task.execute();
+    //TODO: create instance of firebase-model.
+    PostsModelSQL modelsql = new PostsModelSQL();
+//    MutableLiveData<List<ImagePost>> post_list = new MutableLiveData<List<ImagePost>>();
+//    public LiveData<List<ImagePost>> getAllPosts(){
+    List<ImagePost> post_list = new LinkedList<ImagePost>();
+    public List<ImagePost> getAllPosts(){
+//        @SuppressLint("StaticFieldLeak") AsyncTask task = new AsyncTask() {
+//            List<ImagePost> posts;
+//            @Override
+//            protected Object doInBackground(Object[] objects) {
+//                posts = AppLocalDb.db.postDao().getAllPosts();
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Object o) {
+//                super.onPostExecute(o);
+//                listener.onComplete(posts);
+//            }
+//        };
+//        task.execute();
+
+        return post_list;
     }
 
     public interface AddPostListener{

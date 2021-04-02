@@ -1,5 +1,6 @@
 package com.example.puppigram.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.example.puppigram.model.MyApp;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.utils.PhotoUtils;
+
+import org.w3c.dom.Text;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -33,6 +37,9 @@ public class UploadPostFragment extends Fragment {
     ImageView upload_post_btn;
     ImageView post_img;
     EditText description;
+    TextView username_text;
+    ImageView username_img;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,6 +48,12 @@ public class UploadPostFragment extends Fragment {
         upload_post_btn = view.findViewById(R.id.upload_post_img);
         post_img = (ImageView) view.findViewById(R.id.upload_post_img);
         description = view.findViewById(R.id.post_description);
+        username_text = view.findViewById(R.id.upload_username_text);
+        username_img = (ImageView) view.findViewById(R.id.upload_post_img);
+
+        //TODO: show username image and name;
+        //username_text.setText();
+        // username_img.setImageDrawable();
 
         TextView post_btn = view.findViewById(R.id.upload_post_text);
         post_btn.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +66,7 @@ public class UploadPostFragment extends Fragment {
         capture_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: add support to pickup image from gallery
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                PhotoUtils.getPictureFromUser(view);
             }
         });
         return view;
@@ -63,6 +74,7 @@ public class UploadPostFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        PhotoUtils.onResult(requestCode,resultCode, data, getActivity(), post_img);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView new_img = this.getView().findViewById(R.id.upload_post_img);
             Bundle extras = data.getExtras();
@@ -72,6 +84,7 @@ public class UploadPostFragment extends Fragment {
     }
 
 
+    @SuppressLint("WrongConstant")
     public void upload_post(View view){
 //TODO: fix handling images..
 
@@ -81,11 +94,12 @@ public class UploadPostFragment extends Fragment {
             upload_post_btn.setEnabled(true);
             return;
         }
-//        if (description.getText() == null)
-//            description.setText("");
+        if (description.getText() == null)
+            description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-        ImagePost new_post = new ImagePost(55,50,"haroy", "hello");
+        ImagePost new_post = new ImagePost(44,50,"haroy", "hello");
         PostsModelSQL.instance.addPost(new_post, null);
+        Toast.makeText(MyApp.context,"Post was uploaded",40).show();
         upload_post_btn.setEnabled(true);
     }
 }
