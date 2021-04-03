@@ -1,4 +1,4 @@
-package com.example.puppigram.db;
+package com.example.puppigram.model;
 
 import android.app.Activity;
 import android.util.Log;
@@ -15,7 +15,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import static android.content.ContentValues.TAG;
 
-public class FirebaseService {
+public class FirebaseModel {
 
     private FirebaseAuth auth;
     private FirebaseDatabase database;

@@ -1,13 +1,10 @@
-package com.example.puppigram.db;
+package com.example.puppigram.model;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.User;
 import com.example.puppigram.repos.PostRepo;
-import com.example.puppigram.repos.UserRepo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,8 +12,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostHelper {
-    public final static PostHelper instance = new PostHelper();
+public class PostsModelFirebase {
+
+    public final static PostsModelFirebase instance = new PostsModelFirebase();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void addPost(ImagePost post, final PostRepo.SuccessListener listener) {
@@ -55,5 +53,5 @@ public class PostHelper {
             }
         });
     }
-}
 
+}

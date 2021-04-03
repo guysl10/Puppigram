@@ -1,10 +1,9 @@
-package com.example.puppigram.db;
+package com.example.puppigram.model;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -13,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserHelper {
+public class UsersModelFirebase {
     public FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void addUser(User user, final UserRepo.SuccessListener listener) {
