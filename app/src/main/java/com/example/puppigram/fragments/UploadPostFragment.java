@@ -18,11 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.puppigram.R;
+import com.example.puppigram.db.PostHelper;
 import com.example.puppigram.model.MyApp;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.repos.PostRepo;
+import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.PhotoUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import org.w3c.dom.Text;
 
@@ -90,19 +94,24 @@ public class UploadPostFragment extends Fragment {
 //TODO: fix handling images..
 
         upload_post_btn.setEnabled(false);
-        if (post_img.getDrawable() == null){
-            Log.d("TAG", "upload_post: No image selected");
-            Toast.makeText(view.getContext(),"No image selected",40).show();
-            upload_post_btn.setEnabled(true);
-            return;
-        }
-        if (description.getText() == null)
-            description.setText("");
+//        if (post_img.getDrawable() == null){
+//            Log.d("TAG", "upload_post: No image selected");
+//            Toast.makeText(view.getContext(),"No image selected",40).show();
+//            upload_post_btn.setEnabled(true);
+//            return;
+//        }
+//        if (description.getText() == null)
+//            description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
         ImagePost new_post = new ImagePost("44","50","haroy", "hello");
-        PostsModelSQL.instance.addPost(new_post, null);
-        Log.d("TAG", "upload_post: Post was uploaded");
-        Toast.makeText(view.getContext(),"Post was uploaded",40).show();
-        upload_post_btn.setEnabled(true);
+//        PostsModelSQL.instance.addPost(new_post, null);
+        PostHelper.instance.addPost(new_post, new PostRepo.SuccessListener() {
+            @Override
+            public void onComplete(boolean result) {
+                Log.d("TAG", "upload_post: Post was uploaded");
+                Toast.makeText(view.getContext(),"Post was uploaded",40).show();
+                upload_post_btn.setEnabled(true);
+            }
+        });
     }
 }
