@@ -99,7 +99,7 @@ public class UploadPostFragment extends Fragment {
         if (description.getText() == null)
             description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-        ImagePost new_post = new ImagePost(44,50,"haroy", "hello");
+        ImagePost new_post = new ImagePost("44","50","haroy", "hello");
         PostsModelSQL.instance.addPost(new_post, null);
         Log.d("TAG", "upload_post: Post was uploaded");
         Toast.makeText(view.getContext(),"Post was uploaded",40).show();

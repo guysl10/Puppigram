@@ -116,7 +116,7 @@ public class EditPostFragment extends Fragment {
 //        if (description.getText() == null)
 //            description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-        ImagePost new_post = new ImagePost(55,50,"haroy", "hello");
+        ImagePost new_post = new ImagePost("55","50","haroy", "hello");
         PostsModelSQL.instance.editPost(new_post, null);
         upload_btn.setEnabled(true);
     }

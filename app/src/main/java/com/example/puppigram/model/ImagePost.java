@@ -10,16 +10,15 @@ import androidx.room.Entity;
 import java.util.List;
 import java.io.Serializable;
 
-
+@Entity
 /**
  * Represent a image kind of post.
  */
-@Entity
-public class ImagePost extends AbstractPost implements Serializable {
+public class ImagePost extends AbstractPost{
     private String image;
 
-    public ImagePost(String id, String owner_id, String description, String image) {
-        super(id, owner_id, description);
+    public ImagePost(String id, String ownerId, String description, String image) {
+        super(id, ownerId, description);
         this.image = image;
     }
 

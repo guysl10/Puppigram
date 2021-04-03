@@ -17,8 +17,8 @@ public interface PostDao {
     @Query("select * from ImagePost")
     List<ImagePost> getAllPosts();
 
-    @Query("select * from ImagePost where owner_id == :userid")
-    List<ImagePost> getAllUserPosts(int userid);
+    @Query("select * from ImagePost where ownerId == :ownerId")
+    List<ImagePost> getAllUserPosts(int ownerId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllPosts(ImagePost... posts);

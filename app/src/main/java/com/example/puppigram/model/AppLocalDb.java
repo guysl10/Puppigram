@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.puppigram.model.dao.PostDao;
 
-@Database(entities = {ImagePost.class}, version = 1)
+@Database(entities = {ImagePost.class}, version = 2)
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract PostDao postDao();
 }
