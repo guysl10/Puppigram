@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,8 @@ public class UploadPostFragment extends Fragment {
 
         upload_post_btn.setEnabled(false);
         if (post_img.getDrawable() == null){
-            Toast.makeText(MyApp.context,"No image selected",40).show();
+            Log.d("TAG", "upload_post: No image selected");
+            Toast.makeText(view.getContext(),"No image selected",40).show();
             upload_post_btn.setEnabled(true);
             return;
         }
@@ -99,7 +101,8 @@ public class UploadPostFragment extends Fragment {
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
         ImagePost new_post = new ImagePost(44,50,"haroy", "hello");
         PostsModelSQL.instance.addPost(new_post, null);
-        Toast.makeText(MyApp.context,"Post was uploaded",40).show();
+        Log.d("TAG", "upload_post: Post was uploaded");
+        Toast.makeText(view.getContext(),"Post was uploaded",40).show();
         upload_post_btn.setEnabled(true);
     }
 }
