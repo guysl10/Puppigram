@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.MyApp;
 import com.example.puppigram.model.PostsModelSQL;
 
 import static android.app.Activity.RESULT_OK;
@@ -109,7 +107,7 @@ public class EditPostFragment extends Fragment {
     public void editPost(View view){
         upload_btn.setEnabled(false);
         if (post_img.getDrawable() == null){
-            Toast.makeText(MyApp.context,"No image selected",40).show();
+            Toast.makeText(view.getContext(),"No image selected",40).show();
             upload_btn.setEnabled(true);
             return;
         }

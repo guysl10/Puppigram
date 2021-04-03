@@ -1,12 +1,10 @@
-package com.example.puppigram.db;
+package com.example.puppigram.model;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.repos.PostRepo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,12 +12,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PostHelper {
-    public FirebaseFirestore db = FirebaseFirestore.getInstance();
+public class PostsModelFirebase {
 
-    public void addPost(User user, final UserRepo.SuccessListener listener) {
-        db.collection("posts").document(user.getId())
-                .set(user.create()).addOnSuccessListener(aVoid -> {
+    public final static PostsModelFirebase instance = new PostsModelFirebase();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public void addPost(ImagePost post, final PostRepo.SuccessListener listener) {
+        db.collection("posts").document(post.getId())
+                .set(post.create()).addOnSuccessListener(aVoid -> {
             Log.d("TAG", "Post added successfully");
             listener.onComplete(true);
         }).addOnFailureListener(e -> {
@@ -28,7 +28,7 @@ public class PostHelper {
         });
     }
 
-    public void updatePost(ImagePost post, final UserRepo.SuccessListener listener, FirebaseAuth auth) {
+    public void updatePost(ImagePost post, final PostRepo.SuccessListener listener, FirebaseAuth auth) {
 
         Map<String, Object> editUser = new HashMap<>();
         String id = auth.getCurrentUser().getUid();
@@ -53,5 +53,5 @@ public class PostHelper {
             }
         });
     }
-}
 
+}

@@ -131,7 +131,7 @@ public class FeedFragment extends Fragment {
             /**
              * Set the holder info for the post in the recycled post.
              */
-            ImagePost post = posts_viewmodel.getImagePosts().get(position);//getValue().get(position);
+            ImagePost post = posts_viewmodel.getImagePosts().get(position);
             holder.description.setText(post.getDescription());
             //TODO: add all posts items to set for the recyclerview feed.
         }
