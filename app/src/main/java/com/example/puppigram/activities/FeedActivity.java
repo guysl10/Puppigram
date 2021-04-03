@@ -38,7 +38,7 @@ public class FeedActivity extends AppCompatActivity {
 
         //TODO: to remove after connecting to db and apply getting all posts.
         for(int i=0;i<100;i++) {
-            ImagePost post = new ImagePost(12,13,"bla", "bla2");
+            ImagePost post = new ImagePost("12","13","bla", "bla2");
             imagePosts.add(post);
         }
 

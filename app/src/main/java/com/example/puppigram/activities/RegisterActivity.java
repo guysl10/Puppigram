@@ -10,17 +10,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.example.puppigram.R;
-import com.example.puppigram.model.Profile;
+import com.example.puppigram.model.User;
 import com.example.puppigram.repos.AuthenticationRepo;
-import com.example.puppigram.repos.ProfileRepo;
+import com.example.puppigram.repos.UserRepo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -32,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView userPhoto;
     private Uri pickedImgUri = null;
     private Intent intent;
-    private ProfileRepo profileRepo;
+    private UserRepo userRepo;
     private AuthenticationRepo authenticationRepo;
 
     @Override
@@ -61,69 +58,47 @@ public class RegisterActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerButton.setVisibility(View.INVISIBLE);
-                userName.setEnabled(false);
-                userEmail.setEnabled(false);
-                userPassword.setEnabled(false);
-                userRePassword.setEnabled(false);
-                userPhoto.setEnabled(false);
-                loadingProgress.setVisibility(View.VISIBLE);
+        registerButton.setOnClickListener(v -> {
+            registerButton.setVisibility(View.INVISIBLE);
+            registerButton.setVisibility(View.INVISIBLE);
+            userName.setEnabled(false);
+            userEmail.setEnabled(false);
+            userPassword.setEnabled(false);
+            userRePassword.setEnabled(false);
+            userPhoto.setEnabled(false);
+            loadingProgress.setVisibility(View.VISIBLE);
 
-                final String email = userEmail.getText().toString();
-                final String name = userName.getText().toString();
-                final String pass = userPassword.getText().toString();
-                final String repass = userRePassword.getText().toString();
+            final String email = userEmail.getText().toString();
+            final String name = userName.getText().toString();
+            final String pass = userPassword.getText().toString();
+            final String repass = userRePassword.getText().toString();
 
-                if (email.isEmpty() || name.isEmpty() || pass.isEmpty() || !pass.equals(repass) || pickedImgUri == null) {
-                    showMessage("Please Verify all fields");
-                    registerButton.setVisibility(View.VISIBLE);
-                    userName.setEnabled(true);
-                    userEmail.setEnabled(true);
-                    userPassword.setEnabled(true);
-                    userRePassword.setEnabled(true);
-                    userPhoto.setEnabled(true);
-                    loadingProgress.setVisibility(View.INVISIBLE);
-                } else {
-                    //TODO: create user account function in db
+            if (email.isEmpty() || name.isEmpty() || pass.isEmpty() || !pass.equals(repass) || pickedImgUri == null) {
+                showMessage("Please Verify all fields");
+                registerButton.setVisibility(View.VISIBLE);
+                userName.setEnabled(true);
+                userEmail.setEnabled(true);
+                userPassword.setEnabled(true);
+                userRePassword.setEnabled(true);
+                userPhoto.setEnabled(true);
+                loadingProgress.setVisibility(View.INVISIBLE);
+            } else {
+                //TODO: create user account function in db
 //                    CreateUserAccount(email, name, pass);
-                }
-
             }
+
         });
     }
 
-    private void addProfile(Profile profile) {
-        final String key = profileRepo.createNewProfile();
-        profile.setKey(key);
+    private void addProfile(User user) {
+        final String key = userRepo.createNewProfile();
 
-        profileRepo.addProfile(profile).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                authenticationRepo.updateUserAuthKey(key).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        showMessage("Register complete");
-                        intent.putExtra("Result", "OK");
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showMessage(e.getMessage());
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                showMessage(e.getMessage());
-            }
-        });
-
+        userRepo.addProfile(user).addOnSuccessListener((OnSuccessListener<Void>) aVoid -> authenticationRepo.updateUserAuthKey(key).addOnCompleteListener((OnCompleteListener<Void>) task -> {
+            showMessage("Register complete");
+            intent.putExtra("Result", "OK");
+            setResult(RESULT_OK, intent);
+            finish();
+        }).addOnFailureListener(e -> showMessage(e.getMessage()))).addOnFailureListener(e -> showMessage(e.getMessage()));
     }
 
     private void showMessage(String text) {

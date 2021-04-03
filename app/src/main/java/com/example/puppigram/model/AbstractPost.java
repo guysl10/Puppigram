@@ -7,47 +7,46 @@ import java.util.HashSet;
  */
 public abstract class AbstractPost {
     /**
-     *
      * @param id: Post id.
      * @param owner_id: User own the post.
      * @param title: Title of the post.
      * @param likers: Users liked the post.
      */
-    private int id;
-    private int owner_id;
+    private String id;
+    private String ownerId;
     private String description;
     private HashSet<Integer> likers;
 
 
-    public AbstractPost(int id, int owner_id, String description){
+    public AbstractPost(String id, String ownerId, String description) {
         this.id = id;
-        this.owner_id = owner_id;
+        this.ownerId = ownerId;
         this.description = description;
         this.likers = null;
     }
 
-    public int getNumLikers(){
+    public int getNumLikers() {
         return this.likers.size();
     }
 
-    public void removeLiker(int liker_id){
+    public void removeLiker(int liker_id) {
         this.likers.remove(liker_id);
     }
 
-    public void addLiker(int liker_id){
+    public void addLiker(int liker_id) {
         this.likers.add(liker_id);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public int getOwner_id() {
-        return owner_id;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner_id(int owner_id) {
-        this.owner_id = owner_id;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getDescription() {
