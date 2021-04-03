@@ -40,15 +40,15 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.profile, container, false);
-        assert getArguments() != null;
-//        this.profileId = ProfileFragmentArgs.fromBundle(getArguments()).getProfileId();
-
-        this.viewAllPosts = view.findViewById(R.id.go_to_all_user_posts);
-        this.progressBarProfile = view.findViewById(R.id.profile_progressBar);
-        this.imageProfile = view.findViewById(R.id.profile_image);
-        this.fullName = view.findViewById(R.id.profile_full_name);
-        this.email = view.findViewById(R.id.profile_email);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+//        assert getArguments() != null;
+////        this.profileId = ProfileFragmentArgs.fromBundle(getArguments()).getProfileId();
+//
+//        this.viewAllPosts = view.findViewById(R.id.go_to_all_user_posts);
+//        this.progressBarProfile = view.findViewById(R.id.profile_progressBar);
+//        this.imageProfile = view.findViewById(R.id.profile_image);
+//        this.fullName = view.findViewById(R.id.profile_full_name);
+//        this.email = view.findViewById(R.id.profile_email);
 
 //TODO:view all post
 //        this.viewAllPosts
