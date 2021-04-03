@@ -34,7 +34,7 @@ public class UserHelper {
         String userName = user.getUserName();
         String email = user.getEmail();
         String bio = user.getBio();
-        String imageUri = user.getImageUri();
+        String imageUri = user.getUserImage();
 
         editUser.put("id", id);
         editUser.put("name", name);
