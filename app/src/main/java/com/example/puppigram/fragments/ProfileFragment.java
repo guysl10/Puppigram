@@ -14,17 +14,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.Profile;
-import com.example.puppigram.repos.ProfileRepo;
+import com.example.puppigram.model.User;
+import com.example.puppigram.repos.UserRepo;
 
 public class ProfileFragment extends Fragment {
 
     private String profileId;
-    private Profile profile;
+    private User user;
     private TextView fullName, email;
     private ImageView imageProfile;
     private ProgressBar progressBarProfile;
-    private ProfileRepo profileRepo;
+    private UserRepo userRepo;
     private Button viewAllPosts;
 
     public ProfileFragment() {

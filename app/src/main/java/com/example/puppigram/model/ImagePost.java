@@ -8,15 +8,17 @@ import android.widget.ImageView;
 import androidx.room.Entity;
 
 import java.util.List;
+import java.io.Serializable;
 
-@Entity
+
 /**
  * Represent a image kind of post.
  */
-public class ImagePost extends AbstractPost{
+@Entity
+public class ImagePost extends AbstractPost implements Serializable {
     private String image;
 
-    public ImagePost(int id, int owner_id, String description, String image) {
+    public ImagePost(String id, String owner_id, String description, String image) {
         super(id, owner_id, description);
         this.image = image;
     }

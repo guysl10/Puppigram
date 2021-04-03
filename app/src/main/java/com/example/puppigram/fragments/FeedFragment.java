@@ -22,10 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.MyApp;
-import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.viewmodel.PostsViewModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,6 +62,7 @@ public class FeedFragment extends Fragment {
         reloadData();
 
         // After finish configure, disable the spinner
+        ProgressBar spinner = view.findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
         view.invalidate();
         return view;
@@ -133,10 +131,6 @@ public class FeedFragment extends Fragment {
              */
             ImagePost post = posts_viewmodel.getImagePosts().get(position);//getValue().get(position);
             holder.description.setText(post.getDescription());
-            holder.likers.setText(post.getLikers().toString());
-            holder.username.setText(post.getOwner_id().toString());
-//            holder.user_img.setImageDrawable(post.getImage());
-//            holder.post_img.setImageDrawable(post.getImage());
             //TODO: add all posts items to set for the recyclerview feed.
         }
 
@@ -152,6 +146,5 @@ public class FeedFragment extends Fragment {
             return size;
 
         }
-
     }
 }
