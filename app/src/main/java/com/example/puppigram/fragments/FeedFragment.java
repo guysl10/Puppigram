@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.PostsModelSQL;
+import com.example.puppigram.viewmodel.PostsViewModel;
 
 import java.util.LinkedList;
 import java.util.List;

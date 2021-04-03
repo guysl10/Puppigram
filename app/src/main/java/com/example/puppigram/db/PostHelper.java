@@ -28,33 +28,33 @@ public class PostHelper {
         });
     }
 
-    public void updatePost(User user, final UserRepo.SuccessListener listener, FirebaseAuth auth) {
-        Map<String, Object> editUser = new HashMap<>();
-        String id = auth.getCurrentUser().getUid();
-        String ownerId = AbstractPost.getOwnerId();
-        String description = AbstractPost.;
-        String email = user.getEmail();
-        String bio = user.getBio();
-        String imageUri = user.getImageUri();
-
-        editUser.put("id", id);
-        editUser.put("name", name);
-        editUser.put("userName", userName);
-        editUser.put("email", email);
-        editUser.put("bio", bio);
-        editUser.put("imageUri", imageUri);
-
-        db.collection("Users").document(id)
-                .update(editUser).addOnSuccessListener(aVoid -> {
-            Log.d("TAG", "User added successfully");
-            listener.onComplete(true);
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "failed adding User");
-                listener.onComplete(true);
-            }
-        });
-    }
+//    public void updatePost(User user, final UserRepo.SuccessListener listener, FirebaseAuth auth) {
+//        Map<String, Object> editUser = new HashMap<>();
+//        String id = auth.getCurrentUser().getUid();
+//        String ownerId = AbstractPost.getOwnerId();
+//        String description = AbstractPost;
+//        String email = user.getEmail();
+//        String bio = user.getBio();
+//        String imageUri = user.getImageUri();
+//
+//        editUser.put("id", id);
+//        editUser.put("name", name);
+//        editUser.put("userName", userName);
+//        editUser.put("email", email);
+//        editUser.put("bio", bio);
+//        editUser.put("imageUri", imageUri);
+//
+//        db.collection("Users").document(id)
+//                .update(editUser).addOnSuccessListener(aVoid -> {
+//            Log.d("TAG", "User added successfully");
+//            listener.onComplete(true);
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d("TAG", "failed adding User");
+//                listener.onComplete(true);
+//            }
+//        });
+//    }
 }
 
