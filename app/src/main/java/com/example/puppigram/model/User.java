@@ -5,22 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User implements Serializable {
+    private String id;
     private String name;
     private String userName;
+    private String userImage;
     private String email;
-    private String imageUri;
     private String bio;
-    private String id;
 
-    public User() {
-    }
-
-    public User(String id, String name, String userName, String email, String imageUri, String bio) {
+    public User(String id, String name, String userName, String email, String userImage, String bio) {
         this.id = id;
         this.name = name;
         this.userName = userName;
         this.email = email;
-        this.imageUri = imageUri;
+        this.userImage = userImage;
         this.bio = bio;
     }
 
@@ -30,10 +27,14 @@ public class User implements Serializable {
         result.put("id", id);
         result.put("name", name);
         result.put("userName", userName);
+        result.put("userImage", userImage);
         result.put("email", email);
-        result.put("imageUri", imageUri);
         result.put("bio", bio);
         return result;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -60,12 +61,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getImageUri() {
-        return imageUri;
+    public String getUserImage() {
+        return userImage;
     }
 
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
     }
 
     public String getBio() {
@@ -75,9 +76,4 @@ public class User implements Serializable {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
-    public String getId() {
-        return id;
-    }
-
 }
