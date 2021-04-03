@@ -1,8 +1,16 @@
 package com.example.puppigram.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import java.util.HashSet;
+
+
 /**
  * Represent a general post.
  */
+@Entity
 public abstract class AbstractPost {
     /**
      * @param id: Post id.
@@ -10,6 +18,8 @@ public abstract class AbstractPost {
      * @param description: Title of the post.
      * @param likers: Users liked the post.
      */
+    @PrimaryKey
+    @NonNull
     private String id;
     private String ownerId;
     private String description;

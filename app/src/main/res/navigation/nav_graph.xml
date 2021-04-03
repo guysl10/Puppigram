@@ -26,4 +26,16 @@
         android:name="com.example.puppigram.fragments.ProfileFragment"
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.puppigram.fragments.PostFragment"
+        android:label="PostFragment" >
+        <action
+            android:id="@+id/action_postFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.puppigram.fragments.EditPostFragment"
+        android:label="EditPostFragment" />
 </navigation>
