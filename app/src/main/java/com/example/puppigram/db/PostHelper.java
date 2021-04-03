@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.puppigram.model.AbstractPost;
+import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,30 +28,27 @@ public class PostHelper {
         });
     }
 
-    public void updatePost(User user, final UserRepo.SuccessListener listener, FirebaseAuth auth) {
+    public void updatePost(ImagePost post, final UserRepo.SuccessListener listener, FirebaseAuth auth) {
+
         Map<String, Object> editUser = new HashMap<>();
         String id = auth.getCurrentUser().getUid();
-        String ownerId = AbstractPost.getOwnerId();
-        String description = AbstractPost.;
-        String email = user.getEmail();
-        String bio = user.getBio();
-        String imageUri = user.getImageUri();
+        String ownerId = post.getOwnerId();
+        String description = post.getDescription();
+        String postImage = post.getPostImage();
 
         editUser.put("id", id);
-        editUser.put("name", name);
-        editUser.put("userName", userName);
-        editUser.put("email", email);
-        editUser.put("bio", bio);
-        editUser.put("imageUri", imageUri);
+        editUser.put("ownerId", ownerId);
+        editUser.put("description", description);
+        editUser.put("postImage", postImage);
 
-        db.collection("Users").document(id)
+        db.collection("posts").document(id)
                 .update(editUser).addOnSuccessListener(aVoid -> {
-            Log.d("TAG", "User added successfully");
+            Log.d("TAG", "Post added successfully");
             listener.onComplete(true);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "failed adding User");
+                Log.d("TAG", "failed adding Post");
                 listener.onComplete(true);
             }
         });
