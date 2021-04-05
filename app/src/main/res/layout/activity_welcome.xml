@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF0D6"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.WelcomeActivity">
 
     <ProgressBar
         android:id="@+id/welcome_spinner"

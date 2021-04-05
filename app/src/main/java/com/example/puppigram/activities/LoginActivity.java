@@ -1,23 +1,20 @@
 package com.example.puppigram.activities;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.auth.AuthResult;
 import com.example.puppigram.R;
-//import com.example.puppigram.repos.AuthenticationRepo;
+import com.example.puppigram.utils.Navigator;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,14 +23,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextView newAccount;
     private int REQUEST_CODE = 1;
     private Button loginButton;
+    private Navigator navigator;
 //    private AuthenticationRepo authenticationRepo;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.login);
-
+        setContentView(R.layout.activity_login);
 
         userEmail = findViewById(R.id.email);
         userPass = findViewById(R.id.pass);
@@ -41,31 +38,23 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         newAccount = findViewById(R.id.newAccount);
         loadingProgress.setVisibility(View.INVISIBLE);
+        navigator = new Navigator(this);
 
         newAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
 //                startActivityForResult(intent, REQUEST_CODE);
+                navigator.navigate(RegisterActivity.class);
             }
         });
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                loadingProgress.setVisibility(View.VISIBLE);
-//
-//                final String email = userEmail.getText().toString();
-//                final String pass = userPass.getText().toString();
-//
-//                if (email.isEmpty() || pass.isEmpty()) {
-//                    showMessage("Please Verify all fields");
-//                    showGroup();
-//                    loadingProgress.setVisibility(View.INVISIBLE);
-//                } else {
-//                    singIn(email, pass);
-//                }
-//            }
-//        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigator.navigate(MainActivity.class);
+            }
+        });
     }
 
     @Override
@@ -73,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 //        if (authenticationRepo.getCurrentUser() != null) {
 //            //user is already connected to redirect him to home page
-            //TODO:redirect user to home page
+        //TODO:redirect user to home page
 
     }
 //
@@ -121,4 +110,5 @@ public class LoginActivity extends AppCompatActivity {
 //    private void showMessage(String text) {
 //        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
 //    }
+
 }
