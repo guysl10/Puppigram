@@ -13,11 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.User;
 import com.example.puppigram.repos.AuthenticationRepo;
 import com.example.puppigram.repos.UserRepo;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -90,16 +87,16 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void addProfile(User user) {
-        final String key = userRepo.createNewProfile();
-
-        userRepo.addProfile(user).addOnSuccessListener((OnSuccessListener<Void>) aVoid -> authenticationRepo.updateUserAuthKey(key).addOnCompleteListener((OnCompleteListener<Void>) task -> {
-            showMessage("Register complete");
-            intent.putExtra("Result", "OK");
-            setResult(RESULT_OK, intent);
-            finish();
-        }).addOnFailureListener(e -> showMessage(e.getMessage()))).addOnFailureListener(e -> showMessage(e.getMessage()));
-    }
+//    private void addProfile(User user) {
+//        final String key = userRepo.();
+//
+//        userRepo.addProfile(user).addOnSuccessListener((OnSuccessListener<Void>) aVoid -> authenticationRepo.updateUserAuthKey(key).addOnCompleteListener((OnCompleteListener<Void>) task -> {
+//            showMessage("Register complete");
+//            intent.putExtra("Result", "OK");
+//            setResult(RESULT_OK, intent);
+//            finish();
+//        }).addOnFailureListener(e -> showMessage(e.getMessage()))).addOnFailureListener(e -> showMessage(e.getMessage()));
+//    }
 
     private void showMessage(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();

@@ -16,8 +16,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.PostsModelSQL;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.puppigram.fragments.UploadPostFragment.REQUEST_IMAGE_CAPTURE;
@@ -114,8 +112,8 @@ public class EditPostFragment extends Fragment {
 //        if (description.getText() == null)
 //            description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-        ImagePost new_post = new ImagePost("55","50","haroy", "hello");
-        PostsModelSQL.instance.editPost(new_post, null);
+//        ImagePost new_post = new ImagePost("55","50","haroy", "hello");
+//        PostsModelSQL.instance.editPost(new_post, null);
         upload_btn.setEnabled(true);
     }
 }

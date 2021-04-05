@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.HashSet;
-
 
 /**
  * Represent a general post.
@@ -30,8 +28,16 @@ public abstract class AbstractPost {
         this.description = description;
     }
 
+    public AbstractPost() {
+
+    }
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getOwnerId() {

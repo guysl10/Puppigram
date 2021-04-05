@@ -4,21 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.PostsModelFirebase;
-import com.example.puppigram.repos.PostRepo;
 import com.example.puppigram.utils.PhotoUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -94,15 +89,15 @@ public class UploadPostFragment extends Fragment {
 //        if (description.getText() == null)
 //            description.setText("");
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-        ImagePost new_post = new ImagePost("44","50","haroy", "hello");
+//        ImagePost new_post = new ImagePost("44","50","haroy", "hello");
 //        PostsModelSQL.instance.addPost(new_post, null);
-        PostsModelFirebase.instance.addPost(new_post, new PostRepo.SuccessListener() {
-            @Override
-            public void onComplete(boolean result) {
-                Log.d("TAG", "upload_post: Post was uploaded");
-                Toast.makeText(view.getContext(),"Post was uploaded",40).show();
-                upload_post_btn.setEnabled(true);
-            }
-        });
+//        PostsModelFirebase.instance.addPost(new_post, new PostRepo.SuccessListener() {
+//            @Override
+//            public void onComplete(boolean result) {
+//                Log.d("TAG", "upload_post: Post was uploaded");
+//                Toast.makeText(view.getContext(),"Post was uploaded",40).show();
+//                upload_post_btn.setEnabled(true);
+//            }
+//        });
     }
 }

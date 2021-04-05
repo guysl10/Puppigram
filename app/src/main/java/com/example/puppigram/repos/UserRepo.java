@@ -1,25 +1,54 @@
 package com.example.puppigram.repos;
 
+import com.example.puppigram.model.FirebaseModel;
 import com.example.puppigram.model.User;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
+import com.example.puppigram.model.UsersModelFirebase;
 
-public interface UserRepo {
+import java.util.ArrayList;
 
-    interface SuccessListener {
-        void onComplete(boolean result);
+public class UserRepo {
+
+    FirebaseModel firebaseModel;
+    UsersModelFirebase usersModelFirebase;
+
+    public interface GetAllUsersListener {
+        void onComplete(ArrayList<User> data);
     }
 
-    DatabaseReference getUser(String id);
+    public void getAllUsers(GetAllUsersListener listener) {
+        usersModelFirebase.getAllUsers(listener);
+    }
 
-    String createNewProfile();
+    public interface GetUserListener {
+        void onComplete(User userModel);
+    }
 
-    Task addProfile(User user);
+    public void getUser(String id, GetUserListener listener) {
+        UsersModelFirebase.getUser(id, listener);
+    }
 
-    Task getDownloadUserImageUrl(String path);
+    public interface AddUserListener {
+        void onComplete(boolean success);
+    }
 
-    void changeName(String uid, String name);
+    public void register(final User user, AddUserListener listener, String password) {
+        usersModelFirebase.register(user, password, listener);
+    }
 
-    void deleteUser(String key);
+    public interface LoginUserListener {
+        void onComplete(boolean success);
+    }
+
+    public void login(String email, String password, LoginUserListener listener) {
+        firebaseModel.login(email, password, listener);
+    }
+
+    public void updateProfile(final String userName, final String bio, Repo.EditProfileListener listener) {
+        usersModelFirebase.updateProfile(userName, bio, listener);
+    }
+
+    public void uploadImage(User user) {
+        UsersModelFirebase.uploadImage(user);
+    }
 }
 
