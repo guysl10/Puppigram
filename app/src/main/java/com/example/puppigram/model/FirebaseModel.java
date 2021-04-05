@@ -1,59 +1,130 @@
 package com.example.puppigram.model;
 
-import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
+import com.example.puppigram.repos.Repo;
 import com.example.puppigram.repos.UserRepo;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
-import static android.content.ContentValues.TAG;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class FirebaseModel {
 
-    private FirebaseAuth auth;
-    private FirebaseDatabase database;
-    private FirebaseStorage storage;
+    User user = null;
+    FirebaseFirestore db;
+    FirebaseUser firebaseUser;
+    ImagePost imagePost = null;
+    public FirebaseAuth firebaseAuth;
+    private static final String TAG = "FirebaseModel";
 
-    public void logInToFireBase(String email, String password, Activity activity, UserRepo.SuccessListener listener) {
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
-                        Toast.makeText(activity, "Sign In was Successfully", Toast.LENGTH_SHORT).show();
-                        listener.onComplete(true);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        listener.onComplete(false);
-                    }
-                });
+    public FirebaseModel() {
+        db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new
+                FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public void forgotPassword(String email, Activity activity, UserRepo.SuccessListener listener) {
-        auth.sendPasswordResetEmail(email).addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success");
-                    Toast.makeText(activity, "Reset was successful", Toast.LENGTH_SHORT).show();
-                    listener.onComplete(true);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    Toast.makeText(activity, "Error" + task.getException(), Toast.LENGTH_SHORT).show();
-                    listener.onComplete(false);
-                }
+    public FirebaseAuth getAuthInstance() {
+        return FirebaseAuth.getInstance();
+    }
+
+    public void login(String email, String password, final UserRepo.LoginUserListener listener) {
+        Log.d(TAG, "login current user");
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "onComplete: " + task.getResult().getUser());
+                firebaseUser = task.getResult().getUser();
+            }
+            listener.onComplete(task.isSuccessful());
+        });
+    }
+
+    public void logOut() {
+        Log.d(TAG, "logout current user");
+        getAuthInstance().signOut();
+    }
+
+    public void saveImage(Bitmap imageBitmap) {
+        Log.d(TAG, "save image");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+    }
+
+    private void addPictureToGallery(File imageFile) {
+        Log.d(TAG, "add picture to gallery");
+        Intent mediaScanIntent = new
+                Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(imageFile);
+        mediaScanIntent.setData(contentUri);
+        MyApp.getAppContext().sendBroadcast(mediaScanIntent);
+    }
+
+    public void addLike(final String postId, final Repo.GetNewLikeListener listener) {
+        Log.d(TAG, "add like");
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, post -> {
+            if (post != null) {
+//                post.getLikes().add(firebaseUser.getUid());
+                db.collection("posts").document(postId).set(post).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
             }
         });
     }
+
+    public void deleteLike(final String postId, final Repo.DeleteLikeListener listener) {
+        Log.d(TAG, "delete like");
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, postModel -> {
+            if (postModel != null) {
+//                postModel.likes.remove(firebaseUser.getUid());
+                db.collection("posts").document(postId).set(postModel).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+            }
+        });
+    }
+
+//    public void isLiked(final String postId, final ImageView imageView, final Repo.GetIsLikedListener listener) {
+//        firebaseUser = getAuthInstance().getCurrentUser();
+//        PostsModelFirebase.getPost(postId, imagePost -> {
+//            if (imagePost != null) {
+//                this.imagePost = imagePost;
+//                if (this.imagePost.likes.contains(firebaseUser.getUid())) {
+//                    imageView.setImageResource(R.drawable.ic_liked);
+//                    imageView.setTag("liked");
+//                } else {
+//                    imageView.setImageResource(R.drawable.ic_like);
+//                    imageView.setTag("like");
+//                }
+//                listener.onComplete(true);
+//            }
+//            listener.onComplete(false);
+//        });
+//    }
+
+//    public void isSaved(final String postid, final ImageView imageView, final Repo.GetIsLikedListener listener) {
+//        firebaseUser = getAuthInstance().getCurrentUser();
+//        UsersModelFirebase.getUser(firebaseUser.getUid(), userModel -> {
+//            if (userModel != null) {
+//                user = userModel;
+//                if (user.saves.contains(postid)) {
+//                    imageView.setImageResource(R.drawable.ic_save_black);
+//                    imageView.setTag("saved");
+//                } else {
+//                    imageView.setImageResource(R.drawable.ic_savee_black);
+//                    imageView.setTag("save");
+//                }
+//                listener.onComplete(true);
+//            }
+//            listener.onComplete(false);
+//        });
+//    }
 
 }

@@ -1,13 +1,9 @@
 package com.example.puppigram.model;
 
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.widget.ImageView;
+import android.net.Uri;
 
 import androidx.room.Entity;
 
-import java.util.List;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,11 +13,15 @@ import java.util.Map;
  * Represent a image kind of post.
  */
 public class ImagePost extends AbstractPost implements Serializable {
-    private String postImage;
+    public String postImage;
 
-    public ImagePost(String id, String ownerId, String description, String postImage) {
+    public ImagePost(){
+        super();
+
+    }
+    public ImagePost(String id, String ownerId, String description, Uri postImage) {
         super(id, ownerId, description);
-        this.postImage = postImage;
+        this.postImage = postImage.toString();
     }
 
     public Map<String, Object> create() {
@@ -33,25 +33,11 @@ public class ImagePost extends AbstractPost implements Serializable {
         return result;
     }
 
-    public String getPostImage() {
-        return postImage;
+    public Uri getPostImage() {
+        return Uri.parse(postImage);
     }
 
-    public void setPostImage(String image) {
-        this.postImage = image;
+    public void setPostImage(Uri image) {
+        this.postImage = image.toString();
     }
-//    private ImageView image;
-//
-//    public ImagePost(int id, int owner_id, String description, ImageView image) {
-//        super(id, owner_id, description);
-//        this.image = image;
-//    }
-//
-//    public ImageView getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(ImageView image) {
-//        this.image = image;
-//    }
 }

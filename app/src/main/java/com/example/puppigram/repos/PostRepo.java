@@ -1,32 +1,28 @@
 package com.example.puppigram.repos;
 
-import android.net.Uri;
-
 import com.example.puppigram.model.ImagePost;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.storage.UploadTask;
+import com.example.puppigram.model.PostsModelFirebase;
 
-import java.util.List;
+public class PostRepo {
+    PostsModelFirebase postsModelFirebase;
 
-public interface PostRepo {
-    String createNewPost();
+    public void addPost(final ImagePost post, final Repo.AddPostListener listener) {
+        postsModelFirebase.addPost(post, listener);
+    }
 
-    Task addPost(ImagePost post);
+    public void deletePost(final String postId, Repo.DeletePostListener listener) {
+        postsModelFirebase.deletePost(postId, listener);
+    }
 
-    DatabaseReference getPost(String id);
+    public void getAllPost(final Repo.GetAllPostsListener listener) {
+        postsModelFirebase.getAllPost(listener);
+    }
 
-    void updateLikers(String key, List<String> list);
+    public void getPost(final String postId, Repo.GetPostListener listener) {
+        postsModelFirebase.getPost(postId, listener);
+    }
 
-    Task deletePost(String key);
-
-    UploadTask uploadPhoto(String path, Uri photo);
-
-    Task getDownloadPhotoUrl(String path);
-
-    void deleteAllPostsByUserKey(String key);
-
-    interface SuccessListener {
-        void onComplete(boolean result);
+    public void editPost(final String postId, final String description, Repo.EditPostListener listener) {
+        postsModelFirebase.editPost(postId, description, listener);
     }
 }
