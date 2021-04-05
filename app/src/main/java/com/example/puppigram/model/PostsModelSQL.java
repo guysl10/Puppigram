@@ -3,6 +3,8 @@ package com.example.puppigram.model;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
+import com.example.puppigram.repos.PostRepo;
+
 import java.util.List;
 
 public class PostsModelSQL {
@@ -42,7 +44,7 @@ public class PostsModelSQL {
         void onComplete();
     }
 
-    public void addPost(ImagePost post, AddPostListener listener){
+    public void addPost(ImagePost post, PostRepo.SuccessListener listener){
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -54,7 +56,7 @@ public class PostsModelSQL {
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
                 if(listener != null){
-                    listener.onComplete();
+                    listener.onComplete(true);
                 }
             }
         };
