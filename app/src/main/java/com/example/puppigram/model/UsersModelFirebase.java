@@ -32,7 +32,6 @@ public class UsersModelFirebase {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(task -> {
-                    //TODO: add profile picture
                     if (task.isSuccessful()) {
                         firebaseUser = firebaseAuth.getCurrentUser();
                         String userID = firebaseUser.getUid();

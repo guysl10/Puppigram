@@ -4,11 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.example.puppigram.model.FirebaseModel;
-import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.MyApp;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class Repo {
     final public static Repo instance = new Repo();
@@ -39,18 +36,6 @@ public class Repo {
 
     public interface AddPostListener {
         void onComplete(boolean success);
-    }
-
-    public interface DeletePostListener {
-        void onComplete(boolean success);
-    }
-
-    public interface GetAllPostsListener {
-        void onComplete(ArrayList<ImagePost> data);
-    }
-
-    public interface GetPostListener {
-        void onComplete(ImagePost postModel);
     }
 
     public interface GetIsLikedListener {

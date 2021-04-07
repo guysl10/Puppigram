@@ -24,7 +24,10 @@ public class PostFragment extends Fragment {
     private View post;
     private int post_id;
 
-    public PostFragment(){};
+    public PostFragment() {
+    }
+
+    ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class PostFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(
+        View view = inflater.inflate(
                 R.layout.feed_post_row,
                 container,
                 false

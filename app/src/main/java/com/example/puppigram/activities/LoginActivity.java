@@ -1,22 +1,19 @@
 package com.example.puppigram.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.puppigram.R;
 
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthResult;
-import com.example.puppigram.R;
 //import com.example.puppigram.repos.AuthenticationRepo;
 
 public class LoginActivity extends AppCompatActivity {
@@ -73,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 //        if (authenticationRepo.getCurrentUser() != null) {
 //            //user is already connected to redirect him to home page
-            //TODO:redirect user to home page
+        //TODO:redirect user to home page
 
     }
 //

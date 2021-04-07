@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-
 /**
  * Represent a general post.
  */
@@ -21,6 +20,7 @@ public abstract class AbstractPost {
     private String id;
     private String ownerId;
     private String description;
+    private Long lastUpdate;
 
     public AbstractPost(String id, String ownerId, String description) {
         this.id = id;
@@ -54,5 +54,13 @@ public abstract class AbstractPost {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getLastUpdate() {
+        return this.lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

@@ -35,7 +35,7 @@ public class UploadPostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_upload_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_upload_post, container, false);
         upload_post_btn = view.findViewById(R.id.upload_post_img);
         post_img = (ImageView) view.findViewById(R.id.upload_post_img);
         description = view.findViewById(R.id.post_description);
@@ -65,7 +65,7 @@ public class UploadPostFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PhotoUtils.onResult(requestCode,resultCode, data, getActivity(), post_img);
+        PhotoUtils.onResult(requestCode, resultCode, data, getActivity(), post_img);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ImageView new_img = this.getView().findViewById(R.id.upload_post_img);
             Bundle extras = data.getExtras();
@@ -76,7 +76,7 @@ public class UploadPostFragment extends Fragment {
 
 
     @SuppressLint("WrongConstant")
-    public void upload_post(View view){
+    public void upload_post(View view) {
 //TODO: fix handling images..
 
         upload_post_btn.setEnabled(false);

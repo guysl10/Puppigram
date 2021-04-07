@@ -1,29 +1,26 @@
 
 package com.example.puppigram.fragments;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
-import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
 import java.util.LinkedList;
@@ -34,12 +31,13 @@ public class FeedFragment extends Fragment {
 
     private List<ImagePost> imagePosts = new LinkedList<ImagePost>();
 
-    PostsViewModel posts_viewmodel;
+    PostsViewModel postsViewModel;
     RecyclerView posts;
     ProgressBar spinner;
-    TextView no_posts;
+    TextView noPosts;
     PostRecyclerAdapter adapter;
     int i;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +49,7 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         adapter = new PostRecyclerAdapter();
         spinner = view.findViewById(R.id.feed_spinner);
-        no_posts = view.findViewById(R.id.feed_no_posts_text);
+        noPosts = view.findViewById(R.id.feed_no_posts_text);
         posts = view.findViewById(R.id.feed_posts_recycler_list);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -59,9 +57,16 @@ public class FeedFragment extends Fragment {
         posts.setHasFixedSize(true);
         posts.setAdapter(adapter);
 
-        posts_viewmodel = new ViewModelProvider(this).get(PostsViewModel.class);
+        postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
+        postsViewModel.getImagePosts().observe(getViewLifecycleOwner(), new Observer<List<ImagePost>>() {
+            @Override
+            public void onChanged(List<ImagePost> imagePosts) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         i = 0;
-        reloadData();
+        //reloadData();
 
         // After finish configure, disable the spinner
         ProgressBar spinner = view.findViewById(R.id.feed_spinner);
@@ -70,27 +75,27 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        reloadData();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        reloadData();
+//    }
 
     @SuppressLint("WrongConstant")
-    public void reloadData(){
-        spinner.setVisibility(View.VISIBLE);
-        no_posts.setVisibility(View.INVISIBLE);
-        PostsModelSQL.instance.getAllPosts(posts -> {
-            if (posts_viewmodel.getImagePosts().size() == 0)
-                no_posts.setVisibility(View.VISIBLE);
-            else
-                adapter.notifyDataSetChanged();
+//    public void reloadData() {
+//        spinner.setVisibility(View.VISIBLE);
+//        no_posts.setVisibility(View.INVISIBLE);
+//        PostsModelSQL.instance.getAllPosts(posts -> {
+//            if (posts_viewmodel.getImagePosts().size() == 0)
+//                no_posts.setVisibility(View.VISIBLE);
+//            else
+//                adapter.notifyDataSetChanged();
+//
+//            spinner.setVisibility(View.INVISIBLE);
+//        });
+//    }
 
-            spinner.setVisibility(View.INVISIBLE);
-        });
-    }
-
-    static class PostViewHolder extends RecyclerView.ViewHolder{
+    static class PostViewHolder extends RecyclerView.ViewHolder {
         /***
          * Responsible of setting all post info for post items in the recycler list.
          */
@@ -99,6 +104,7 @@ public class FeedFragment extends Fragment {
         TextView likers;
         ImageView post_img;
         ImageView user_img;
+
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.post_description);
@@ -113,7 +119,7 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder>{
+    class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder> {
         @NonNull
         @Override
         public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -131,7 +137,7 @@ public class FeedFragment extends Fragment {
             /**
              * Set the holder info for the post in the recycled post.
              */
-            ImagePost post = posts_viewmodel.getImagePosts().get(position);
+            ImagePost post = postsViewModel.getImagePosts().getValue().get(position);
             holder.description.setText(post.getDescription());
             //TODO: add all posts items to set for the recyclerview feed.
         }
@@ -140,11 +146,11 @@ public class FeedFragment extends Fragment {
         public int getItemCount() {
             int size = 0;
             try {
-                size = posts_viewmodel.getImagePosts().size();//.getValue().size();
+                size = postsViewModel.getImagePosts().getValue().size();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.d("TAG", "getItemCount: posts size = "+ size);
+            Log.d("TAG", "getItemCount: posts size = " + size);
             return size;
 
         }

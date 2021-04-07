@@ -44,7 +44,7 @@ public class Like implements Serializable {
         this.postId = postId;
     }
 
-    public void add(){
+    public void add() {
 
     }
 }

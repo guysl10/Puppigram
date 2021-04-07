@@ -47,11 +47,11 @@ public class EditPostFragment extends Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
-    ImageView upload_btn;
+    ImageView uploadBtn;
     EditText description;
-    ImageView post_img;
-    ImageView username_img;
-    TextView username_text;
+    ImageView postImage;
+    ImageView userImage;
+    TextView userName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,11 @@ public class EditPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
-        upload_btn = view.findViewById(R.id.edit_post_text);
-        post_img = (ImageView) view.findViewById(R.id.edit_post_img);
+        uploadBtn = view.findViewById(R.id.edit_post_text);
+        postImage = (ImageView) view.findViewById(R.id.edit_post_img);
         description = view.findViewById(R.id.edit_description);
-        username_img = (ImageView) view.findViewById(R.id.edit_username_img);
-        username_text = view.findViewById(R.id.edit_username_text);
+        userImage = (ImageView) view.findViewById(R.id.edit_username_img);
+        userName = view.findViewById(R.id.edit_username_text);
         ImageView capture_btn = view.findViewById(R.id.edit_capture_img);
 
         //TODO: show username image and name;
@@ -75,22 +75,15 @@ public class EditPostFragment extends Fragment {
         // username_img.setImageDrawable();
 
 
-        capture_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: add support to pickup image from gallery
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
+        capture_btn.setOnClickListener(v -> {
+            // TODO: add support to pickup image from gallery
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         });
-        upload_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editPost(view);
-            }
-        });
+        uploadBtn.setOnClickListener(v -> editPost(view));
         return view;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -102,11 +95,11 @@ public class EditPostFragment extends Fragment {
     }
 
     @SuppressLint("WrongConstant")
-    public void editPost(View view){
-        upload_btn.setEnabled(false);
-        if (post_img.getDrawable() == null){
-            Toast.makeText(view.getContext(),"No image selected",40).show();
-            upload_btn.setEnabled(true);
+    public void editPost(View view) {
+        uploadBtn.setEnabled(false);
+        if (postImage.getDrawable() == null) {
+            Toast.makeText(view.getContext(), "No image selected", 40).show();
+            uploadBtn.setEnabled(true);
             return;
         }
 //        if (description.getText() == null)
@@ -114,6 +107,6 @@ public class EditPostFragment extends Fragment {
 //        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
 //        ImagePost new_post = new ImagePost("55","50","haroy", "hello");
 //        PostsModelSQL.instance.editPost(new_post, null);
-        upload_btn.setEnabled(true);
+        uploadBtn.setEnabled(true);
     }
 }

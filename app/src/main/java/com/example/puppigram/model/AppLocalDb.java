@@ -10,7 +10,8 @@ import com.example.puppigram.model.dao.PostDao;
 abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract PostDao postDao();
 }
-public class AppLocalDb{
+
+public class AppLocalDb {
     static public AppLocalDbRepository db =
             Room.databaseBuilder(MyApp.context,
                     AppLocalDbRepository.class,
