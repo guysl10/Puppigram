@@ -4,13 +4,11 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.puppigram.R;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Pass the ID's of Different destinations
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.feedFragment, R.id.searchFragment, R.id.uploadPostFragment, R.id.profileFragment )
+                R.id.feedFragment, R.id.searchFragment, R.id.uploadPostFragment, R.id.profileFragment)
                 .build();
 
         //Initialize NavController.
@@ -34,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
     }
-
-
 
 
 }

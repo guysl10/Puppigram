@@ -1,5 +1,6 @@
 package com.example.puppigram.model;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
@@ -12,7 +13,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PostsModelFirebase {
 
@@ -22,22 +25,26 @@ public class PostsModelFirebase {
     private static final String TAG = "FirebaseModel";
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
-    public void addPost(final ImagePost post, final Repo.AddPostListener listener) {
+    interface GetAllPostsListener {
+        void onComplete(List<ImagePost> imagePosts);
+    }
+
+    public void addPost(final ImagePost post, final PostsModel.AddPostListener listener) {
         Log.d(TAG, "create new post");
         db.collection("posts").document(post.getId()).set(post).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                uploadPost(post);
+                uploadPost(post, listener);
             }
-            listener.onComplete(task.isSuccessful());
-        });
+            listener.onComplete();
+        }).addOnFailureListener(e -> listener.onComplete());
     }
 
-    public void deletePost(final String postId, final Repo.DeletePostListener listener) {
+    public void deletePost(final String postId, final PostsModel.DeletePostListener listener) {
         Log.d(TAG, "Delete post " + postId);
-        db.collection("posts").document(postId).delete().addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+        db.collection("posts").document(postId).delete().addOnCompleteListener(task -> listener.onComplete(true));
     }
 
-    public static void getPost(final String postId, final Repo.GetPostListener listener) {
+    public static void getPost(final String postId, final PostsModel.GetPostListener listener) {
         db.collection("posts").document(postId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -50,7 +57,7 @@ public class PostsModelFirebase {
                 });
     }
 
-    public void getAllPost(final Repo.GetAllPostsListener listener) {
+    public void getAllPosts(final PostsModel.GetAllPostsListener listener) {
         db.collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
             ArrayList<ImagePost> data = new ArrayList<>();
             if (e != null) {
@@ -74,7 +81,7 @@ public class PostsModelFirebase {
         });
     }
 
-    public void uploadPost(ImagePost post) {
+    public void uploadPost(ImagePost post, PostsModel.AddPostListener listener) {
         Log.d(TAG, "Upload new post");
         storageRef = FirebaseStorage.getInstance().getReference("posts");
         if (post.getPostImage() != null) {
@@ -104,5 +111,22 @@ public class PostsModelFirebase {
         } else {
             Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
         }
+    }
+
+    public void updatePost(ImagePost imagePost, final PostsModel.AddPostListener listener) {
+        addPost(imagePost, listener);
+    }
+
+    public void uploadImage(Bitmap imageBmp, String name, final PostsModel.UploadImageListener listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference imagesRef = storage.getReference().child("images").child(name);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] data = stream.toByteArray();
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> listener.onComplete(null)).addOnSuccessListener(taskSnapshot -> imagesRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            Uri downloadUrl = uri;
+            listener.onComplete(downloadUrl.toString());
+        }));
     }
 }

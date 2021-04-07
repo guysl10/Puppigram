@@ -1,28 +1,23 @@
 package com.example.puppigram.fragments;
 
-import android.media.Image;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.puppigram.R;
 
-public class TabBarFragment extends Fragment{
+public class TabBarFragment extends Fragment {
     Fragment[] tabs = new Fragment[4];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tab_bar, container,false);
+        View view = inflater.inflate(R.layout.fragment_tab_bar, container, false);
         ImageView feed = view.findViewById(R.id.tabbar_feed_img);
         ImageView upload_post = view.findViewById(R.id.tabbar_upload_img);
         ImageView search = view.findViewById(R.id.tabbar_search_img);
