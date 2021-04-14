@@ -40,4 +40,6 @@ public class ImagePost extends AbstractPost implements Serializable {
     public void setPostImage(Uri image) {
         this.postImage = image.toString();
     }
+
+
 }

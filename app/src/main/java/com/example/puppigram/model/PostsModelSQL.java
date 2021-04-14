@@ -3,7 +3,13 @@ package com.example.puppigram.model;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.TypeConverter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsModelSQL {
@@ -84,4 +90,5 @@ public class PostsModelSQL {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
+
 }
