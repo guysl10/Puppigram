@@ -14,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.puppigram.R;
+import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModelFirebase;
 import com.example.puppigram.model.PostsModelSQL;
-import com.example.puppigram.utils.PhotoUtils;
+import com.example.puppigram.utils.PhotoActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -29,7 +31,6 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class UploadPostFragment extends Fragment {
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageView uploadPostBtn;
     ImageView postImg;
     EditText description;
@@ -41,11 +42,11 @@ public class UploadPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload_post, container, false);
-        uploadPostBtn = view.findViewById(R.id.upload_post_img);
+        uploadPostBtn = view.findViewById(R.id.upload_capture_img);
         postImg = (ImageView) view.findViewById(R.id.upload_post_img);
         description = view.findViewById(R.id.postDescription);
         username = view.findViewById(R.id.upload_username_text);
-        usernameImg = (ImageView) view.findViewById(R.id.upload_post_img);
+        usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
 
         //TODO: show username image and name;
         //username_text.setText();
@@ -53,20 +54,8 @@ public class UploadPostFragment extends Fragment {
 
         TextView postBtn = view.findViewById(R.id.upload_post_text);
         postBtn.setOnClickListener(v -> upload_post(view));
-        ImageView captureBtn = view.findViewById(R.id.upload_capture_img);
-        captureBtn.setOnClickListener(v -> PhotoUtils.getPictureFromUser());
+        uploadPostBtn.setOnClickListener(v -> ((MainActivity)getActivity()).getPhotoActivity().checkAndRequestPermissionForCamera(postImg));
         return view;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PhotoUtils.onResult(requestCode, resultCode, data, postImg);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ImageView newImg = this.getView().findViewById(R.id.upload_post_img);
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            newImg.setImageBitmap(imageBitmap);
-        }
     }
 
     @SuppressLint("WrongConstant")
