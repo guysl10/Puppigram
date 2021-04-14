@@ -45,12 +45,12 @@ public class PostFragment extends Fragment {
                 false
         );
 
-        this.post_description = view.findViewById(R.id.post_description);
-        this.post_username = view.findViewById(R.id.post_username);
-        this.post_count_likers = view.findViewById(R.id.post_count_likers);
+        this.post_description = view.findViewById(R.id.postDescription);
+        this.post_username = view.findViewById(R.id.postOwner);
+        this.post_count_likers = view.findViewById(R.id.postCountLikers);
 
-        this.post_img = view.findViewById(R.id.post_img);
-        this.post_liker_img = view.findViewById(R.id.post_liker_img);
+        this.post_img = view.findViewById(R.id.postImg);
+        this.post_liker_img = view.findViewById(R.id.postLiker);
         this.post_user_img = view.findViewById(R.id.post_user_img);
         this.post_progressBar = view.findViewById(R.id.post_spinner);
 

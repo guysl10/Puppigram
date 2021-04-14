@@ -2,6 +2,7 @@ package com.example.puppigram.repos;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 import com.example.puppigram.model.FirebaseModel;
 import com.example.puppigram.model.MyApp;
@@ -42,9 +43,9 @@ public class Repo {
         void onComplete(boolean success);
     }
 
-//    public void isLiked(final String postId, final ImageView imageView, GetIsLikedListener listener) {
-//        firebaseModel.isLiked(postId, imageView, listener);
-//    }
+    public void isLiked(final String postId, final ImageView imageView, GetIsLikedListener listener){
+        firebaseModel.isLiked(postId,imageView,listener);
+    }
 
     public interface GetNewSaveListener {
         void onComplete(boolean success);

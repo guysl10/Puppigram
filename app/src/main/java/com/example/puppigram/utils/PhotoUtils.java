@@ -11,22 +11,20 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import java.util.concurrent.Callable;
-
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 public class PhotoUtils {
-    Activity currentActivity;
+    static Activity currentActivity;
 
     public PhotoUtils(Activity activity){
-        this.currentActivity = activity;
+        currentActivity = activity;
     }
 
-    public void getPictureFromUser()
+    public static void getPictureFromUser()
     {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.currentActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
         builder.setTitle("Choose picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
@@ -47,7 +45,7 @@ public class PhotoUtils {
         builder.show();
     }
 
-    public void onResult(int requestCode, int resultCode, Intent data, ImageView show_image){
+    public static void onResult(int requestCode, int resultCode, Intent data, ImageView show_image){
         if(resultCode != RESULT_CANCELED) {
             switch (requestCode) {
                 case 0:
@@ -61,7 +59,7 @@ public class PhotoUtils {
                         Uri selectedImage =  data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
                         if (selectedImage != null) {
-                            Cursor cursor = this.currentActivity.getContentResolver().query(selectedImage,
+                            Cursor cursor = currentActivity.getContentResolver().query(selectedImage,
                                     filePathColumn, null, null, null);
                             if (cursor != null) {
                                 cursor.moveToFirst();

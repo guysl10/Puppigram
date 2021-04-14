@@ -30,10 +30,6 @@ public class PostsModel {
         void onComplete(ArrayList<ImagePost> data);
     }
 
-//    public interface getAllPostsListener {
-//        void onComplete();
-//    }
-
     public interface GetPostListener {
         void onComplete(ImagePost postModel);
     }

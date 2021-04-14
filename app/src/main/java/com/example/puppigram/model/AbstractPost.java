@@ -1,19 +1,20 @@
 package com.example.puppigram.model;
 
 import androidx.annotation.NonNull;
-import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.ArrayList;
 
 /**
  * Represent a general post.
  */
-@Entity
+//@Entity
 public abstract class AbstractPost {
     /**
      * @param id: Post id.
      * @param ownerId: User own the post.
      * @param description: Title of the post.
-     * @param likers: Users liked the post.
+     * @param likes: Users liked the post.
      */
     @PrimaryKey
     @NonNull
@@ -21,11 +22,13 @@ public abstract class AbstractPost {
     private String ownerId;
     private String description;
     private Long lastUpdate;
+    private ArrayList<String> likes;
 
     public AbstractPost(String id, String ownerId, String description) {
         this.id = id;
         this.ownerId = ownerId;
         this.description = description;
+        likes = new ArrayList<>();
     }
 
     public AbstractPost() {
@@ -63,4 +66,13 @@ public abstract class AbstractPost {
     public void setLastUpdate(Long lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+    public ArrayList<String> getLikes() {
+        return this.likes;
+    }
+
+    public void setLikes(ArrayList<String> likes) {
+        this.likes = likes;
+    }
+
 }

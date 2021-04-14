@@ -14,8 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,13 +55,13 @@ public class FeedFragment extends Fragment {
         posts.setHasFixedSize(true);
         posts.setAdapter(adapter);
 
-        postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
-        postsViewModel.getImagePosts().observe(getViewLifecycleOwner(), new Observer<List<ImagePost>>() {
-            @Override
-            public void onChanged(List<ImagePost> imagePosts) {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        //postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
+        //postsViewModel.getImagePosts().observe(getViewLifecycleOwner(), new Observer<List<ImagePost>>() {
+        //    @Override
+        //    public void onChanged(List<ImagePost> imagePosts) {
+        //        adapter.notifyDataSetChanged();
+        //    }
+        //});
 
         i = 0;
         //reloadData();
@@ -107,11 +105,11 @@ public class FeedFragment extends Fragment {
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            description = itemView.findViewById(R.id.post_description);
-            likers = itemView.findViewById(R.id.post_count_likers);
-            username = itemView.findViewById(R.id.post_username);
+            description = itemView.findViewById(R.id.postDescription);
+            likers = itemView.findViewById(R.id.postCountLikers);
+            username = itemView.findViewById(R.id.postOwner);
             user_img = itemView.findViewById(R.id.post_user_img);
-            post_img = itemView.findViewById(R.id.post_img);
+            post_img = itemView.findViewById(R.id.postImg);
 
             // After finish configure, disable the spinner
             ProgressBar spinner = itemView.findViewById(R.id.post_spinner);

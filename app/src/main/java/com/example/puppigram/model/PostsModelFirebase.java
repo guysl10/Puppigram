@@ -19,6 +19,7 @@ import java.util.List;
 
 public class PostsModelFirebase {
 
+    public static PostsModelFirebase instance;
     static FirebaseFirestore db;
     Uri imageUri = null;
     StorageReference storageRef;

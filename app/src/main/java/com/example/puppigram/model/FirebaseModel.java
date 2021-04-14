@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.example.puppigram.R;
 import com.example.puppigram.repos.Repo;
 import com.example.puppigram.repos.UserRepo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,7 +19,6 @@ import java.io.File;
 
 public class FirebaseModel {
 
-    User user = null;
     FirebaseFirestore db;
     FirebaseUser firebaseUser;
     ImagePost imagePost = null;
@@ -74,7 +75,7 @@ public class FirebaseModel {
         firebaseUser = getAuthInstance().getCurrentUser();
         PostsModelFirebase.getPost(postId, post -> {
             if (post != null) {
-//                post.getLikes().add(firebaseUser.getUid());
+                post.getLikes().add(firebaseUser.getUid());
                 db.collection("posts").document(postId).set(post).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
             }
         });
@@ -83,48 +84,29 @@ public class FirebaseModel {
     public void deleteLike(final String postId, final Repo.DeleteLikeListener listener) {
         Log.d(TAG, "delete like");
         firebaseUser = getAuthInstance().getCurrentUser();
-        PostsModelFirebase.getPost(postId, postModel -> {
-            if (postModel != null) {
-//                postModel.likes.remove(firebaseUser.getUid());
-                db.collection("posts").document(postId).set(postModel).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+        PostsModelFirebase.getPost(postId, post -> {
+            if (post != null) {
+                post.getLikes().remove(firebaseUser.getUid());
+                db.collection("posts").document(postId).set(post).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
             }
         });
     }
 
-//    public void isLiked(final String postId, final ImageView imageView, final Repo.GetIsLikedListener listener) {
-//        firebaseUser = getAuthInstance().getCurrentUser();
-//        PostsModelFirebase.getPost(postId, imagePost -> {
-//            if (imagePost != null) {
-//                this.imagePost = imagePost;
-//                if (this.imagePost.likes.contains(firebaseUser.getUid())) {
-//                    imageView.setImageResource(R.drawable.ic_liked);
-//                    imageView.setTag("liked");
-//                } else {
-//                    imageView.setImageResource(R.drawable.ic_like);
-//                    imageView.setTag("like");
-//                }
-//                listener.onComplete(true);
-//            }
-//            listener.onComplete(false);
-//        });
-//    }
-
-//    public void isSaved(final String postid, final ImageView imageView, final Repo.GetIsLikedListener listener) {
-//        firebaseUser = getAuthInstance().getCurrentUser();
-//        UsersModelFirebase.getUser(firebaseUser.getUid(), userModel -> {
-//            if (userModel != null) {
-//                user = userModel;
-//                if (user.saves.contains(postid)) {
-//                    imageView.setImageResource(R.drawable.ic_save_black);
-//                    imageView.setTag("saved");
-//                } else {
-//                    imageView.setImageResource(R.drawable.ic_savee_black);
-//                    imageView.setTag("save");
-//                }
-//                listener.onComplete(true);
-//            }
-//            listener.onComplete(false);
-//        });
-//    }
-
+    public void isLiked(final String postId, final ImageView imageView, final Repo.GetIsLikedListener listener) {
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, imagePost -> {
+            if (imagePost != null) {
+                this.imagePost = imagePost;
+                if (this.imagePost.getLikes().contains(firebaseUser.getUid())) {
+                    imageView.setImageResource(R.drawable.is_liked);
+                    imageView.setTag("liked");
+                } else {
+                    imageView.setImageResource(R.drawable.is_liked);
+                    imageView.setTag("like");
+                }
+                listener.onComplete(true);
+            }
+            listener.onComplete(false);
+        });
+    }
 }
