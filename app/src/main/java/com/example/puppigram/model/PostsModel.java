@@ -14,9 +14,10 @@ import java.util.List;
 public class PostsModel {
 
     public final static PostsModel instance = new PostsModel();
-    PostsViewModel viewModel = new PostsViewModel();
     PostsModelSQL modelSQL = new PostsModelSQL();
     PostsModelFirebase modelFirebase = new PostsModelFirebase();
+    private LiveData<List<ImagePost>> imagePosts;
+
 
     public interface Listener<T> {
         void onComplete(T result);
@@ -45,24 +46,26 @@ public class PostsModel {
     }
 
     public LiveData<List<ImagePost>> getAllPosts() {
-        if (viewModel.getImagePosts() == null) {
-            viewModel.setImagePosts(modelSQL.getAllPosts());
+        if (imagePosts == null) {
+            imagePosts = modelSQL.getAllPosts();
             refreshAllPosts(null);
         }
-        return viewModel.getImagePosts();
+        return imagePosts;
     }
 
     public void refreshAllPosts(final PostsModel.GetAllPostsListener listener) {
         final SharedPreferences sp = MyApp.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         modelFirebase.getAllPosts((PostsModel.GetAllPostsListener) imagePosts -> {
             long lastU = 0;
-            for (ImagePost imagePost : imagePosts) {
-                modelSQL.addPost(imagePost, null);
-                if (imagePost.getLastUpdate() > lastU) {
-                    lastU = imagePost.getLastUpdate();
+            if(imagePosts!= null) {
+                for (ImagePost imagePost : imagePosts) {
+                    modelSQL.addPost(imagePost, null);
+                    if (imagePost.getLastUpdate() > lastU) {
+                        lastU = imagePost.getLastUpdate();
+                    }
                 }
+                sp.edit().putLong("lastUpdated", lastU).apply();
             }
-            sp.edit().putLong("lastUpdated", lastU).apply();
             if (listener != null) {
                 listener.onComplete(null);
             }

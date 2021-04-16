@@ -3,8 +3,10 @@ package com.example.puppigram.fragments;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,18 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
+import com.example.puppigram.activities.MainActivity;
+import com.example.puppigram.adapters.PostAdapter;
+import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.PostsModelFirebase;
+import com.example.puppigram.model.PostsModelSQL;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
@@ -27,32 +41,18 @@ import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
  * create an instance of this fragment.
  */
 public class EditPostFragment extends Fragment {
+    ImageView uploadBtn;
+    EditText description;
+    ImageView postImg;
+    ImageView userImage;
+    TextView username;
+    ImageView removeContentImg;
+    TextView deletePostBtn;
+    FirebaseUser currentUser;
+
     public EditPostFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditPostFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-//    public static EditPostFragment newInstance(String param1, String param2) {
-//        EditPostFragment fragment = new EditPostFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-    ImageView uploadBtn;
-    EditText description;
-    ImageView postImage;
-    ImageView userImage;
-    TextView userName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,24 +65,59 @@ public class EditPostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
         uploadBtn = view.findViewById(R.id.edit_post_text);
-        postImage = (ImageView) view.findViewById(R.id.edit_post_img);
+        postImg = (ImageView) view.findViewById(R.id.edit_post_img);
         description = view.findViewById(R.id.edit_description);
         userImage = (ImageView) view.findViewById(R.id.edit_username_img);
-        userName = view.findViewById(R.id.edit_username_text);
-        ImageView capture_btn = view.findViewById(R.id.edit_capture_img);
+        username = view.findViewById(R.id.edit_username_text);
+        removeContentImg = view.findViewById(R.id.edit_remove_img);
+        deletePostBtn = view.findViewById(R.id.edit_delete_post_text);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //TODO: show username image and name;
-        //username_text.setText();
-        // username_img.setImageDrawable();
+        ImageView captureBtn = view.findViewById(R.id.edit_capture_img);
 
+        //TODO: apply getting imagePost after navigation...
 
-        capture_btn.setOnClickListener(v -> {
-            // TODO: add support to pickup image from gallery
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        });
+        if (currentUser != null) {
+            username.setText(currentUser.getDisplayName());
+            try {
+                assert getActivity() != null;
+                postImg.setImageBitmap(MediaStore.Images.Media.getBitmap(
+                        getActivity().getApplicationContext().getContentResolver(),
+                        currentUser.getPhotoUrl()
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(
+                        view.getContext(),
+                        "Image post not found",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        }
+
+        captureBtn.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).getPhotoActivity().
+                        checkAndRequestPermissionForCamera(postImg)
+        );
+
+        removeContentImg.setOnClickListener(v -> removeContent());
+        deletePostBtn.setOnClickListener(v-> deletePost());
         uploadBtn.setOnClickListener(v -> editPost(view));
+
         return view;
+    }
+
+
+    private void removeContent() {
+        description.setText("");
+        postImg.setImageResource(0);
+    }
+
+    private void deletePost(){
+        //TODO: delete post according to given imagePost..
+//        PostsModel.instance.deletePost();
+        removeContent();
+        Toast.makeText(getContext(),"Post deleted successfully!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -98,16 +133,25 @@ public class EditPostFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public void editPost(View view) {
         uploadBtn.setEnabled(false);
-        if (postImage.getDrawable() == null) {
-            Toast.makeText(view.getContext(), "No image selected", 40).show();
+        if (postImg.getDrawable() == null) {
+            Log.d("TAG", "upload_post: No image selected");
+            Toast.makeText(view.getContext(), "No image selected", Toast.LENGTH_LONG).show();
             uploadBtn.setEnabled(true);
             return;
         }
-//        if (description.getText() == null)
-//            description.setText("");
-//        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-//        ImagePost new_post = new ImagePost("55","50","haroy", "hello");
-//        PostsModelSQL.instance.editPost(new_post, null);
-        uploadBtn.setEnabled(true);
+        if (description.getText() == null)
+            description.setText("");
+
+        File tempFile = new File(this.postImg.toString());
+        Uri photoUri = Uri.fromFile(tempFile);
+        String userUid = this.currentUser.getUid();
+        String photoUid = UUID.randomUUID().toString();
+
+        ImagePost new_post = new ImagePost(photoUid, userUid, description.getText().toString(), photoUri);
+        PostsModel.instance.updatePost(new_post, () -> {
+            Log.d("TAG", "editPost: Post was uploaded");
+            Toast.makeText(view.getContext(), "Post was updated successfully", Toast.LENGTH_LONG).show();
+            uploadBtn.setEnabled(true);
+        });
     }
 }

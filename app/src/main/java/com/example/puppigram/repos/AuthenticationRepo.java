@@ -10,7 +10,7 @@ public interface AuthenticationRepo {
 
     void delete();
 
-    static Task createUserAuth(String email, String pass);
+//    static Task createUserAuth(String email, String pass);
 
     Task updateUserAuthKey(String key);
 

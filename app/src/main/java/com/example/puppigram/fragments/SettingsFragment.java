@@ -13,7 +13,7 @@ import com.example.puppigram.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SettingsFragment#newInstance} factory method to
+ * Use the  factory method to
  * create an instance of this fragment.
  */
 public class SettingsFragment extends Fragment {
@@ -25,11 +25,8 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         logoutBtn = view.findViewById(R.id.logout_btn);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: apply logout functionality.
-            }
+        logoutBtn.setOnClickListener(v -> {
+            //TODO: apply logout functionality.
         });
 
         return view;
