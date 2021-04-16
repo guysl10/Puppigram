@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.puppigram.R;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.puppigram.utils.PhotoActivity.REQUEST_IMAGE_CAPTURE;
+import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
 
 
 /**

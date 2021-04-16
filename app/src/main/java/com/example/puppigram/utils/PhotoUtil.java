@@ -1,33 +1,30 @@
 package com.example.puppigram.utils;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.puppigram.activities.MainActivity;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class PhotoActivity {
+public class PhotoUtil {
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_GALLERY = 2;
     static MainActivity mainActivity;
     ImageView showPlace;
-    public PhotoActivity (MainActivity mainActivity){
-        this.mainActivity = mainActivity;
+    public PhotoUtil(MainActivity mainActivity){
+        PhotoUtil.mainActivity = mainActivity;
         this.showPlace = null;
     }
 
@@ -74,20 +71,15 @@ public class PhotoActivity {
                     break;
                 case REQUEST_IMAGE_GALLERY:
                     if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage =  data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = mainActivity.getContentResolver().query(selectedImage,
-                                    filePathColumn, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                if(this.showPlace != null){
-                                    this.showPlace.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                                }
-                                cursor.close();
-                            }
+                        Uri imageUri = data.getData();
+                        InputStream imageStream;
+                        try {
+                            imageStream = mainActivity.getContentResolver().openInputStream(imageUri);
+                            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                            showPlace.setImageBitmap(selectedImage);
+                            showPlace.setRotation(90);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
                         }
                     }
                     break;

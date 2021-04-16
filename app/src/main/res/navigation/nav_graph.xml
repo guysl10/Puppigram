@@ -17,10 +17,10 @@
         tools:layout="@layout/fragment_upload_post"
         />
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/settingsFragment"
         android:name="com.example.puppigram.fragments.SearchFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_search"/>
+        tools:layout="@layout/fragment_settings"/>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.puppigram.fragments.ProfileFragment"
