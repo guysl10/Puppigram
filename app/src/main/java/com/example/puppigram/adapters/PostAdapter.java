@@ -1,5 +1,6 @@
 package com.example.puppigram.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -49,7 +50,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
     @Override
     public PostAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.feed_post_row, parent, false);
-        return new PostAdapter.ImageViewHolder(view);
+        return new ImageViewHolder(view);
     }
 
     @Override
@@ -117,7 +118,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
         return posts.size();
     }
 
-    public class ImageViewHolder extends RecyclerView.ViewHolder {
+    public static class ImageViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView usernameImage, postImage, like;
         public TextView username, likes, owner, description;
@@ -137,6 +138,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
 
 
     //for showing who many do likes
+    @SuppressLint("SetTextI18n")
     private void getNumLikes(final TextView likes, String postId) {
         PostRepo.getPost(postId, postModel -> {
             if (postModel != null) {
