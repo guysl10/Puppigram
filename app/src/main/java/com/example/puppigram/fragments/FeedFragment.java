@@ -82,7 +82,8 @@ public class FeedFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
         noPosts.setVisibility(View.INVISIBLE);
         PostsModel.instance.refreshAllPosts(posts -> {
-            if (postsViewModel.getImagePosts() == null) //|| postsViewModel.getImagePosts().getValue().size() == 0)
+            List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
+            if (allPosts == null || allPosts.isEmpty())
                 noPosts.setVisibility(View.VISIBLE);
             else
                 adapter.notifyDataSetChanged();
