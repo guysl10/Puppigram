@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.User;
@@ -48,7 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
     @NonNull
     @Override
     public UserAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.feed_user_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.fragment_feed, parent, false);
         return new UserAdapter.ImageViewHolder(view);
     }
 
@@ -60,7 +59,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
 
         holder.name.setText(user.getName());
         holder.userName.setText(user.getUserName());
-        Glide.with(context).load(user.getUserImage()).into(holder.userImage);
+        //Glide.with(context).load(user.getUserImage()).into(holder.userImage);
 
         //if user click on other user go to his profile
         holder.itemView.setOnClickListener(view -> {
@@ -69,7 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
                 editor.putString("profileId", user.getId());
                 editor.putString("other", "true");
                 editor.apply();
-                Navigation.createNavigateOnClickListener(R.id.action_global_profileFragment);
+                Navigation.createNavigateOnClickListener(R.id.action_postFragment_to_editPostFragment);
 
             } else {
                 Intent intent = new Intent(context, MainActivity.class);
@@ -92,7 +91,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
 
         public TextView name;
         public TextView userName;
-        public CircleImageView userImage;
+        //public CircleImageView userImage;
         public TextView email;
         public TextView bio;
 
@@ -101,7 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
 
             name = itemView.findViewById(R.id.profile_full_name);
             userName = itemView.findViewById(R.id.profile_username_text);
-            userImage = itemView.findViewById(R.id.profile_image);
+            //userImage = itemView.findViewById(R.id.profile_image);
             email = itemView.findViewById(R.id.profile_email);
             bio = itemView.findViewById(R.id.profile_bio_text);
         }
