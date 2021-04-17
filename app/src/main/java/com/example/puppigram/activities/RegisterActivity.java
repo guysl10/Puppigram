@@ -1,7 +1,6 @@
 package com.example.puppigram.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.register);
 
         userPhoto = findViewById(R.id.profile_image);
         userFullName = findViewById(R.id.profile_full_name);
@@ -45,20 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerButton = findViewById(R.id.registerButton);
         loadingProgress = findViewById(R.id.loadingProgress);
-        Intent intent = new Intent();
 
         loadingProgress.setVisibility(View.INVISIBLE);
-//      TODO:add user image
-//        userPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (Build.VERSION.SDK_INT >= 22) {
-//                    checkAndRequestPermission();
-//                } else {
-//                    openGallery();
-//                }
-//            }
-//        });
+
         registerButton.setOnClickListener(v -> {
             registerButton.setVisibility(View.INVISIBLE);
             registerButton.setVisibility(View.INVISIBLE);

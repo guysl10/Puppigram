@@ -13,10 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.repos.AuthenticationRepo;
 import com.example.puppigram.utils.Navigator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,11 +26,12 @@ public class LoginActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 1;
     private Button loginButton;
     private Navigator navigator;
-    private AuthenticationRepo authenticationRepo;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.firebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.login);
 
         userEmail = findViewById(R.id.email);
@@ -52,35 +53,30 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (authenticationRepo.getCurrentUser() != null) {
-            //user is already connected to redirect him to home page
-            //TODO:redirect user to home page
-
+        if (firebaseAuth.getCurrentUser() != null) {
+            navigator.navigate(MainActivity.class);
         }
     }
 
     private void singIn(String email, String pass) {
-        authenticationRepo.signIn(email, pass).addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
+        firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
             if (task.isSuccessful()) {
                 loadingProgress.setVisibility(View.INVISIBLE);
+                navigator.navigate(MainActivity.class);
             } else {
-                showGroup();
+                groupToBeHideOrNot();
                 loginButton.setVisibility(View.VISIBLE);
                 loadingProgress.setVisibility(View.INVISIBLE);
-                showMessage(task.getException().getMessage());
+                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    void showGroup() {
-        groupToBeHideOrNot(View.VISIBLE);
-    }
-
-    void groupToBeHideOrNot(int visibility) {
-        userEmail.setVisibility(visibility);
-        userPass.setVisibility(visibility);
-        newAccount.setVisibility(visibility);
-        loginButton.setVisibility(visibility);
+    void groupToBeHideOrNot() {
+        userEmail.setVisibility(View.VISIBLE);
+        userPass.setVisibility(View.VISIBLE);
+        newAccount.setVisibility(View.VISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -94,9 +90,5 @@ public class LoginActivity extends AppCompatActivity {
                     this.onStart();
             }
         }
-    }
-
-    private void showMessage(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 }
