@@ -66,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
             final String pass = userPassword.getText().toString();
             final String repass = userRePassword.getText().toString();
 
-            if (email.isEmpty() || name.isEmpty() || pass.isEmpty() || username.isEmpty() || bio.isEmpty() || !pass.equals(repass) || pickedImgUri == null) {
+            if (email.isEmpty() || name.isEmpty() || pass.isEmpty() || username.isEmpty() || bio.isEmpty() || !pass.equals(repass)) {
                 showMessage("Please Verify all fields");
                 registerButton.setVisibility(View.VISIBLE);
                 userName.setEnabled(true);
