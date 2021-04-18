@@ -8,15 +8,13 @@ import java.util.Map;
 
 public class User implements Serializable {
     private String id;
-    private String name;
     private String userName;
     private Uri userImage;
     private String email;
     private String bio;
 
-    public User(String id, String name, String userName, String email, Uri userImage, String bio) {
+    public User(String id, String userName, String email, Uri userImage, String bio) {
         this.id = id;
-        this.name = name;
         this.userName = userName;
         this.email = email;
         this.userImage = userImage;
@@ -26,7 +24,6 @@ public class User implements Serializable {
     public Map<String, Object> create() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
-        result.put("name", name);
         result.put("userName", userName);
         result.put("userImage", userImage);
         result.put("email", email);
@@ -40,14 +37,6 @@ public class User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUserName() {

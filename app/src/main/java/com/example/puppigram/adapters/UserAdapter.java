@@ -57,7 +57,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ImageViewHolde
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         final User user = users.get(position);
 
-        holder.name.setText(user.getName());
         holder.userName.setText(user.getUserName());
         //Glide.with(context).load(user.getUserImage()).into(holder.userImage);
 

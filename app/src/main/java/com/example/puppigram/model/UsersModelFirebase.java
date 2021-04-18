@@ -66,7 +66,6 @@ public class UsersModelFirebase {
             for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                 User user = new User(
                         doc.getString("id"),
-                        doc.getString("name"),
                         doc.getString("userName"),
                         doc.getString("email"),
                         Uri.parse(doc.getString("userImage")),

@@ -7,9 +7,14 @@ import com.example.puppigram.model.UsersModelFirebase;
 import java.util.ArrayList;
 
 public class UserRepo {
+    public static final UserRepo instance = new UserRepo();
+    private final FirebaseModel firebaseModel;
+    private final UsersModelFirebase usersModelFirebase;
 
-    static FirebaseModel firebaseModel;
-    static UsersModelFirebase usersModelFirebase;
+    public UserRepo() {
+        firebaseModel = new FirebaseModel();
+        usersModelFirebase = new UsersModelFirebase();
+    }
 
     public interface GetAllUsersListener {
         void onComplete(ArrayList<User> data);
@@ -31,7 +36,7 @@ public class UserRepo {
         void onComplete(boolean success);
     }
 
-    public static void register(final User user, AddUserListener listener, String password) {
+    public void register(final User user, AddUserListener listener, String password) {
         usersModelFirebase.register(user, password, listener);
     }
 
@@ -39,7 +44,7 @@ public class UserRepo {
         void onComplete(boolean success);
     }
 
-    public static void login(String email, String password, LoginUserListener listener) {
+    public void login(String email, String password, LoginUserListener listener) {
         firebaseModel.login(email, password, listener);
     }
 

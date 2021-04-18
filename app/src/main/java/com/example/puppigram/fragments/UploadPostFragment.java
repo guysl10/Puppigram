@@ -21,6 +21,7 @@ import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelFirebase;
 import com.example.puppigram.model.PostsModelSQL;
+import com.example.puppigram.utils.PhotoUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -41,6 +42,7 @@ public class UploadPostFragment extends Fragment {
     ImageView usernameImg;
     ImageView removeContentImg;
     FirebaseUser currentUser;
+    private PhotoUtil photoActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

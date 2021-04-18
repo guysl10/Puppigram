@@ -1,5 +1,6 @@
 package com.example.puppigram.utils;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +11,6 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.puppigram.activities.MainActivity;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -21,15 +20,15 @@ import static android.app.Activity.RESULT_OK;
 public class PhotoUtil {
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_GALLERY = 2;
-    static MainActivity mainActivity;
+    static Activity myActivity;
     ImageView showPlace;
-    public PhotoUtil(MainActivity mainActivity){
-        PhotoUtil.mainActivity = mainActivity;
+    public PhotoUtil(Activity myActivity){
+        this.myActivity = myActivity;
         this.showPlace = null;
     }
 
     public void checkAndRequestPermissionForCamera(ImageView postImg) {
-        this.showPlace = mainActivity.findViewById(postImg.getId());
+        this.showPlace = myActivity.findViewById(postImg.getId());
         getPictureFromUser();
     }
 
@@ -37,20 +36,20 @@ public class PhotoUtil {
     {
         Log.d("TAG", "getPictureFromUser: get picture");
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(myActivity);
         builder.setTitle("Choose picture");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
                 Intent takePicture = new Intent(
                         MediaStore.ACTION_IMAGE_CAPTURE
                 );
-                mainActivity.startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                myActivity.startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
             } else if (options[item].equals("Choose from Gallery")) {
                 Intent pickPhoto = new Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 );
-                mainActivity.startActivityForResult(pickPhoto, REQUEST_IMAGE_GALLERY);
+                myActivity.startActivityForResult(pickPhoto, REQUEST_IMAGE_GALLERY);
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
@@ -74,7 +73,7 @@ public class PhotoUtil {
                         Uri imageUri = data.getData();
                         InputStream imageStream;
                         try {
-                            imageStream = mainActivity.getContentResolver().openInputStream(imageUri);
+                            imageStream = myActivity.getContentResolver().openInputStream(imageUri);
                             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                             showPlace.setImageBitmap(selectedImage);
                             showPlace.setRotation(90);
