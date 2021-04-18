@@ -32,13 +32,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.firebaseAuth = FirebaseAuth.getInstance();
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
-        userEmail = findViewById(R.id.email);
-        userPass = findViewById(R.id.pass);
-        loadingProgress = findViewById(R.id.progressBar);
-        loginButton = findViewById(R.id.loginButton);
-        newAccount = findViewById(R.id.newAccount);
+        userEmail = findViewById(R.id.login_email_input);
+        userPass = findViewById(R.id.login_password_test);
+        loadingProgress = findViewById(R.id.login_spinner);
+        loginButton = findViewById(R.id.login_btn);
+        newAccount = findViewById(R.id.login_signup_text);
         loadingProgress.setVisibility(View.INVISIBLE);
         navigator = new Navigator(this);
         newAccount.setOnClickListener(v -> {
@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> navigator.navigate(MainActivity.class));
+        newAccount.setOnClickListener(v -> navigator.navigate(RegisterActivity.class));
     }
 
     @Override

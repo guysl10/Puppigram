@@ -17,7 +17,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navigator = new Navigator(this);
-        setContentView(R.layout.welcome);
+        setContentView(R.layout.activity_welcome);
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {

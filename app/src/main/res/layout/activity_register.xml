@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="0dp"
-        android:layout_height="186dp"
+        android:layout_width="421dp"
+        android:layout_height="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,11 +26,11 @@
         android:hint="E-mail"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
+        android:textColorHint="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regitster_username_input"
-        android:textColorHint="@color/black"/>
+        app:layout_constraintTop_toBottomOf="@+id/regitster_username_input" />
 
     <EditText
         android:id="@+id/regitster_pass_input"
@@ -43,11 +43,11 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:textColor="#000000"
+        android:textColorHint="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regitster_email_input"
-        android:textColorHint="@color/black"/>
+        app:layout_constraintTop_toBottomOf="@+id/regitster_bio_input" />
 
     <EditText
         android:id="@+id/regitster_retypepass_input"
@@ -66,18 +66,34 @@
         app:layout_constraintTop_toBottomOf="@+id/regitster_pass_input"
         android:textColorHint="@color/black"/>
 
+    <EditText
+        android:id="@+id/regitster_bio_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Bio"
+        android:inputType="textPassword"
+        android:textColor="#000000"
+        android:textColorHint="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/regitster_email_input" />
+
     <Button
         android:id="@+id/register_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:background="#4CAF50"
         android:text="Sign Me Up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regitster_retypepass_input" />
+        tools:layout_editor_absoluteY="510dp" />
 
     <EditText
         android:id="@+id/regitster_username_input"
