@@ -1,5 +1,6 @@
 package com.example.puppigram.model;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -25,6 +26,7 @@ public class PostsModelSQL {
     }
 
     public void addPost(ImagePost post, AddPostListener listener) {
+        @SuppressLint("StaticFieldLeak")
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -46,6 +48,7 @@ public class PostsModelSQL {
     }
 
     public void editPost(ImagePost post, AddPostListener listener) {
+        @SuppressLint("StaticFieldLeak")
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -84,4 +87,5 @@ public class PostsModelSQL {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
+
 }

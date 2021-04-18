@@ -19,6 +19,7 @@ import java.util.List;
 
 public class PostsModelFirebase {
 
+    public static PostsModelFirebase instance;
     static FirebaseFirestore db;
     Uri imageUri = null;
     StorageReference storageRef;
@@ -58,18 +59,24 @@ public class PostsModelFirebase {
     }
 
     public void getAllPosts(final PostsModel.GetAllPostsListener listener) {
-        db.collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
-            ArrayList<ImagePost> data = new ArrayList<>();
-            if (e != null) {
+        try{
+            db.collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
+                assert queryDocumentSnapshots != null;
+                ArrayList<ImagePost> data = new ArrayList<>();
+                if (e != null) {
+                    listener.onComplete(data);
+                    return;
+                }
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    ImagePost post = doc.toObject(ImagePost.class);
+                    data.add(post);
+                }
                 listener.onComplete(data);
-                return;
-            }
-            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                ImagePost post = doc.toObject(ImagePost.class);
-                data.add(post);
-            }
-            listener.onComplete(data);
-        });
+            });
+        }
+        catch (NullPointerException nullPointerException){
+            listener.onComplete(null);
+        }
     }
 
     public void editPost(final String postId, final String description, final Repo.EditPostListener listener) {

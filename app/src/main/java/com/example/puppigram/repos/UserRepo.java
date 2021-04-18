@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class UserRepo {
 
-    FirebaseModel firebaseModel;
-    UsersModelFirebase usersModelFirebase;
+    static FirebaseModel firebaseModel;
+    static UsersModelFirebase usersModelFirebase;
 
     public interface GetAllUsersListener {
         void onComplete(ArrayList<User> data);
@@ -31,7 +31,7 @@ public class UserRepo {
         void onComplete(boolean success);
     }
 
-    public void register(final User user, AddUserListener listener, String password) {
+    public static void register(final User user, AddUserListener listener, String password) {
         usersModelFirebase.register(user, password, listener);
     }
 
@@ -39,7 +39,7 @@ public class UserRepo {
         void onComplete(boolean success);
     }
 
-    public void login(String email, String password, LoginUserListener listener) {
+    public static void login(String email, String password, LoginUserListener listener) {
         firebaseModel.login(email, password, listener);
     }
 

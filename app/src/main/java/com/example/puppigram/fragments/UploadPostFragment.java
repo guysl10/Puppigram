@@ -1,22 +1,32 @@
 package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
-import com.example.puppigram.utils.PhotoUtils;
+import com.example.puppigram.activities.MainActivity;
+import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.PostsModelFirebase;
+import com.example.puppigram.model.PostsModelSQL;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import static android.app.Activity.RESULT_OK;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,80 +34,84 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class UploadPostFragment extends Fragment {
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    ImageView upload_post_btn;
-    ImageView post_img;
+    ImageView captureBtn;
+    ImageView postImg;
     EditText description;
-    TextView username_text;
-    ImageView username_img;
+    TextView username;
+    ImageView usernameImg;
+    ImageView removeContentImg;
+    FirebaseUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upload_post, container, false);
-        upload_post_btn = view.findViewById(R.id.upload_post_img);
-        post_img = (ImageView) view.findViewById(R.id.upload_post_img);
-        description = view.findViewById(R.id.post_description);
-        username_text = view.findViewById(R.id.upload_username_text);
-        username_img = (ImageView) view.findViewById(R.id.upload_post_img);
+        captureBtn = view.findViewById(R.id.upload_capture_img);
+        postImg = (ImageView) view.findViewById(R.id.upload_post_img);
+        description = view.findViewById(R.id.upload_post_description);
+        username = view.findViewById(R.id.upload_username_text);
+        usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
+        removeContentImg = (ImageView) view.findViewById(R.id.upload_remove_img);
+        currentUser= FirebaseAuth.getInstance().getCurrentUser();
 
-        //TODO: show username image and name;
-        //username_text.setText();
-        // username_img.setImageDrawable();
+        if (currentUser != null) {
+            username.setText(currentUser.getDisplayName());
+            try {
+                postImg.setImageBitmap(MediaStore.Images.Media.getBitmap(
+                        getActivity().getApplicationContext().getContentResolver(),
+                        currentUser.getPhotoUrl()
+                ));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(
+                        view.getContext(),
+                        "Image post not found",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        }
 
-        TextView post_btn = view.findViewById(R.id.upload_post_text);
-        post_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                upload_post(view);
-            }
-        });
-        ImageView capture_btn = view.findViewById(R.id.upload_capture_img);
-        capture_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PhotoUtils.getPictureFromUser(view);
-            }
-        });
+        TextView postBtn = view.findViewById(R.id.upload_post_text);
+        postBtn.setOnClickListener(v -> upload_post(view));
+
+        captureBtn.setOnClickListener(v ->
+                        ((MainActivity) requireActivity()).getPhotoActivity().
+                        checkAndRequestPermissionForCamera(postImg)
+        );
+        removeContentImg.setOnClickListener(v -> removeContent());
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PhotoUtils.onResult(requestCode, resultCode, data, getActivity(), post_img);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ImageView new_img = this.getView().findViewById(R.id.upload_post_img);
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            new_img.setImageBitmap(imageBitmap);
-        }
+    private void removeContent() {
+        description.setText("");
+        postImg.setImageResource(0);
     }
-
 
     @SuppressLint("WrongConstant")
     public void upload_post(View view) {
-//TODO: fix handling images..
+        captureBtn.setEnabled(false);
+        if (postImg.getDrawable() == null) {
+            Log.d("TAG", "upload_post: No image selected");
+            Toast.makeText(view.getContext(), "No image selected", Toast.LENGTH_LONG).show();
+            captureBtn.setEnabled(true);
+            return;
+        }
+        if (description.getText() == null)
+            description.setText("");
 
-        upload_post_btn.setEnabled(false);
-//        if (post_img.getDrawable() == null){
-//            Log.d("TAG", "upload_post: No image selected");
-//            Toast.makeText(view.getContext(),"No image selected",40).show();
-//            upload_post_btn.setEnabled(true);
-//            return;
-//        }
-//        if (description.getText() == null)
-//            description.setText("");
-//        ImagePost new_post = new ImagePost(50,50,description.getText().toString(), "hello");
-//        ImagePost new_post = new ImagePost("44","50","haroy", "hello");
-//        PostsModelSQL.instance.addPost(new_post, null);
-//        PostsModelFirebase.instance.addPost(new_post, new PostRepo.SuccessListener() {
-//            @Override
-//            public void onComplete(boolean result) {
-//                Log.d("TAG", "upload_post: Post was uploaded");
-//                Toast.makeText(view.getContext(),"Post was uploaded",40).show();
-//                upload_post_btn.setEnabled(true);
-//            }
-//        });
+        File tempFile = new File(this.postImg.toString());
+        Uri photoUri = Uri.fromFile(tempFile);
+
+        String userUid = this.currentUser.getUid();
+        String photoUid = UUID.randomUUID().toString();
+
+
+        ImagePost new_post = new ImagePost(userUid, userUid, description.getText().toString(), photoUri);
+        PostsModel.instance.addPost(new_post, () -> {
+            Log.d("TAG", "upload_post: Post was uploaded");
+            Toast.makeText(view.getContext(), "Post was uploaded", Toast.LENGTH_LONG).show();
+            captureBtn.setEnabled(true);
+        });
     }
 }

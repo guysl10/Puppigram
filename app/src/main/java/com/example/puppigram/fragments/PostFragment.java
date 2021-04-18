@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 //Responsible to handle all simple post issues
 public class PostFragment extends Fragment {
@@ -25,15 +26,12 @@ public class PostFragment extends Fragment {
     private int post_id;
 
     public PostFragment() {
-    }
-
-    ;
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mainActivity = (MainActivity) getActivity();
-
     }
 
     @Override
@@ -45,21 +43,21 @@ public class PostFragment extends Fragment {
                 false
         );
 
-        this.post_description = view.findViewById(R.id.post_description);
-        this.post_username = view.findViewById(R.id.post_username);
-        this.post_count_likers = view.findViewById(R.id.post_count_likers);
+        this.post_description = view.findViewById(R.id.postDescription);
+        this.post_username = view.findViewById(R.id.postOwner);
+        this.post_count_likers = view.findViewById(R.id.postCountLikers);
 
-        this.post_img = view.findViewById(R.id.post_img);
-        this.post_liker_img = view.findViewById(R.id.post_liker_img);
+        this.post_img = view.findViewById(R.id.postImg);
+        this.post_liker_img = view.findViewById(R.id.postLiker);
         this.post_user_img = view.findViewById(R.id.post_user_img);
         this.post_progressBar = view.findViewById(R.id.post_spinner);
 
+        //TODO: check if the user own the post.
         ImageView edit_post = view.findViewById(R.id.upload_post_img);
         edit_post.setOnClickListener(Navigation.createNavigateOnClickListener(
                 R.id.action_postFragment_to_editPostFragment
         ));
         return view;
-
     }
 
     private void updateView() {

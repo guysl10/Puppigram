@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "b0210147a1a87334247b0ef887f72065",
+    "identityHash": "eb135816892e3ef609518cde7037fdbc",
     "entities": [
       {
         "tableName": "ImagePost",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`postImage` TEXT, `id` TEXT NOT NULL, `ownerId` TEXT, `description` TEXT, `lastUpdate` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`postImage` TEXT, `id` TEXT NOT NULL, `ownerId` TEXT, `description` TEXT, `lastUpdate` INTEGER, `likes` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "postImage",
@@ -37,6 +37,12 @@
             "columnName": "lastUpdate",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "likes",
+            "columnName": "likes",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -52,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b0210147a1a87334247b0ef887f72065')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb135816892e3ef609518cde7037fdbc')"
     ]
   }
 }

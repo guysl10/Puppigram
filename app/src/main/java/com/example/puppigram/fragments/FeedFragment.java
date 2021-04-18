@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,22 +22,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.PostsModelSQL;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 //Responsible to handle all feed issues.
 public class FeedFragment extends Fragment {
-
-    private List<ImagePost> imagePosts = new LinkedList<ImagePost>();
-
     PostsViewModel postsViewModel;
     RecyclerView posts;
     ProgressBar spinner;
     TextView noPosts;
     PostRecyclerAdapter adapter;
-    int i;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,15 +57,11 @@ public class FeedFragment extends Fragment {
         posts.setAdapter(adapter);
 
         postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
-        postsViewModel.getImagePosts().observe(getViewLifecycleOwner(), new Observer<List<ImagePost>>() {
-            @Override
-            public void onChanged(List<ImagePost> imagePosts) {
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        i = 0;
-        //reloadData();
+        postsViewModel.getImagePosts().observe(
+                getViewLifecycleOwner(),
+                imagePosts -> adapter.notifyDataSetChanged()
+        );
+        reloadData();
 
         // After finish configure, disable the spinner
         ProgressBar spinner = view.findViewById(R.id.feed_spinner);
@@ -75,25 +70,26 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        reloadData();
-//    }
+
+        @Override
+    public void onStart() {
+        super.onStart();
+        reloadData();
+    }
 
     @SuppressLint("WrongConstant")
-//    public void reloadData() {
-//        spinner.setVisibility(View.VISIBLE);
-//        no_posts.setVisibility(View.INVISIBLE);
-//        PostsModelSQL.instance.getAllPosts(posts -> {
-//            if (posts_viewmodel.getImagePosts().size() == 0)
-//                no_posts.setVisibility(View.VISIBLE);
-//            else
-//                adapter.notifyDataSetChanged();
-//
-//            spinner.setVisibility(View.INVISIBLE);
-//        });
-//    }
+    public void reloadData() {
+        spinner.setVisibility(View.VISIBLE);
+        noPosts.setVisibility(View.INVISIBLE);
+        PostsModel.instance.refreshAllPosts(posts -> {
+            List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
+            if (allPosts == null || allPosts.isEmpty())
+                noPosts.setVisibility(View.VISIBLE);
+            else
+                adapter.notifyDataSetChanged();
+            spinner.setVisibility(View.INVISIBLE);
+        });
+    }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
         /***
@@ -107,37 +103,32 @@ public class FeedFragment extends Fragment {
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            description = itemView.findViewById(R.id.post_description);
-            likers = itemView.findViewById(R.id.post_count_likers);
-            username = itemView.findViewById(R.id.post_username);
+            description = itemView.findViewById(R.id.postDescription);
+            likers = itemView.findViewById(R.id.postCountLikers);
+            username = itemView.findViewById(R.id.postOwner);
             user_img = itemView.findViewById(R.id.post_user_img);
-            post_img = itemView.findViewById(R.id.post_img);
+            post_img = itemView.findViewById(R.id.postImg);
 
             // After finish configure, disable the spinner
             ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
             spinner.setVisibility(View.INVISIBLE);
         }
     }
-
+    /**
+     * Responsible of recycling posts.
+     */
     class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder> {
         @NonNull
         @Override
         public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            /***
-             * Responsible of recycling posts.
-             */
-            View view = getLayoutInflater().inflate(R.layout.feed_post_row, null);
-            PostViewHolder holder = new PostViewHolder(view);
-
-            return holder;
+            @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.feed_post_row, null);
+            return new PostViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-            /**
-             * Set the holder info for the post in the recycled post.
-             */
-            ImagePost post = postsViewModel.getImagePosts().getValue().get(position);
+            //Set the holder info for the post in the recycled post.
+            ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             holder.description.setText(post.getDescription());
             //TODO: add all posts items to set for the recyclerview feed.
         }
@@ -146,13 +137,12 @@ public class FeedFragment extends Fragment {
         public int getItemCount() {
             int size = 0;
             try {
-                size = postsViewModel.getImagePosts().getValue().size();
+                size = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).size();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Log.d("TAG", "getItemCount: posts size = " + size);
             return size;
-
         }
     }
 }

@@ -5,7 +5,7 @@ import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelFirebase;
 
 public class PostRepo {
-    PostsModelFirebase postsModelFirebase;
+    static PostsModelFirebase postsModelFirebase;
 
     public void addPost(final ImagePost post, final PostsModel.AddPostListener listener) {
         postsModelFirebase.addPost(post, listener);
@@ -19,11 +19,11 @@ public class PostRepo {
         postsModelFirebase.getAllPosts(listener);
     }
 
-    public void getPost(final String postId, PostsModel.GetPostListener listener) {
+    public static void getPost(final String postId, PostsModel.GetPostListener listener) {
         postsModelFirebase.getPost(postId, listener);
     }
 
-    public void editPost(final String postId, final String description, Repo.EditPostListener listener) {
+    public static void editPost(final String postId, final String description, Repo.EditPostListener listener) {
         postsModelFirebase.editPost(postId, description, listener);
     }
 }
