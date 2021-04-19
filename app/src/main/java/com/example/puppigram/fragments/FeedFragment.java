@@ -2,6 +2,9 @@
 package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,24 +13,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.puppigram.BuildConfig;
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
-import com.example.puppigram.model.PostsModelSQL;
+import com.example.puppigram.model.User;
+import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 //Responsible to handle all feed issues.
 public class FeedFragment extends Fragment {
@@ -129,8 +136,40 @@ public class FeedFragment extends Fragment {
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
+            AtomicReference<User> temp_user = null;
+            UserRepo.instance.getUser(post.getOwnerId(), temp_user::set);
+            setImage(
+                    post.getPostImage(),
+                    holder.post_img,
+                    "post image "+post.getId()+ "not found"
+            );
+            setImage(
+                    temp_user.get().getUserImage(),
+                    holder.user_img,
+                    "user image in post " + post.getId()+ "not found"
+            );
             holder.description.setText(post.getDescription());
-            //TODO: add all posts items to set for the recyclerview feed.
+            holder.username.setText(temp_user.get().getUserName());
+            holder.likers.setText(post.getLikes().size());
+        }
+
+        private void setImage(Uri srcImg, ImageView dstImg, String errorMsg){
+            try {
+                InputStream inputStream = getActivity().getApplicationContext().
+                        getContentResolver().openInputStream(srcImg);
+                dstImg.setImageDrawable(
+                        Drawable.createFromStream(
+                                inputStream,
+                                srcImg.toString()
+                        )
+                );
+            } catch (FileNotFoundException e) {
+                Toast.makeText(
+                        getContext(),
+                        errorMsg,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
         }
 
         @Override
