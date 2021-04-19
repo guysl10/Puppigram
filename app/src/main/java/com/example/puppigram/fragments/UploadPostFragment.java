@@ -21,6 +21,8 @@ import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelFirebase;
 import com.example.puppigram.model.PostsModelSQL;
+import com.example.puppigram.repos.Repo;
+import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.PhotoUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,7 +57,7 @@ public class UploadPostFragment extends Fragment {
         username = view.findViewById(R.id.upload_username_text);
         usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
         removeContentImg = (ImageView) view.findViewById(R.id.upload_remove_img);
-        currentUser= FirebaseAuth.getInstance().getCurrentUser();
+        currentUser= UserRepo.instance.getAuthInstance().getCurrentUser();
 
         if (currentUser != null) {
             username.setText(currentUser.getDisplayName());

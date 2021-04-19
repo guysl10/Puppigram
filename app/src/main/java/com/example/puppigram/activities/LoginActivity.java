@@ -13,10 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
+import com.example.puppigram.model.FirebaseModel;
+import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.Navigator;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.Callable;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,12 +30,10 @@ public class LoginActivity extends AppCompatActivity {
     private final int REQUEST_CODE = 1;
     private Button loginButton;
     private Navigator navigator;
-    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.firebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_login);
 
         userEmail = findViewById(R.id.login_email_input);
@@ -54,21 +56,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null) {
+        if (UserRepo.instance.getAuthInstance().getCurrentUser() != null) {
             navigator.navigate(MainActivity.class);
         }
     }
 
     private void singIn(String email, String pass) {
-        firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
-            if (task.isSuccessful()) {
+        UserRepo.instance.login(email, pass, success -> {
+            if (success) {
                 loadingProgress.setVisibility(View.INVISIBLE);
                 navigator.navigate(MainActivity.class);
             } else {
                 groupToBeHideOrNot();
                 loginButton.setVisibility(View.VISIBLE);
                 loadingProgress.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(
+                        getApplicationContext(),
+                        "signin failed",
+                        Toast.LENGTH_LONG
+                ).show();
             }
         });
     }

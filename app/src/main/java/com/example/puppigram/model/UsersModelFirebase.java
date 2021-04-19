@@ -23,40 +23,27 @@ public class UsersModelFirebase {
 
     User user = null;
     FirebaseUser firebaseUser;
-    static FirebaseFirestore db;
     static StorageReference storageRef;
-    public FirebaseAuth firebaseAuth;
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "FirebaseModel";
     private static StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
     public void register(final User user, String password, final UserRepo.AddUserListener listener) {
         Log.d(TAG, "register - create new user");
-        firebaseAuth = FirebaseAuth.getInstance();
-//        firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        Log.d(TAG, "register: account created successfully");
-//                        firebaseUser = firebaseAuth.getCurrentUser();
-//                        String userID = firebaseUser.getUid();
-//                        user.setId(userID);
-//                        db.collection("users").document(user.getId()).set(user);
-//                        UsersModelFirebase.uploadImage(user);
-//                    }
-//                    listener.onComplete(task.isSuccessful());
-//                });
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "createUserWithEmail:success");
                         firebaseUser = firebaseAuth.getCurrentUser();
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
                         db.collection("users").document(user.getId()).set(user);
+                        UsersModelFirebase.uploadImage(user);
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
+                    listener.onComplete(task.isSuccessful());
                 });
     }
 

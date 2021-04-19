@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
     private final Uri pickedImgUri = null;
     private PhotoUtil photoActivity;
     private Navigator navigator;
+    private TextView cancel;
+    private TextView empty;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -45,10 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
         userBio = findViewById(R.id.register_bio_input);
         userPassword = findViewById(R.id.register_pass_input);
         userRePassword = findViewById(R.id.register_retypepass_input);
-
+        cancel = findViewById(R.id.register_cancel_text);
         registerButton = findViewById(R.id.register_btn);
         loadingProgress = findViewById(R.id.register_spinner);
-
+        empty = findViewById(R.id.register_empty_text);
         loadingProgress.setVisibility(View.INVISIBLE);
         photoActivity = new PhotoUtil(this);
         userPhoto.setOnClickListener(v ->
@@ -59,6 +62,28 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             createProfile();
         });
+
+        empty.setOnClickListener(v -> emptyFields());
+
+        cancel.setOnClickListener(v -> navigator.navigate(LoginActivity.class));
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void emptyFields() {
+        this.userPhoto.setImageDrawable(
+                getResources().getDrawable(
+                        getResources().getIdentifier(
+                                "circle_cropped",
+                                "drawable",
+                                getPackageName()
+                        )
+                )
+        );
+        this.userBio.setText("");
+        this.userEmail.setText("");
+        this.userName.setText("");
+        this.userPassword.setText("");
+        this.userRePassword.setText("");
     }
 
     public PhotoUtil getPhotoActivity() {
@@ -68,20 +93,20 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_GALLERY) && resultCode == RESULT_OK){
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_GALLERY) && resultCode == RESULT_OK) {
             photoActivity.onResult(requestCode, resultCode, data);
         }
     }
     private void createProfile() {
         registerButton.setVisibility(View.INVISIBLE);
         registerButton.setVisibility(View.INVISIBLE);
-        userName.setEnabled(false);
-        userEmail.setEnabled(false);
-        userBio.setEnabled(false);
-        userPassword.setEnabled(false);
-        userRePassword.setEnabled(false);
-        userPhoto.setEnabled(false);
-        loadingProgress.setVisibility(View.VISIBLE);
+//        userName.setEnabled(false);
+//        userEmail.setEnabled(false);
+//        userBio.setEnabled(false);
+//        userPassword.setEnabled(false);
+//        userRePassword.setEnabled(false);
+//        userPhoto.setEnabled(false);
+//        loadingProgress.setVisibility(View.VISIBLE);
 
         final String username = userName.getText().toString();
         final String email = userEmail.getText().toString();
@@ -100,9 +125,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         } else {
             User user = new User(username, email, bio);
-            UserRepo.instance.register(user, success -> showMessage("Register complete"), pass);
-            UserRepo.instance.login(user.getEmail(), userPassword.toString(), success -> showMessage("Login completed"));
-            navigator.navigate(MainActivity.class);
+            UserRepo.instance.register(user, pass, success -> {
+                showMessage("Register complete");
+                UserRepo.instance.login(user.getEmail(), userPassword.toString(), v -> {
+                    if (success) {
+                        navigator.navigate(MainActivity.class);
+                    } else
+                        showMessage("SignIn failed");
+                });
+            });
         }
         loadingProgress.setVisibility(View.INVISIBLE);
     }
