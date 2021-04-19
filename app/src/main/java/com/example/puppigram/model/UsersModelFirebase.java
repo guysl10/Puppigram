@@ -33,6 +33,7 @@ public class UsersModelFirebase {
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "register: account created successfully");
                         firebaseUser = firebaseAuth.getCurrentUser();
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
