@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.example.puppigram.repos.Repo;
 import com.example.puppigram.repos.UserRepo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,24 +23,25 @@ public class UsersModelFirebase {
 
     User user = null;
     FirebaseUser firebaseUser;
-    static FirebaseFirestore db;
     static StorageReference storageRef;
-    public FirebaseAuth firebaseAuth;
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "FirebaseModel";
     private static StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
     public void register(final User user, String password, final UserRepo.AddUserListener listener) {
         Log.d(TAG, "register - create new user");
-        firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
-                .addOnCompleteListener(task -> {
+                .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "register: account created successfully");
+                        Log.d(TAG, "createUserWithEmail:success");
                         firebaseUser = firebaseAuth.getCurrentUser();
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
                         db.collection("users").document(user.getId()).set(user);
                         UsersModelFirebase.uploadImage(user);
+                    } else {
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
                     listener.onComplete(task.isSuccessful());
                 });

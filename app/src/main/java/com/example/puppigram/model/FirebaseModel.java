@@ -6,11 +6,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-
 import com.example.puppigram.R;
 import com.example.puppigram.repos.Repo;
-import com.example.puppigram.repos.UserRepo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

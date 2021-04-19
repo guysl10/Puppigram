@@ -16,14 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.FirebaseModel;
 import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.Navigator;
 import com.example.puppigram.utils.PhotoUtil;
-
-import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_GALLERY;
@@ -97,20 +93,20 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_GALLERY) && resultCode == RESULT_OK){
+        if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_GALLERY) && resultCode == RESULT_OK) {
             photoActivity.onResult(requestCode, resultCode, data);
         }
     }
     private void createProfile() {
         registerButton.setVisibility(View.INVISIBLE);
         registerButton.setVisibility(View.INVISIBLE);
-        userName.setEnabled(false);
-        userEmail.setEnabled(false);
-        userBio.setEnabled(false);
-        userPassword.setEnabled(false);
-        userRePassword.setEnabled(false);
-        userPhoto.setEnabled(false);
-        loadingProgress.setVisibility(View.VISIBLE);
+//        userName.setEnabled(false);
+//        userEmail.setEnabled(false);
+//        userBio.setEnabled(false);
+//        userPassword.setEnabled(false);
+//        userRePassword.setEnabled(false);
+//        userPhoto.setEnabled(false);
+//        loadingProgress.setVisibility(View.VISIBLE);
 
         final String username = userName.getText().toString();
         final String email = userEmail.getText().toString();
@@ -128,14 +124,13 @@ public class RegisterActivity extends AppCompatActivity {
             userPhoto.setEnabled(true);
 
         } else {
-            User user = new User(UUID.randomUUID().toString(), userName.toString(), email, pickedImgUri, bio);
+            User user = new User(username, email, bio);
             UserRepo.instance.register(user, pass, success -> {
                 showMessage("Register complete");
                 UserRepo.instance.login(user.getEmail(), userPassword.toString(), v -> {
-                    if(success){
+                    if (success) {
                         navigator.navigate(MainActivity.class);
-                    }
-                    else
+                    } else
                         showMessage("SignIn failed");
                 });
             });

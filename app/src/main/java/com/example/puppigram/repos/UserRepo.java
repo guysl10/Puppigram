@@ -1,12 +1,8 @@
 package com.example.puppigram.repos;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.FirebaseModel;
 import com.example.puppigram.model.User;
 import com.example.puppigram.model.UsersModelFirebase;
-import com.example.puppigram.utils.Navigator;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
