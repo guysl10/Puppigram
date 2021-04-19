@@ -2,6 +2,8 @@
 package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
@@ -28,6 +30,7 @@ import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
 import java.io.FileNotFoundException;
@@ -140,15 +143,17 @@ public class FeedFragment extends Fragment {
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             AtomicReference<User> temp_user = null;
             UserRepo.instance.getUser(post.getOwnerId(), temp_user::set);
-            setImage(
+            PhotoUtil.setImage(
                     post.getPostImage(),
                     holder.postImg,
-                    "post image "+post.getId()+ "not found"
+                    "post image "+post.getId()+ "not found",
+                    getActivity().getApplicationContext()
             );
-            setImage(
+            PhotoUtil.setImage(
                     Uri.parse(temp_user.get().getUserImage()),
                     holder.userImg,
-                    "user image in post " + post.getId()+ "not found"
+                    "user image in post " + post.getId()+ "not found",
+                    getActivity().getApplicationContext()
             );
             holder.description.setText(post.getDescription());
             holder.username.setText(temp_user.get().getUserName());
@@ -158,25 +163,6 @@ public class FeedFragment extends Fragment {
             if(UserRepo.instance.getAuthInstance().getCurrentUser().
                     getUid().equals(post.getOwnerId())){
                 holder.editBtn.setVisibility(View.VISIBLE);
-            }
-        }
-
-        private void setImage(Uri srcImg, ImageView dstImg, String errorMsg){
-            try {
-                InputStream inputStream = getActivity().getApplicationContext().
-                        getContentResolver().openInputStream(srcImg);
-                dstImg.setImageDrawable(
-                        Drawable.createFromStream(
-                                inputStream,
-                                srcImg.toString()
-                        )
-                );
-            } catch (FileNotFoundException e) {
-                Toast.makeText(
-                        getContext(),
-                        errorMsg,
-                        Toast.LENGTH_LONG
-                ).show();
             }
         }
 

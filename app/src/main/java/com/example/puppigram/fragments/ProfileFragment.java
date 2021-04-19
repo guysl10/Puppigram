@@ -2,15 +2,12 @@ package com.example.puppigram.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,23 +25,22 @@ import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     private User user;
-    private TextView username, email;
+    private TextView username, bio;
     private ImageView imageProfile;
     private ProgressBar progressBarProfile;
     private TextView noPosts;
     ProfilePostRecyclerAdapter adapter;
     RecyclerView posts;
     PostsViewModel postsViewModel;
-    Button editProfile;
+    ImageView editProfile;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -67,7 +63,7 @@ public class ProfileFragment extends Fragment {
         imageProfile = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.profile_username_text);
         posts = view.findViewById(R.id.profile_posts_recycler_view);
-        email = view.findViewById(R.id.profile_bio_text);
+        bio = view.findViewById(R.id.profile_bio_text);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
         posts.setHasFixedSize(true);
@@ -80,26 +76,23 @@ public class ProfileFragment extends Fragment {
         );
         UserRepo.instance.getUser(
                 UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
-                userModel -> user = userModel
+                userModel -> {
+                    user = userModel;
+                    username.setText(user.getUserName());
+                    bio.setText(user.getBio());
+                    PhotoUtil.setImage(
+                            Uri.parse(user.getUserImage()),
+                            imageProfile,
+                            "",
+                            getActivity().getApplicationContext()
+                    );
+                    reloadData();
+                }
         );
-
-        username.setText(user.getUserName());
-        email.setText(user.getEmail());
-
-        try {
-            InputStream imageStream = getActivity().getApplicationContext().
-                    getContentResolver().openInputStream(Uri.parse(user.getUserImage()));
-            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            imageProfile.setImageBitmap(selectedImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        reloadData();
 
         editProfile.setOnClickListener(v->
                 Navigation.findNavController(view).navigate(
-                        R.id.action_postFragment_to_editPostFragment
+                        R.id.action_profileFragment_to_editProfileFragment
                 ));
         return view;
     }

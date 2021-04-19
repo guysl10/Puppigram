@@ -22,8 +22,8 @@
         android:id="@+id/editprofile_profileimg_img"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:srcCompat="@drawable/circle_cropped" />
@@ -33,7 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:background="#4CAF50"
         android:text="Save"
@@ -44,45 +44,33 @@
 
     <EditText
         android:id="@+id/editprofile_username_input"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="username"
         android:inputType="textPersonName"
         android:textColor="#000000"
         android:textColorHint="#000000"
-        app:layout_constraintStart_toEndOf="@+id/editprofile_profileimg_img"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/editprofile_bio_input"
+        app:layout_constraintStart_toStartOf="@+id/editprofile_bio_input"
+        app:layout_constraintTop_toBottomOf="@+id/editprofile_profileimg_img" />
 
     <EditText
         android:id="@+id/editprofile_bio_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="Bio - Description"
         android:inputType="textPersonName"
+        android:textColor="#000000"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editprofile_profileimg_img"
-        app:layout_constraintTop_toBottomOf="@+id/editprofile_profileimg_img" />
-
-    <EditText
-        android:id="@+id/editprofile_email_edittext"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress"
-        android:textColorHint="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editprofile_bio_input"
-        app:layout_constraintTop_toBottomOf="@+id/editprofile_bio_input" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editprofile_username_input" />
 
     <Button
         android:id="@+id/edit_profile_discard_btn"
@@ -103,10 +91,11 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="#000000"
         android:textColorHint="#000000"
-        app:layout_constraintEnd_toEndOf="@+id/editprofile_email_edittext"
-        app:layout_constraintStart_toStartOf="@+id/editprofile_email_edittext"
-        app:layout_constraintTop_toBottomOf="@+id/editprofile_email_edittext" />
+        app:layout_constraintEnd_toEndOf="@+id/editprofile_bio_input"
+        app:layout_constraintStart_toStartOf="@+id/editprofile_bio_input"
+        app:layout_constraintTop_toBottomOf="@+id/editprofile_bio_input" />
 
     <EditText
         android:id="@+id/editprofile_retype_password"
@@ -116,6 +105,7 @@
         android:ems="10"
         android:hint="retype Password"
         android:inputType="textPassword"
+        android:textColor="#000000"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="@+id/editprofile_password"
         app:layout_constraintHorizontal_bias="1.0"

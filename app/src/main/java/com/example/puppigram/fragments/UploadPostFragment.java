@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -59,20 +60,14 @@ public class UploadPostFragment extends Fragment {
         currentUser= UserRepo.instance.getAuthInstance().getCurrentUser();
 
         if (currentUser != null) {
-            username.setText(currentUser.getDisplayName());
-            try {
-                postImg.setImageBitmap(MediaStore.Images.Media.getBitmap(
-                        getActivity().getApplicationContext().getContentResolver(),
-                        currentUser.getPhotoUrl()
-                ));
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(
-                        view.getContext(),
-                        "Image post not found",
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
+            //username.setText(currentUser.getDisplayName());
+            username.setText("Omer");
+            PhotoUtil.setImage(
+                currentUser.getPhotoUrl(),
+                postImg,
+                "Image post not found",
+                requireActivity().getApplicationContext()
+            );
         }
 
         TextView postBtn = view.findViewById(R.id.upload_post_text);

@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
@@ -46,10 +48,9 @@ public class EditProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         username = view.findViewById(R.id.editprofile_username_input);
         bio = view.findViewById(R.id.editprofile_bio_input);
-        email = view.findViewById(R.id.editprofile_email_edittext);
         profileImg = view.findViewById(R.id.editprofile_profileimg_img);
         password = view.findViewById(R.id.editprofile_password);
         retypePassword = view.findViewById(R.id.editprofile_retype_password);
@@ -58,9 +59,11 @@ public class EditProfileFragment extends Fragment {
 
         UserRepo.instance.getUser(
                 UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
-                userModel -> user = userModel
+                userModel -> {
+                    user = userModel;
+                    restoreDefaultData();
+                }
         );
-        restoreDefaultData();
 
         profileImg.setOnClickListener(v ->
                 ((MainActivity)requireActivity()).getPhotoActivity()
@@ -70,6 +73,21 @@ public class EditProfileFragment extends Fragment {
         saveChanges.setOnClickListener(v-> {
             //TODO: update updateProfile to support password and image profile change.
             //            UserRepo.instance.updateProfile();
+            UserRepo.instance.updateProfile(
+                    username.getText().toString(),
+                    bio.getText().toString(),
+                    y->{
+                        Toast.makeText(
+                                getContext(),
+                                "updade profile successfully",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                        restoreDefaultData();
+                        Navigation.findNavController(view).navigate(
+                                R.id.action_editProfileFragment_to_profileFragment
+                        );
+                }
+            );
         });
 
         discardBtn.setOnClickListener(v-> {
@@ -77,8 +95,6 @@ public class EditProfileFragment extends Fragment {
             password.setText("");
             retypePassword.setText("");
         });
-
-
         return view;
     }
 
