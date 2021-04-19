@@ -1,5 +1,6 @@
 package com.example.puppigram.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,10 +21,11 @@ import static android.app.Activity.RESULT_OK;
 public class PhotoUtil {
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final int REQUEST_IMAGE_GALLERY = 2;
+    @SuppressLint("StaticFieldLeak")
     static Activity myActivity;
     ImageView showPlace;
     public PhotoUtil(Activity myActivity){
-        this.myActivity = myActivity;
+        PhotoUtil.myActivity = myActivity;
         this.showPlace = null;
     }
 
@@ -76,7 +78,6 @@ public class PhotoUtil {
                             imageStream = myActivity.getContentResolver().openInputStream(imageUri);
                             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                             showPlace.setImageBitmap(selectedImage);
-                            showPlace.setRotation(90);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }

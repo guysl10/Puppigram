@@ -44,7 +44,6 @@ public class UploadPostFragment extends Fragment {
     ImageView usernameImg;
     ImageView removeContentImg;
     FirebaseUser currentUser;
-    private PhotoUtil photoActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

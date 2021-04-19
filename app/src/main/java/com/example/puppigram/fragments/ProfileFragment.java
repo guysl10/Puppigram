@@ -2,6 +2,8 @@ package com.example.puppigram.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,23 +29,21 @@ import com.example.puppigram.model.User;
 import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
-
-    private String profileId;
     private User user;
     private TextView username, email;
     private ImageView imageProfile;
     private ProgressBar progressBarProfile;
-    private UserRepo userRepo;
-    private Button viewAllPosts;
     private TextView noPosts;
     ProfilePostRecyclerAdapter adapter;
     RecyclerView posts;
     PostsViewModel postsViewModel;
-
+    Button editProfile;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -60,12 +61,12 @@ public class ProfileFragment extends Fragment {
         adapter = new ProfilePostRecyclerAdapter();
 
         noPosts = view.findViewById(R.id.profile_no_posts_text);
-        viewAllPosts = view.findViewById(R.id.go_to_all_user_posts);
+        editProfile = view.findViewById(R.id.profile_edit_img);
         progressBarProfile = view.findViewById(R.id.profile_spinner);
         imageProfile = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.profile_username_text);
         posts = view.findViewById(R.id.profile_posts_recycler_view);
-
+        email = view.findViewById(R.id.profile_bio_text);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
         posts.setHasFixedSize(true);
@@ -76,15 +77,29 @@ public class ProfileFragment extends Fragment {
                 getViewLifecycleOwner(),
                 imagePosts -> adapter.notifyDataSetChanged()
         );
+        UserRepo.instance.getUser(
+                UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
+                userModel -> user = userModel
+        );
+
+        username.setText(user.getUserName());
+        email.setText(user.getEmail());
+
+        try {
+            InputStream imageStream = getActivity().getApplicationContext().
+                    getContentResolver().openInputStream(user.getUserImage());
+            Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            imageProfile.setImageBitmap(selectedImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         reloadData();
-//TODO: get relevant posts for specific user.
-//TODO:view all post
-//        this.viewAllPosts
-//                .setOnClickListener(
-//                );
 
-        //TODO:Get profile from db
-
+        editProfile.setOnClickListener(v->
+                Navigation.findNavController(view).navigate(
+                        R.id.action_postFragment_to_editPostFragment
+                ));
         return view;
     }
 
@@ -99,6 +114,9 @@ public class ProfileFragment extends Fragment {
         progressBarProfile.setVisibility(View.VISIBLE);
         noPosts.setVisibility(View.INVISIBLE);
         PostsModel.instance.refreshAllPosts(posts -> {
+            //TODO: change to show only user posts!
+            //TODO:view all post
+            // this.viewAllPosts.setOnClickListener();
             List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
             if (allPosts == null || allPosts.isEmpty())
                 noPosts.setVisibility(View.VISIBLE);
