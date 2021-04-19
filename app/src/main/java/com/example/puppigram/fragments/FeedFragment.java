@@ -142,7 +142,7 @@ public class FeedFragment extends Fragment {
             UserRepo.instance.getUser(post.getOwnerId(), temp_user::set);
             setImage(
                     post.getPostImage(),
-                    holder.post_img,
+                    holder.postImg,
                     "post image "+post.getId()+ "not found"
             );
             setImage(
