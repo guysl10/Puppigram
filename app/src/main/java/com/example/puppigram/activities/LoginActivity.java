@@ -13,14 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.FirebaseModel;
 import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.Navigator;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.concurrent.Callable;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -61,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void singIn(String email, String pass) {
+    private void signIn(String email, String pass) {
         UserRepo.instance.login(email, pass, success -> {
             if (success) {
                 loadingProgress.setVisibility(View.INVISIBLE);
@@ -72,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgress.setVisibility(View.INVISIBLE);
                 Toast.makeText(
                         getApplicationContext(),
-                        "signin failed",
+                        "signIn failed",
                         Toast.LENGTH_LONG
                 ).show();
             }

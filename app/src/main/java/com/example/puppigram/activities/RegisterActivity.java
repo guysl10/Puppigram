@@ -21,6 +21,8 @@ import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.Navigator;
 import com.example.puppigram.utils.PhotoUtil;
 
+import java.util.regex.Pattern;
+
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_GALLERY;
 
@@ -35,6 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Navigator navigator;
     private TextView cancel;
     private TextView empty;
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -100,31 +106,33 @@ public class RegisterActivity extends AppCompatActivity {
     private void createProfile() {
         registerButton.setVisibility(View.INVISIBLE);
         registerButton.setVisibility(View.INVISIBLE);
-//        userName.setEnabled(false);
-//        userEmail.setEnabled(false);
-//        userBio.setEnabled(false);
-//        userPassword.setEnabled(false);
-//        userRePassword.setEnabled(false);
-//        userPhoto.setEnabled(false);
-//        loadingProgress.setVisibility(View.VISIBLE);
+        userName.setEnabled(false);
+        userEmail.setEnabled(false);
+        userBio.setEnabled(false);
+        userPassword.setEnabled(false);
+        userRePassword.setEnabled(false);
+        userPhoto.setEnabled(false);
+        loadingProgress.setVisibility(View.VISIBLE);
 
         final String username = userName.getText().toString();
         final String email = userEmail.getText().toString();
         final String bio = userBio.getText().toString();
         final String pass = userPassword.getText().toString();
         final String repass = userRePassword.getText().toString();
+        final String userImage =userPhoto.toString();
 
-        if (email.isEmpty() || pass.isEmpty() || username.isEmpty() || bio.isEmpty() || !pass.equals(repass)) {
+        if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find() || pass.length() < 6 || !pass.equals(repass) || email.isEmpty() || pass.isEmpty() || username.isEmpty() || bio.isEmpty()) {
             showMessage("Please Verify all fields");
-            registerButton.setVisibility(View.VISIBLE);
             userName.setEnabled(true);
             userEmail.setEnabled(true);
+            userBio.setEnabled(true);
             userPassword.setEnabled(true);
             userRePassword.setEnabled(true);
             userPhoto.setEnabled(true);
+            registerButton.setVisibility(View.VISIBLE);
 
         } else {
-            User user = new User(username, email, bio);
+            User user = new User(username, email, bio, userImage);
             UserRepo.instance.register(user, pass, success -> {
                 showMessage("Register complete");
                 UserRepo.instance.login(user.getEmail(), userPassword.toString(), v -> {

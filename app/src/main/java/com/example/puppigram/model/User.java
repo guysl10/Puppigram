@@ -1,7 +1,5 @@
 package com.example.puppigram.model;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +7,7 @@ import java.util.Map;
 public class User implements Serializable {
     private String id;
     private String userName;
-    private Uri userImage;
+    private String userImage;
     private String email;
     private String bio;
 
@@ -17,13 +15,14 @@ public class User implements Serializable {
 
     }
 
-    public User(String userName, String email, String bio) {
+    public User(String userName, String email, String bio, String userImage) {
         this.userName = userName;
         this.email = email;
         this.bio = bio;
+        this.userImage = userImage;
     }
 
-    public User(String id, String userName, String email, Uri userImage, String bio) {
+    public User(String id, String userName, String email, String userImage, String bio) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -34,7 +33,7 @@ public class User implements Serializable {
     public void fromMap(Map<String, Object> map) {
         id = (String) map.get("id");
         userName = (String) map.get("userName");
-        userImage = (Uri) map.get("userImage");
+        userImage = (String) map.get("userImage");
         email = (String) map.get("email");
         bio = (String) map.get("bio");
     }
@@ -73,11 +72,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Uri getUserImage() {
+    public String getUserImage() {
         return userImage;
     }
 
-    public void setUserImage(Uri userImage) {
+    public void setUserImage(String userImage) {
         this.userImage = userImage;
     }
 

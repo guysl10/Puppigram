@@ -1,6 +1,5 @@
 package com.example.puppigram.model;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.puppigram.repos.Repo;
@@ -12,7 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -39,7 +37,7 @@ public class UsersModelFirebase {
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
                         db.collection("users").document(user.getId()).set(user);
-                        UsersModelFirebase.uploadImage(user);
+                        //UsersModelFirebase.uploadImage(user);
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
@@ -72,7 +70,7 @@ public class UsersModelFirebase {
                         doc.getString("id"),
                         doc.getString("userName"),
                         doc.getString("email"),
-                        Uri.parse(doc.getString("userImage")),
+                        doc.getString("userImage"),
                         doc.getString("bio"));
                 data.add(user);
             }
@@ -93,36 +91,36 @@ public class UsersModelFirebase {
         });
     }
 
-    public static void uploadImage(User user) {
-        Log.d(TAG, "uploadImage: Upload a profile picture and edit the user with the new one");
-        storageRef = FirebaseStorage.getInstance().getReference("profileImage");
-        if (user.getUserImage() != null) {
-            final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
-                    + "." + user.getUserImage().getLastPathSegment());
-            uploadTask = fileReference.putFile(user.getUserImage());
-
-            uploadTask.continueWithTask(task -> {
-                Log.d(TAG, "then: task of upload the file(image) to the storage");
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return fileReference.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                Log.d(TAG, "onComplete: task complete");
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: task succeed");
-                    Uri downloadUri = task.getResult();
-                    user.setUserImage(downloadUri);
-                    db.collection("users").document(user.getId()).set(user);
-                } else {
-                    Log.d(TAG, "onComplete: task not succeed");
-                }
-            }).addOnFailureListener(e -> {
-                Log.d(TAG, "onComplete: task not succeed and not complete");
-            });
-
-        } else {
-            Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
-        }
-    }
+//    public static void uploadImage(User user) {
+//        Log.d(TAG, "uploadImage: Upload a profile picture and edit the user with the new one");
+//        storageRef = FirebaseStorage.getInstance().getReference("userImage");
+//        if (user.getUserImage() != null) {
+//            final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
+//                    + "." + user.getUserImage().getLastPathSegment());
+//            uploadTask = fileReference.putFile(user.getUserImage());
+//
+//            uploadTask.continueWithTask(task -> {
+//                Log.d(TAG, "then: task of upload the file(image) to the storage");
+//                if (!task.isSuccessful()) {
+//                    throw task.getException();
+//                }
+//                return fileReference.getDownloadUrl();
+//            }).addOnCompleteListener(task -> {
+//                Log.d(TAG, "onComplete: task complete");
+//                if (task.isSuccessful()) {
+//                    Log.d(TAG, "onComplete: task succeed");
+//                    Uri downloadUri = task.getResult();
+//                    user.setUserImage(downloadUri);
+//                    db.collection("users").document(user.getId()).set(user);
+//                } else {
+//                    Log.d(TAG, "onComplete: task not succeed");
+//                }
+//            }).addOnFailureListener(e -> {
+//                Log.d(TAG, "onComplete: task not succeed and not complete");
+//            });
+//
+//        } else {
+//            Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
+//        }
+//    }
 }

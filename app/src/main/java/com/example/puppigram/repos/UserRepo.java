@@ -57,9 +57,5 @@ public class UserRepo {
     public void updateProfile(final String userName, final String bio, Repo.EditProfileListener listener) {
         usersModelFirebase.updateProfile(userName, bio, listener);
     }
-
-    public void uploadImage(User user) {
-        UsersModelFirebase.uploadImage(user);
-    }
 }
 
