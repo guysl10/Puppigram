@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.User;
-import com.example.puppigram.repos.PostRepo;
 import com.example.puppigram.repos.UserRepo;
 
 import java.io.FileNotFoundException;
