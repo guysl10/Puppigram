@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.repos.Repo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,15 +47,18 @@ public class FirebaseModel {
 
     public void login(String email, String password, LoginUserListener loginUserListener) {
         Log.d(TAG, "login current user");
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                firebaseUser = task.getResult().getUser();
-                Log.d(TAG, "onComplete: " + firebaseUser);
-                loginUserListener.onComplete(true);
-            }
-            else
-                loginUserListener.onComplete(false);
-        });
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithEmail:success");
+                        firebaseUser = firebaseAuth.getCurrentUser();
+                        Log.d(TAG, "onComplete: " + firebaseUser);
+                        loginUserListener.onComplete(true);
+                    } else {
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        loginUserListener.onComplete(false);
+                    }
+                });
     }
 
     public void logOut(Callable<Void> onComplete) {

@@ -40,7 +40,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="64dp"
         android:background="#4CAF50"
-        android:text="Sign Me Up"
+        android:text="Sign Me In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_password_test" />

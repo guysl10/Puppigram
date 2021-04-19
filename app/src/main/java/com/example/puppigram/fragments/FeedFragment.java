@@ -3,7 +3,6 @@ package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.puppigram.BuildConfig;
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
@@ -144,9 +142,9 @@ public class FeedFragment extends Fragment {
                     "post image "+post.getId()+ "not found"
             );
             setImage(
-                    temp_user.get().getUserImage(),
+                    Uri.parse(temp_user.get().getUserImage()),
                     holder.user_img,
-                    "user image in post " + post.getId()+ "not found"
+                    "user image in post " + post.getId() + "not found"
             );
             holder.description.setText(post.getDescription());
             holder.username.setText(temp_user.get().getUserName());

@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             navigator.navigate(RegisterActivity.class);
         });
 
-        loginButton.setOnClickListener(v -> navigator.navigate(MainActivity.class));
+        loginButton.setOnClickListener(v -> signIn(userEmail.getText().toString(), userPass.getText().toString()));
         newAccount.setOnClickListener(v -> navigator.navigate(RegisterActivity.class));
     }
 

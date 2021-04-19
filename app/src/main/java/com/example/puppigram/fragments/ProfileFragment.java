@@ -4,6 +4,7 @@ package com.example.puppigram.fragments;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -87,7 +88,7 @@ public class ProfileFragment extends Fragment {
 
         try {
             InputStream imageStream = getActivity().getApplicationContext().
-                    getContentResolver().openInputStream(user.getUserImage());
+                    getContentResolver().openInputStream(Uri.parse(user.getUserImage()));
             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
             imageProfile.setImageBitmap(selectedImage);
         } catch (FileNotFoundException e) {
