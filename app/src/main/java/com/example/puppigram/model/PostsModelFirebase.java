@@ -19,11 +19,11 @@ import java.util.List;
 
 public class PostsModelFirebase {
 
-    public static PostsModelFirebase instance;
-    static FirebaseFirestore db;
     Uri imageUri = null;
+    static FirebaseFirestore db;
     StorageReference storageRef;
-    private static final String TAG = "FirebaseModel";
+    public static PostsModelFirebase instance;
+    private static final String TAG = "PostsModelFirebase";
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
     interface GetAllPostsListener {
@@ -31,21 +31,25 @@ public class PostsModelFirebase {
     }
 
     public void addPost(final ImagePost post, final PostsModel.AddPostListener listener) {
-        Log.d(TAG, "create new post");
+        Log.d(TAG, "AddPost:create new post");
         db.collection("posts").document(post.getId()).set(post).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                uploadPost(post, listener);
+                Log.d(TAG, "AddPost:success");
+                uploadPost(post);
+            } else {
+                Log.d(TAG, "AddPost:failure");
             }
             listener.onComplete();
-        }).addOnFailureListener(e -> listener.onComplete());
+        }).addOnFailureListener(exception -> listener.onComplete());
     }
 
     public void deletePost(final String postId, final PostsModel.DeletePostListener listener) {
-        Log.d(TAG, "Delete post " + postId);
+        Log.d(TAG, "DeletePost:Delete post " + postId);
         db.collection("posts").document(postId).delete().addOnCompleteListener(task -> listener.onComplete(true));
     }
 
     public static void getPost(final String postId, final PostsModel.GetPostListener listener) {
+        Log.d(TAG, "GetPostPost:get post " + postId);
         db.collection("posts").document(postId).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -59,11 +63,11 @@ public class PostsModelFirebase {
     }
 
     public void getAllPosts(final PostsModel.GetAllPostsListener listener) {
-        try{
-            db.collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
+        try{Log.d(TAG, "getAllPosts:get all posts from db");
+            db.collection("posts").addSnapshotListener((queryDocumentSnapshots, exception) -> {
                 assert queryDocumentSnapshots != null;
                 ArrayList<ImagePost> data = new ArrayList<>();
-                if (e != null) {
+                if (exception != null) {
                     listener.onComplete(data);
                     return;
                 }
@@ -88,7 +92,7 @@ public class PostsModelFirebase {
         });
     }
 
-    public void uploadPost(ImagePost post, PostsModel.AddPostListener listener) {
+    public void uploadPost(ImagePost post) {
         Log.d(TAG, "Upload new post");
         storageRef = FirebaseStorage.getInstance().getReference("posts");
         if (post.getPostImage() != null) {
@@ -111,7 +115,7 @@ public class PostsModelFirebase {
                 } else {
                     Log.d(TAG, "onComplete: task not succeed");
                 }
-            }).addOnFailureListener(e -> {
+            }).addOnFailureListener(exception -> {
                 Log.d(TAG, "onComplete: task not succeed and not complete");
             });
 

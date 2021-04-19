@@ -12,6 +12,7 @@ public class UserRepo {
     public static final UserRepo instance = new UserRepo();
     private final FirebaseModel firebaseModel;
     private final UsersModelFirebase usersModelFirebase;
+
     public UserRepo() {
         firebaseModel = new FirebaseModel();
         usersModelFirebase = new UsersModelFirebase();

@@ -24,11 +24,11 @@ public class UsersModelFirebase {
     static StorageReference storageRef;
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private static final String TAG = "FirebaseModel";
+    private static final String TAG = "UsersModelFirebase";
     private static StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
     public void register(final User user, String password, final UserRepo.AddUserListener listener) {
-        Log.d(TAG, "register - create new user");
+        Log.d(TAG, "register:create new user");
         firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
                     if (task.isSuccessful()) {
@@ -46,19 +46,23 @@ public class UsersModelFirebase {
     }
 
     public static void getUser(String id, UserRepo.GetUserListener listener) {
+        Log.d(TAG, "getUser:get user from db");
         db.collection("users").document(id).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot snapshot = task.getResult();
                         User user = snapshot.toObject(User.class);
+                        Log.d(TAG, "getUser:got user - " + user.getUserName());
                         listener.onComplete(user);
-                        return;
+                    } else {
+                        Log.d(TAG, "getUser:failed");
                     }
                     listener.onComplete(null);
                 });
     }
 
     public void getAllUsers(final UserRepo.GetAllUsersListener listener) {
+        Log.d(TAG, "getAllUsers:get all users from db");
         db.collection("users").addSnapshotListener((queryDocumentSnapshots, e) -> {
             ArrayList<User> data = new ArrayList<>();
             if (e != null) {
@@ -79,13 +83,14 @@ public class UsersModelFirebase {
 
     }
 
-    public void updateProfile(final String userName, final String bio, final Repo.EditProfileListener listener) {
+    public void updateProfile(final String userName, final String bio, final String pass, final Repo.EditProfileListener listener) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         getUser(firebaseUser.getUid(), userModel -> {
             if (userModel != null) {
                 user = userModel;
                 user.setUserName(userName);
                 user.setBio(bio);
+                firebaseAuth.getCurrentUser().updatePassword(pass);
                 db.collection("users").document(firebaseUser.getUid()).set(user).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
             }
         });
