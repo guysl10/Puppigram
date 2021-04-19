@@ -20,8 +20,6 @@ import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.Navigator;
 import com.example.puppigram.utils.PhotoUtil;
 
-import java.util.UUID;
-
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_GALLERY;
 
@@ -101,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
             userPhoto.setEnabled(true);
 
         } else {
-            User user = new User(UUID.randomUUID().toString(), userName.toString(), email, pickedImgUri, bio);
+            User user = new User(username, email, bio);
             UserRepo.instance.register(user, success -> showMessage("Register complete"), pass);
             UserRepo.instance.login(user.getEmail(), userPassword.toString(), success -> showMessage("Login completed"));
             navigator.navigate(MainActivity.class);
