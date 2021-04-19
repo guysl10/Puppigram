@@ -12,6 +12,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.List;
 public class PostsModelFirebase {
 
     Uri imageUri = null;
-    static FirebaseFirestore db;
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
     StorageReference storageRef;
     public static PostsModelFirebase instance;
     private static final String TAG = "PostsModelFirebase";
@@ -72,8 +74,11 @@ public class PostsModelFirebase {
                     return;
                 }
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    ImagePost post = doc.toObject(ImagePost.class);
-                    data.add(post);
+//                    Gson gson = new Gson();
+//                    JsonElement jsonElement = gson.toJsonTree(doc.getData());
+//                    ImagePost post = gson.fromJson(jsonElement, ImagePost.class);
+//                    data.add(post);
+                    Log.d(TAG, "getAllPosts: ");
                 }
                 listener.onComplete(data);
             });

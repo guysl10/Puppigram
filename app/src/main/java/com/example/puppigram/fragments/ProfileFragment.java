@@ -41,6 +41,7 @@ public class ProfileFragment extends Fragment {
     RecyclerView posts;
     PostsViewModel postsViewModel;
     ImageView editProfile;
+    ProgressBar spinner;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -55,8 +56,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        spinner = view.findViewById(R.id.profile_spinner2);
         adapter = new ProfilePostRecyclerAdapter();
-
         noPosts = view.findViewById(R.id.profile_no_posts_text);
         editProfile = view.findViewById(R.id.profile_edit_img);
         progressBarProfile = view.findViewById(R.id.profile_spinner);
@@ -64,6 +65,11 @@ public class ProfileFragment extends Fragment {
         username = view.findViewById(R.id.profile_username_text);
         posts = view.findViewById(R.id.profile_posts_recycler_view);
         bio = view.findViewById(R.id.profile_bio_text);
+        spinner.setVisibility(View.VISIBLE);
+        editProfile.setEnabled(false);
+        noPosts.setEnabled(false);
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
         posts.setHasFixedSize(true);
@@ -94,6 +100,10 @@ public class ProfileFragment extends Fragment {
                 Navigation.findNavController(view).navigate(
                         R.id.action_profileFragment_to_editProfileFragment
                 ));
+
+        editProfile.setEnabled(false);
+        noPosts.setEnabled(false);
+        spinner.setVisibility(View.INVISIBLE);
         return view;
     }
 
