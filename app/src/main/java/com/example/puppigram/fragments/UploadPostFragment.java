@@ -21,6 +21,7 @@ import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelFirebase;
 import com.example.puppigram.model.PostsModelSQL;
+import com.example.puppigram.model.User;
 import com.example.puppigram.repos.Repo;
 import com.example.puppigram.repos.UserRepo;
 import com.example.puppigram.utils.PhotoUtil;
@@ -44,7 +45,7 @@ public class UploadPostFragment extends Fragment {
     TextView username;
     ImageView usernameImg;
     ImageView removeContentImg;
-    FirebaseUser currentUser;
+    User currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,17 +58,19 @@ public class UploadPostFragment extends Fragment {
         username = view.findViewById(R.id.upload_username_text);
         usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
         removeContentImg = (ImageView) view.findViewById(R.id.upload_remove_img);
-        currentUser= UserRepo.instance.getAuthInstance().getCurrentUser();
 
-        if (currentUser != null) {
-            username.setText(currentUser.getDisplayName());
-            PhotoUtil.setImage(
-                currentUser.getPhotoUrl(),
-                postImg,
-                "Image post not found",
-                requireActivity().getApplicationContext()
-            );
-        }
+        UserRepo.instance.getUser(
+                UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
+                userModel -> {
+                    currentUser = userModel;
+                    username.setText(currentUser.getUserName());
+                    PhotoUtil.setImage(
+                            Uri.parse(currentUser.getUserImage()),
+                            postImg,
+                            "user image not found",
+                            requireActivity().getApplicationContext()
+                    );
+                });
 
         TextView postBtn = view.findViewById(R.id.upload_post_text);
         postBtn.setOnClickListener(v -> upload_post(view));
@@ -100,7 +103,7 @@ public class UploadPostFragment extends Fragment {
         File tempFile = new File(this.postImg.toString());
         Uri photoUri = Uri.fromFile(tempFile);
 
-        String userUid = this.currentUser.getUid();
+        String userUid = this.currentUser.getId();
         String photoUid = UUID.randomUUID().toString();
 
 
