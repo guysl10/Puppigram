@@ -3,7 +3,6 @@ package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.puppigram.BuildConfig;
 import com.example.puppigram.R;
 import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
@@ -105,16 +103,18 @@ public class FeedFragment extends Fragment {
         TextView username;
         TextView description;
         TextView likers;
-        ImageView post_img;
-        ImageView user_img;
+        ImageView postImg;
+        ImageView userImg;
+        ImageView editBtn;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.postDescription);
             likers = itemView.findViewById(R.id.postCountLikers);
             username = itemView.findViewById(R.id.postOwner);
-            user_img = itemView.findViewById(R.id.post_user_img);
-            post_img = itemView.findViewById(R.id.postImg);
+            userImg = itemView.findViewById(R.id.post_user_img);
+            postImg = itemView.findViewById(R.id.postImg);
+            editBtn = itemView.findViewById(R.id.post_edit_img);
 
             // After finish configure, disable the spinner
             ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
@@ -140,17 +140,23 @@ public class FeedFragment extends Fragment {
             UserRepo.instance.getUser(post.getOwnerId(), temp_user::set);
             setImage(
                     post.getPostImage(),
-                    holder.post_img,
+                    holder.postImg,
                     "post image "+post.getId()+ "not found"
             );
             setImage(
                     Uri.parse(temp_user.get().getUserImage()),
-                    holder.user_img,
+                    holder.userImg,
                     "user image in post " + post.getId()+ "not found"
             );
             holder.description.setText(post.getDescription());
             holder.username.setText(temp_user.get().getUserName());
             holder.likers.setText(post.getLikes().size());
+
+            //Check if current user own the post.
+            if(UserRepo.instance.getAuthInstance().getCurrentUser().
+                    getUid().equals(post.getOwnerId())){
+                holder.editBtn.setVisibility(View.VISIBLE);
+            }
         }
 
         private void setImage(Uri srcImg, ImageView dstImg, String errorMsg){

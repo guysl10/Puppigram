@@ -14,13 +14,12 @@ import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
-import com.google.firebase.auth.FirebaseAuth;
 
 //Responsible to handle all simple post issues
 public class PostFragment extends Fragment {
-    private TextView post_description, post_username, post_count_likers;
-    private ImageView post_img, post_user_img, post_liker_img;
-    private ProgressBar post_progressBar;
+    private TextView postDescription, postUsername, postCountLikers;
+    private ImageView postImg, postUserImg, postLikerImg;
+    private ProgressBar postProgressBar;
     private MainActivity mainActivity;
     private View post;
     private int post_id;
@@ -43,14 +42,14 @@ public class PostFragment extends Fragment {
                 false
         );
 
-        this.post_description = view.findViewById(R.id.postDescription);
-        this.post_username = view.findViewById(R.id.postOwner);
-        this.post_count_likers = view.findViewById(R.id.postCountLikers);
+        this.postDescription = view.findViewById(R.id.postDescription);
+        this.postUsername = view.findViewById(R.id.postOwner);
+        this.postCountLikers = view.findViewById(R.id.postCountLikers);
 
-        this.post_img = view.findViewById(R.id.postImg);
-        this.post_liker_img = view.findViewById(R.id.postLiker);
-        this.post_user_img = view.findViewById(R.id.post_user_img);
-        this.post_progressBar = view.findViewById(R.id.post_spinner);
+        this.postImg = view.findViewById(R.id.postImg);
+        this.postLikerImg = view.findViewById(R.id.postLiker);
+        this.postUserImg = view.findViewById(R.id.post_user_img);
+        this.postProgressBar = view.findViewById(R.id.post_spinner);
 
         //TODO: check if the user own the post.
         ImageView edit_post = view.findViewById(R.id.upload_post_img);
