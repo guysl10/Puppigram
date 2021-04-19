@@ -144,7 +144,7 @@ public class FeedFragment extends Fragment {
                     "post image "+post.getId()+ "not found"
             );
             setImage(
-                    temp_user.get().getUserImage(),
+                    Uri.parse(temp_user.get().getUserImage()),
                     holder.user_img,
                     "user image in post " + post.getId()+ "not found"
             );

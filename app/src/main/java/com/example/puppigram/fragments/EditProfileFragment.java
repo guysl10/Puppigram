@@ -2,6 +2,7 @@ package com.example.puppigram.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,7 @@ public class EditProfileFragment extends Fragment {
 
         try {
             InputStream imageStream = getActivity().getApplicationContext().
-                    getContentResolver().openInputStream(user.getUserImage());
+                    getContentResolver().openInputStream(Uri.parse(user.getUserImage()));
             Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
             profileImg.setImageBitmap(selectedImage);
         } catch (FileNotFoundException e) {
