@@ -55,8 +55,8 @@ public class UserRepo {
         firebaseModel.logOut(function);
     }
 
-    public void updateProfile(final String userName, final String bio, Repo.EditProfileListener listener) {
-        usersModelFirebase.updateProfile(userName, bio, listener);
+    public void updateProfile(final String userName, final String bio,final String pass, Repo.EditProfileListener listener) {
+        usersModelFirebase.updateProfile(userName, bio, pass, listener);
     }
 }
 

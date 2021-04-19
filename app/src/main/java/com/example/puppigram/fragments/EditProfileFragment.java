@@ -73,9 +73,15 @@ public class EditProfileFragment extends Fragment {
         saveChanges.setOnClickListener(v-> {
             //TODO: update updateProfile to support password and image profile change.
             //            UserRepo.instance.updateProfile();
+            if(!password.getText().toString().equals(retypePassword.getText().toString()))
+            {
+                Toast.makeText(getContext(),"passwords not equal",Toast.LENGTH_SHORT).show();
+                return;
+            }
             UserRepo.instance.updateProfile(
                     username.getText().toString(),
                     bio.getText().toString(),
+                    password.getText().toString(),
                     y->{
                         Toast.makeText(
                                 getContext(),
@@ -100,7 +106,6 @@ public class EditProfileFragment extends Fragment {
 
     void restoreDefaultData(){
         username.setText(user.getUserName());
-        email.setText(user.getEmail());
         bio.setText(user.getBio());
 
         try {

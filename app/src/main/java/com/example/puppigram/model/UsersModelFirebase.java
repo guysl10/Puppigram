@@ -57,7 +57,6 @@ public class UsersModelFirebase {
                     } else {
                         Log.d(TAG, "getUser:failed");
                     }
-                    listener.onComplete(null);
                 });
     }
 

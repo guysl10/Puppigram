@@ -60,8 +60,7 @@ public class UploadPostFragment extends Fragment {
         currentUser= UserRepo.instance.getAuthInstance().getCurrentUser();
 
         if (currentUser != null) {
-            //username.setText(currentUser.getDisplayName());
-            username.setText("Omer");
+            username.setText(currentUser.getDisplayName());
             PhotoUtil.setImage(
                 currentUser.getPhotoUrl(),
                 postImg,
