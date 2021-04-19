@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.example.puppigram.R;
 import com.example.puppigram.repos.Repo;
 import com.example.puppigram.repos.UserRepo;
@@ -16,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.concurrent.Callable;
 
 public class FirebaseModel {
 
@@ -39,20 +42,35 @@ public class FirebaseModel {
         return FirebaseAuth.getInstance();
     }
 
-    public void login(String email, String password, final UserRepo.LoginUserListener listener) {
+    public interface LoginUserListener{
+        void onComplete(boolean success);
+    }
+
+    public void login(String email, String password, LoginUserListener loginUserListener) {
         Log.d(TAG, "login current user");
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.d(TAG, "onComplete: " + task.getResult().getUser());
                 firebaseUser = task.getResult().getUser();
+                Log.d(TAG, "onComplete: " + firebaseUser);
+                loginUserListener.onComplete(true);
             }
-            listener.onComplete(task.isSuccessful());
+            else
+                loginUserListener.onComplete(false);
         });
     }
 
-    public void logOut() {
+    public void logOut(Callable<Void> onComplete) {
         Log.d(TAG, "logout current user");
-        getAuthInstance().signOut();
+        firebaseAuth.signOut();
+        firebaseAuth.addAuthStateListener(firebaseAuth -> {
+            if(firebaseAuth.getCurrentUser() == null) {
+                try {
+                    onComplete.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void saveImage(Bitmap imageBitmap) {

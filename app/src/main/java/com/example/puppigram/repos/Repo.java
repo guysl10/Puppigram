@@ -19,20 +19,12 @@ public class Repo {
         firebaseModel = new FirebaseModel();
     }
 
-    public void logOut() {
-        firebaseModel.logOut();
-    }
-
     public interface SaveImageListener {
         void onComplete(String url);
     }
 
     public void saveImage(Bitmap imageBitmap, SaveImageListener listener) {
         firebaseModel.saveImage(imageBitmap);
-    }
-
-    public FirebaseAuth getAuthInstance() {
-        return firebaseModel.firebaseAuth;
     }
 
     public interface AddPostListener {
