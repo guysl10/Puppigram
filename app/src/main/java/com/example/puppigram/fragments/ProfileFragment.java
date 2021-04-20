@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,8 @@ public class ProfileFragment extends Fragment {
     ImageView editProfile;
     ProgressBar spinner;
     List<ImagePost> allPosts;
+    LifecycleOwner lifecycleOwner;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -76,12 +79,14 @@ public class ProfileFragment extends Fragment {
         posts.setLayoutManager(layoutManager);
         posts.setHasFixedSize(true);
         posts.setAdapter(adapter);
+        lifecycleOwner = getViewLifecycleOwner();
 
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         postsViewModel.getAllUserPosts(UsersModel.instance.getAuthInstance().getCurrentUser().getUid()).observe(
-                getViewLifecycleOwner(),
+                lifecycleOwner,
                 imagePosts -> adapter.notifyDataSetChanged()
         );
+
         Log.d("UserRepo", "ProfileFragment:Start");
         UsersModel.instance.getUser(
                 UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
@@ -115,7 +120,7 @@ public class ProfileFragment extends Fragment {
             postsViewModel.getAllUserPosts(
                     UsersModel.instance.getAuthInstance().
                             getCurrentUser().getUid()).observe(
-                    getViewLifecycleOwner(),
+                    this.lifecycleOwner,
                     allPosts -> {
                         if (allPosts == null || allPosts.isEmpty())
                             noPosts.setVisibility(View.VISIBLE);
