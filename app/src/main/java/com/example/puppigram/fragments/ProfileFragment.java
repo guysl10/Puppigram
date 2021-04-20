@@ -2,6 +2,7 @@ package com.example.puppigram.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -133,6 +134,7 @@ public class ProfileFragment extends Fragment {
         ImageView editBtn;
         TextView username;
         ImageView userImg;
+        ImageView likeBtn;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -142,6 +144,7 @@ public class ProfileFragment extends Fragment {
             editBtn = itemView.findViewById(R.id.post_edit_img);
             userImg = itemView.findViewById(R.id.post_user_img);
             username = itemView.findViewById(R.id.postOwner);
+            likeBtn = itemView.findViewById(R.id.postLiker);
             userImg.setVisibility(View.INVISIBLE);
             username.setVisibility(View.INVISIBLE);
 
@@ -169,10 +172,15 @@ public class ProfileFragment extends Fragment {
             UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
                 tempUser[0] = new AtomicReference<>(userModel);
                 holder.description.setText(post.getDescription());
-                //TODO: apply likes
-//                    holder.likers.setText(post.getLikes().size());
-                holder.likers.setText("0");
-                if (post.getPostImage() != null){
+                holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                    if (isLiked) {
+                        PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                    } else {
+                        PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                    }
+                }));
+                holder.likers.setText(String.valueOf(post.getLikes().size()));
+                if (post.getPostImage() != null) {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
                 }
             });

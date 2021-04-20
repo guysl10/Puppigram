@@ -44,12 +44,14 @@
         android:id="@+id/upload_username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="12dp"
         android:text="Username"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/upload_username_img"
         app:layout_constraintStart_toEndOf="@+id/upload_username_img"
-        app:layout_constraintTop_toTopOf="@+id/upload_username_img" />
+        app:layout_constraintTop_toTopOf="@+id/upload_username_img"
+        app:layout_constraintVertical_bias="0.492" />
 
     <ImageView
         android:id="@+id/upload_post_img"
@@ -65,20 +67,22 @@
         android:id="@+id/upload_capture_img"
         android:layout_width="45dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/upload_username_text"
         app:layout_constraintEnd_toStartOf="@+id/upload_remove_img"
         app:layout_constraintTop_toTopOf="@+id/upload_username_text"
+        app:layout_constraintVertical_bias="0.421"
         app:srcCompat="@drawable/photo" />
 
     <ImageView
         android:id="@+id/upload_remove_img"
         android:layout_width="42dp"
         android:layout_height="45dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="36dp"
         app:layout_constraintBottom_toBottomOf="@+id/upload_capture_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/upload_capture_img"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/delete" />
 
     <EditText
@@ -89,9 +93,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:hint="post description"
+        android:selectAllOnFocus="true"
         android:textColor="#000000"
         android:textColorHint="#000000"
-        android:selectAllOnFocus="true"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/upload_username_img" />
