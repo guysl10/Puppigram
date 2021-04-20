@@ -39,6 +39,14 @@ public class UsersModel {
         void onComplete();
     }
 
+    public interface LoginUserListener {
+        void onComplete(boolean success);
+    }
+
+    public interface ChangeUserPasswordListener {
+        void onComplete(boolean success);
+    }
+
     public void addUser(final User student, final AddStudentListener listener) {
         usersModeFirebase.addUser(student, listener);
     }
@@ -55,7 +63,7 @@ public class UsersModel {
         usersModeFirebase.register(user, password, listener);
     }
 
-    public void login(String email, String password, UsersModeFirebase.LoginUserListener loginUserListener) {
+    public void login(String email, String password, LoginUserListener loginUserListener) {
         usersModeFirebase.login(email, password, loginUserListener);
     }
 
@@ -74,8 +82,8 @@ public class UsersModel {
         usersModeFirebase.uploadImage(imageBmp, name, listener);
     }
 
-    public void changeUserPassword(final String pass) {
-        usersModeFirebase.changeUserPassword(pass);
+    public void changeUserPassword(final String pass, ChangeUserPasswordListener listener) {
+        usersModeFirebase.changeUserPassword(pass, listener);
     }
 }
 

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +24,8 @@ import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
-import com.example.puppigram.utils.PhotoUtil;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.UUID;
 
 /**
@@ -40,7 +38,7 @@ public class UploadPostFragment extends Fragment {
     ImageView postImg;
     EditText description;
     TextView username;
-    ImageView usernameImg;
+    ImageView userImage;
     ImageView removeContentImg;
     User currentUser;
     ProgressBar spinner;
@@ -56,7 +54,7 @@ public class UploadPostFragment extends Fragment {
         postImg = (ImageView) view.findViewById(R.id.upload_post_img);
         description = view.findViewById(R.id.upload_post_description);
         username = view.findViewById(R.id.upload_username_text);
-        usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
+        userImage = (ImageView) view.findViewById(R.id.upload_username_img);
         removeContentImg = (ImageView) view.findViewById(R.id.upload_remove_img);
 
         UsersModel.instance.getUser(
@@ -64,12 +62,7 @@ public class UploadPostFragment extends Fragment {
                 userModel -> {
                     currentUser = userModel;
                     username.setText(currentUser.getUserName());
-                    PhotoUtil.UriToImageView(
-                            Uri.parse(currentUser.getUserImage()),
-                            postImg,
-                            "user image not found",
-                            requireActivity().getApplicationContext()
-                    );
+                    Picasso.get().load(userModel.getUserImage()).placeholder(R.drawable.postimagereplaceable).into(userImage);
                 });
 
         TextView postBtn = view.findViewById(R.id.upload_post_text);

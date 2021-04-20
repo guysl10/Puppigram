@@ -2,19 +2,10 @@ package com.example.puppigram.model.post;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.ImageView;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.puppigram.R;
-import com.example.puppigram.model.user.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,24 +17,17 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Entity;
-
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.example.puppigram.utils.PhotoUtil.StringToBitMap;
-
 public class PostsModelFirebase {
 
-    Uri imageUri = null;
     ImagePost imagePost = null;
     FirebaseUser firebaseUser;
+    FirebaseStorage storage;
     @SuppressLint("StaticFieldLeak")
     static FirebaseFirestore db;
-    FirebaseStorage storage;
-    StorageReference storageRef;
     public FirebaseAuth firebaseAuth;
     public static PostsModelFirebase instance;
     private static final String TAG = "PostsModelFirebase";
@@ -58,6 +42,7 @@ public class PostsModelFirebase {
                 .build();
         db.setFirestoreSettings(settings);
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = getAuthInstance().getCurrentUser();
     }
 
     interface GetAllPostsListener {
@@ -76,7 +61,6 @@ public class PostsModelFirebase {
 
     public void addLike(final String postId, final PostsModel.GetNewLikeListener listener) {
         Log.d(TAG, "add like");
-        firebaseUser = getAuthInstance().getCurrentUser();
         PostsModelFirebase.getPost(postId, post -> {
             if (post != null) {
                 post.getLikes().add(firebaseUser.getUid());
@@ -87,7 +71,6 @@ public class PostsModelFirebase {
 
     public void deleteLike(final String postId, final PostsModel.DeleteLikeListener listener) {
         Log.d(TAG, "delete like");
-        firebaseUser = getAuthInstance().getCurrentUser();
         PostsModelFirebase.getPost(postId, post -> {
             if (post != null) {
                 post.getLikes().remove(firebaseUser.getUid());
@@ -96,21 +79,20 @@ public class PostsModelFirebase {
         });
     }
 
-    public void isLiked(final String postId, final ImageView imageView, final PostsModel.GetIsLikedListener listener) {
-        firebaseUser = getAuthInstance().getCurrentUser();
-        PostsModelFirebase.getPost(postId, imagePost -> {
-            if (imagePost != null) {
-                this.imagePost = imagePost;
+    public void isLiked(final String postId, final PostsModel.GetIsLikedListener listener) {
+        Log.d(TAG, "Check like");
+        PostsModelFirebase.getPost(postId, post -> {
+            if (post != null) {
+                this.imagePost = post;
                 if (this.imagePost.getLikes().contains(firebaseUser.getUid())) {
-                    imageView.setImageResource(R.drawable.is_liked);
-                    imageView.setTag("liked");
+                    listener.onComplete(true);
                 } else {
-                    imageView.setImageResource(R.drawable.is_liked);
-                    imageView.setTag("like");
+                    listener.onComplete(false);
                 }
-                listener.onComplete(true);
             }
-            listener.onComplete(false);
+            else{
+                Log.d(TAG, "IsLiked:post is null");
+            }
         });
     }
 

@@ -40,9 +40,10 @@ public class ChangeUserPasswordFragment extends Fragment {
         updateBtn = view.findViewById(R.id.change_save_new_password_btn);
         updateBtn.setOnClickListener(v -> {
             if (pass.getText().toString().equals(rePass.getText().toString())) {
-                UsersModel.instance.changeUserPassword(pass.getText().toString());
-                Navigation.findNavController(view).navigate(R.id.settingsFragment);
-                Toast.makeText(getContext(), "Password changed successfully", Toast.LENGTH_LONG).show();
+                UsersModel.instance.changeUserPassword(pass.getText().toString(), success -> {
+                    Toast.makeText(getContext(), "Password changed successfully", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(view).navigate(R.id.settingsFragment);
+                });
             } else {
                 currentPassword.setText("");
                 pass.setText("");
