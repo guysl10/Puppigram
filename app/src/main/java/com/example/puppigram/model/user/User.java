@@ -30,6 +30,13 @@ public class User implements Serializable {
         this.userImage = userImage;
     }
 
+    public User(User setUser){
+        this.id = setUser.id;
+        this.userName = setUser.userName;
+        this.email = setUser.email;
+        this.userImage = setUser.userImage;
+        this.bio = setUser.bio;
+    }
     public void fromMap(Map<String, Object> map) {
         id = (String) map.get("id");
         userName = (String) map.get("userName");

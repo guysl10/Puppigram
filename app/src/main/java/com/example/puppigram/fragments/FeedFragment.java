@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,12 +55,13 @@ public class FeedFragment extends Fragment {
         noPosts = view.findViewById(R.id.feed_no_posts_text);
         posts = view.findViewById(R.id.feed_posts_recycler_list);
 
+        postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         posts.setLayoutManager(layoutManager);
         posts.setHasFixedSize(true);
         posts.setAdapter(adapter);
 
-        postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
         postsViewModel.getImagePosts().observe(
                 getViewLifecycleOwner(),
                 imagePosts -> adapter.notifyDataSetChanged()
@@ -134,19 +136,23 @@ public class FeedFragment extends Fragment {
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
-            AtomicReference<User> temp_user = null;
-            UsersModel.instance.getUser(post.getOwnerId(), temp_user::set);
-
-            holder.description.setText(post.getDescription());
-            holder.username.setText(temp_user.get().getUserName());
-            holder.likers.setText(post.getLikes().size());
-
-            if (post.getPostImage() != null){
-                Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
-            }
+            final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
+            UsersModel.instance.getUser(post.getOwnerId(), new UsersModel.GetUserListener() {
+                @Override
+                public void onComplete(User userModel) {
+                    tempUser[0] = new AtomicReference<>(userModel);
+                    holder.description.setText(post.getDescription());
+                    holder.username.setText(tempUser[0].get().getUserName());
+//                    holder.likers.setText(post.getLikes().size());
+                    holder.likers.setText("0");
+                    if (post.getPostImage() != null){
+                        Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
+                    }
+                }
+            });
 
 //            PhotoUtil.UriToImageView(
-//                    Uri.parse(temp_user.get().getUserImage()),
+//                    Uri.parse(tempUser.get().getUserImage()),
 //                    holder.userImg,
 //                    "user image in post " + post.getId()+ "not found",
 //                    getActivity().getApplicationContext()
