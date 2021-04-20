@@ -62,6 +62,8 @@ public class FeedFragment extends Fragment {
         noPosts = view.findViewById(R.id.feed_no_posts_text);
         posts = view.findViewById(R.id.feed_posts_recycler_list);
 
+        noPosts.setVisibility(View.INVISIBLE);
+
         postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -95,10 +97,15 @@ public class FeedFragment extends Fragment {
         noPosts.setVisibility(View.INVISIBLE);
         PostsModel.instance.refreshAllPosts(posts -> {
             List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
-            if (allPosts == null || allPosts.isEmpty())
+            if (allPosts == null || allPosts.isEmpty()){
                 noPosts.setVisibility(View.VISIBLE);
-            else
+                this.posts.setVisibility(View.INVISIBLE);
+            }
+            else{
+                this.posts.setVisibility(View.VISIBLE);
+                noPosts.setVisibility(View.INVISIBLE);
                 adapter.notifyDataSetChanged();
+            }
             spinner.setVisibility(View.INVISIBLE);
         });
     }

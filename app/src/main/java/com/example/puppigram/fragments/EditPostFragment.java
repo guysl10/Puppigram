@@ -16,12 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.post.ImagePost;
+import com.example.puppigram.model.post.PostsModel;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -44,6 +49,7 @@ public class EditPostFragment extends Fragment {
     TextView deletePostBtn;
     FirebaseUser currentUser;
     ProgressBar spinner;
+    ImagePost editablePost;
 
     public EditPostFragment() {
         // Required empty public constructor
@@ -77,27 +83,17 @@ public class EditPostFragment extends Fragment {
         deletePostBtn.setEnabled(false);
         removeContentImg.setEnabled(false);
 
-        ImagePost editpost = getArguments().getParcelable("post");
-
-        //TODO: apply getting imagePost after navigation...
-
-        if (currentUser != null) {
-            username.setText(currentUser.getDisplayName());
-            try {
-                assert getActivity() != null;
-                postImg.setImageBitmap(MediaStore.Images.Media.getBitmap(
-                        getActivity().getApplicationContext().getContentResolver(),
-                        currentUser.getPhotoUrl()
-                ));
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(
-                        view.getContext(),
-                        "Image post not found",
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
-        }
+        editablePost = getArguments().getParcelable("post");
+        UsersModel.instance.getUser(editablePost.getOwnerId(), userModel -> {
+            description.setText(editablePost.getDescription());
+            username.setText(userModel.getUserName());
+            Picasso.get().load(userModel.getUserImage()).placeholder(
+                    R.drawable.editpostuserimagereplaceable
+            ).into(userImage);
+            Picasso.get().load(editablePost.getPostImage()).placeholder(
+                    R.drawable.editpostimagereplaceable
+            ).into(postImg);
+        });
 
         captureBtn.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).getPhotoActivity().
@@ -122,11 +118,15 @@ public class EditPostFragment extends Fragment {
         postImg.setImageResource(0);
     }
 
+    @SuppressLint("ShowToast")
     private void deletePost(){
-        //TODO: delete post according to given imagePost..
-//        PostsModel.instance.deletePost();
-        removeContent();
-        Toast.makeText(getContext(),"Post deleted successfully!", Toast.LENGTH_SHORT).show();
+        PostsModel.instance.deletePost(editablePost, success -> {
+            removeContent();
+            Toast.makeText(getContext(),"Post deleted successfully!", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(getView()).navigate(R.id.action_editPostFragment_to_feedFragment);
+        });
+
+
     }
 
     @Override
