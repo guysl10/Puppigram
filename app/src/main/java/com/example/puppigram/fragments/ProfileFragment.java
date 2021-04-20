@@ -150,6 +150,7 @@ public class ProfileFragment extends Fragment {
         TextView username;
         ImageView userImg;
         ImageView likeBtn;
+        ProgressBar spinner;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -160,11 +161,12 @@ public class ProfileFragment extends Fragment {
             userImg = itemView.findViewById(R.id.post_user_img);
             username = itemView.findViewById(R.id.postOwner);
             likeBtn = itemView.findViewById(R.id.postLiker);
+            spinner = itemView.findViewById(R.id.post_spinner);
             userImg.setVisibility(View.INVISIBLE);
             username.setVisibility(View.INVISIBLE);
 
             // After finish configure, disable the spinner
-            ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
+
             spinner.setVisibility(View.INVISIBLE);
         }
     }
@@ -182,6 +184,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ProfileFragment.PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
+            spinner.setVisibility(View.VISIBLE);
             ImagePost post = allPosts.get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
             UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
@@ -201,6 +204,7 @@ public class ProfileFragment extends Fragment {
                         if (isLiked) {
                             holder.likeBtn.setColorFilter(Color.GREEN);
                         }
+
                     });
 
                     holder.editBtn.setOnClickListener(v -> {
@@ -229,6 +233,7 @@ public class ProfileFragment extends Fragment {
                     }
                 }
             });
+            spinner.setVisibility(View.INVISIBLE);
         }
 
         @Override
