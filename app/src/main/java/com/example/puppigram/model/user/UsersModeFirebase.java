@@ -1,6 +1,6 @@
 package com.example.puppigram.model.user;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.puppigram.model.post.PostsModel;
@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
@@ -24,6 +25,7 @@ public class UsersModeFirebase {
     User user = null;
     FirebaseUser firebaseUser;
     static StorageReference storageRef;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
     static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "UsersModelFirebase";
@@ -43,7 +45,6 @@ public class UsersModeFirebase {
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
                         db.collection("users").document(user.getId()).set(user);
-//                        UsersModeFirebase.uploadImage(user);
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
@@ -81,7 +82,6 @@ public class UsersModeFirebase {
         });
     }
 
-
     public static void getUser(String id, UsersModel.GetUserListener listener) {
         Log.d(TAG, "getUser:get user from db");
         db.collection("users").document(id).get()
@@ -94,6 +94,18 @@ public class UsersModeFirebase {
                     } else {
                         Log.d(TAG, "getUser:failed");
                     }
+                });
+    }
+
+    public void addStudent(User user, final UsersModel.AddStudentListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getId())
+                .set(user).addOnSuccessListener(aVoid -> {
+                    Log.d("TAG", "user added successfully");
+                    listener.onComplete();
+                }).addOnFailureListener(e -> {
+                    Log.d("TAG", "fail adding user");
+                    listener.onComplete();
                 });
     }
 
@@ -132,36 +144,23 @@ public class UsersModeFirebase {
         });
     }
 
-//    public static void uploadImage(User user) {
-//        Log.d(TAG, "uploadImage: Upload a profile picture");
-//        storageRef = FirebaseStorage.getInstance().getReference("userImage");
-//        if (user.getUserImage() != null) {
-//            final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
-//                    + "." + Uri.parse(user.getUserImage()).getLastPathSegment());
-//            uploadTask = fileReference.putFile(Uri.parse(user.getUserImage()));
-//
-//            uploadTask.continueWithTask(task -> {
-//                Log.d(TAG, "then: task of upload the file(image) to the storage");
-//                if (!task.isSuccessful()) {
-//                    throw task.getException();
-//                }
-//                return fileReference.getDownloadUrl();
-//            }).addOnCompleteListener(task -> {
-//                Log.d(TAG, "onComplete: task complete");
-//                if (task.isSuccessful()) {
-//                    Log.d(TAG, "onComplete: task succeed");
-//                    Uri downloadUri = task.getResult();
-//                    user.setUserImage(downloadUri.toString());
-//                    db.collection("users").document(user.getId()).set(user);
-//                } else {
-//                    Log.d(TAG, "onComplete: task not succeed");
-//                }
-//            }).addOnFailureListener(e -> {
-//                Log.d(TAG, "onComplete: task not succeed and not complete");
-//            });
-//
-//        } else {
-//            Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
-//        }
-//    }
+    public void uploadImage(Bitmap imageBmp, String name, UsersModel.UploadImageListener listener) {
+        final StorageReference imagesRef =
+                storage.getReference().child("userImages").child(name);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception ->
+                listener.onComplete(null)).addOnSuccessListener(
+                taskSnapshot ->
+                        imagesRef.getDownloadUrl().addOnSuccessListener(
+                                uri -> {
+                                    listener.onComplete(uri.toString());
+                                }
+                        )
+        );
+    }
+
 }

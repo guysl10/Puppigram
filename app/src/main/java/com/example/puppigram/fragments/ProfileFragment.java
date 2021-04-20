@@ -2,7 +2,6 @@ package com.example.puppigram.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.post.ImagePost;
+import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
-import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
@@ -61,7 +60,7 @@ public class ProfileFragment extends Fragment {
         noPosts = view.findViewById(R.id.profile_no_posts_text);
         editProfile = view.findViewById(R.id.profile_edit_img);
         progressBarProfile = view.findViewById(R.id.profile_spinner);
-        imageProfile = view.findViewById(R.id.profile_image);
+        imageProfile = view.findViewById(R.id.profile_img);
         username = view.findViewById(R.id.profile_username_text);
         posts = view.findViewById(R.id.profile_posts_recycler_view);
         bio = view.findViewById(R.id.profile_bio_text);
@@ -87,12 +86,9 @@ public class ProfileFragment extends Fragment {
                     user = userModel;
                     username.setText(user.getUserName());
                     bio.setText(user.getBio());
-                    PhotoUtil.UriToImageView(
-                            Uri.parse(user.getUserImage()),
-                            imageProfile,
-                            "Image was not updated",
-                            getActivity().getApplicationContext()
-                    );
+                    if (user.getUserImage() != null) {
+                        Picasso.get().load(user.getUserImage()).placeholder(R.drawable.postimagereplaceable).into(imageProfile);
+                    }
                     reloadData();
                 }
         );

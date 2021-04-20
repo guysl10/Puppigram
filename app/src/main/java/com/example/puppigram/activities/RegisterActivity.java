@@ -1,7 +1,10 @@
 package com.example.puppigram.activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.user.User;
@@ -105,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void createProfile() {
         loadingProgress.setVisibility(View.VISIBLE);
-        registerButton.setEnabled(false);
+        //registerButton.setEnabled(false);
         userName.setEnabled(false);
         userEmail.setEnabled(false);
         userBio.setEnabled(false);
@@ -134,6 +139,16 @@ public class RegisterActivity extends AppCompatActivity {
             User user = new User(username, email, bio, userImage);
             UsersModel.instance.register(user, pass, success -> {
                 showMessage("Register complete");
+                BitmapDrawable drawable = (BitmapDrawable) userPhoto.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                UsersModel.instance.uploadImage(bitmap, user.getId(), url -> {
+                    if (url == null) {
+                        displayFailedError();
+                    } else {
+                        user.setUserImage(url);
+                        UsersModel.instance.addUser(user, () -> Navigation.findNavController(registerButton).popBackStack());
+                    }
+                });
                 UsersModel.instance.login(user.getEmail(), userPassword.toString(), v -> {
                     if (success) {
                         navigator.navigate(MainActivity.class);
@@ -147,5 +162,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void showMessage(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    private void displayFailedError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Operation Failed");
+        builder.setMessage("Saving image failed, please try again later...");
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
     }
 }
