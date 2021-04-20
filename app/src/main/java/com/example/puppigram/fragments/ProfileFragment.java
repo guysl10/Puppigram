@@ -88,6 +88,13 @@ public class ProfileFragment extends Fragment {
         );
 
         Log.d("UserRepo", "ProfileFragment:Start");
+
+        editProfile.setOnClickListener(v->
+                Navigation.findNavController(view).navigate(
+                        R.id.action_profileFragment_to_editProfileFragment
+                )
+        );
+
         UsersModel.instance.getUser(
                 UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
                 userModel -> {
@@ -98,12 +105,11 @@ public class ProfileFragment extends Fragment {
                         Picasso.get().load(user.getUserImage()).placeholder(R.drawable.postimagereplaceable).into(imageProfile);
                     }
                     reloadData();
+                    editProfile.setEnabled(true);
+                    noPosts.setEnabled(true);
+                    spinner.setVisibility(View.INVISIBLE);
                 }
         );
-
-        editProfile.setEnabled(true);
-        noPosts.setEnabled(true);
-        spinner.setVisibility(View.INVISIBLE);
         return view;
     }
 

@@ -37,6 +37,8 @@ public class ChangeUserPasswordFragment extends Fragment {
         pass = view.findViewById(R.id.change_new_password);
         rePass = view.findViewById(R.id.change_repassword);
         Button updateBtn = view.findViewById(R.id.change_save_new_password_btn);
+        Button discardBtn = view.findViewById(R.id.change_save_new_discard_btn);
+
         updateBtn.setOnClickListener(v -> {
             if (pass.getText().toString().equals(rePass.getText().toString())) {
                 UsersModel.instance.changeUserPassword(pass.getText().toString(), success -> {
@@ -50,6 +52,14 @@ public class ChangeUserPasswordFragment extends Fragment {
                 Toast.makeText(getContext(), "Password not equal!", Toast.LENGTH_LONG).show();
             }
         });
+
+        discardBtn.setOnClickListener(v ->{
+            currentPassword.setText("");
+            pass.setText("");
+            rePass.setText("");
+            Navigation.findNavController(view).popBackStack();
+        });
+
         return view;
     }
 }
