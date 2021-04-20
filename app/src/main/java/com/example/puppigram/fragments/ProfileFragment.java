@@ -95,17 +95,17 @@ public class ProfileFragment extends Fragment {
                             getActivity().getApplicationContext()
                     );
                     reloadData();
-                    showMessage("User updated successfully");
                 }
         );
 
         editProfile.setOnClickListener(v->
-                Navigation.findNavController(view).navigate(
-                        R.id.action_profileFragment_to_editProfileFragment
-                ));
+            Navigation.findNavController(view).navigate(
+                            R.id.action_profileFragment_to_editProfileFragment
+            )
+        );
 
-        editProfile.setEnabled(false);
-        noPosts.setEnabled(false);
+        editProfile.setEnabled(true);
+        noPosts.setEnabled(true);
         spinner.setVisibility(View.INVISIBLE);
         return view;
     }
