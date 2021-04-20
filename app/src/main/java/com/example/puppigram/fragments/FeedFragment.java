@@ -66,19 +66,16 @@ public class FeedFragment extends Fragment {
         postsViewModel.getImagePosts().observe(
                 getViewLifecycleOwner(),
                 imagePosts -> {
-
                     adapter.notifyDataSetChanged();
                 }
         );
 
-        reloadData();
         // After finish configure, disable the spinner
         ProgressBar spinner = view.findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
         view.invalidate();
         return view;
     }
-
 
         @Override
     public void onStart() {
