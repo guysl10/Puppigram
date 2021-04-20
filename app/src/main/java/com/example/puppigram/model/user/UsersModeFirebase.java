@@ -43,7 +43,7 @@ public class UsersModeFirebase {
                         String userID = firebaseUser.getUid();
                         user.setId(userID);
                         db.collection("users").document(user.getId()).set(user);
-                        UsersModeFirebase.uploadImage(user);
+//                        UsersModeFirebase.uploadImage(user);
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     }
@@ -132,36 +132,36 @@ public class UsersModeFirebase {
         });
     }
 
-    public static void uploadImage(User user) {
-        Log.d(TAG, "uploadImage: Upload a profile picture");
-        storageRef = FirebaseStorage.getInstance().getReference("userImage");
-        if (user.getUserImage() != null) {
-            final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
-                    + "." + Uri.parse(user.getUserImage()).getLastPathSegment());
-            uploadTask = fileReference.putFile(Uri.parse(user.getUserImage()));
-
-            uploadTask.continueWithTask(task -> {
-                Log.d(TAG, "then: task of upload the file(image) to the storage");
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-                return fileReference.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                Log.d(TAG, "onComplete: task complete");
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "onComplete: task succeed");
-                    Uri downloadUri = task.getResult();
-                    user.setUserImage(downloadUri.toString());
-                    db.collection("users").document(user.getId()).set(user);
-                } else {
-                    Log.d(TAG, "onComplete: task not succeed");
-                }
-            }).addOnFailureListener(e -> {
-                Log.d(TAG, "onComplete: task not succeed and not complete");
-            });
-
-        } else {
-            Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
-        }
-    }
+//    public static void uploadImage(User user) {
+//        Log.d(TAG, "uploadImage: Upload a profile picture");
+//        storageRef = FirebaseStorage.getInstance().getReference("userImage");
+//        if (user.getUserImage() != null) {
+//            final StorageReference fileReference = storageRef.child(System.currentTimeMillis()
+//                    + "." + Uri.parse(user.getUserImage()).getLastPathSegment());
+//            uploadTask = fileReference.putFile(Uri.parse(user.getUserImage()));
+//
+//            uploadTask.continueWithTask(task -> {
+//                Log.d(TAG, "then: task of upload the file(image) to the storage");
+//                if (!task.isSuccessful()) {
+//                    throw task.getException();
+//                }
+//                return fileReference.getDownloadUrl();
+//            }).addOnCompleteListener(task -> {
+//                Log.d(TAG, "onComplete: task complete");
+//                if (task.isSuccessful()) {
+//                    Log.d(TAG, "onComplete: task succeed");
+//                    Uri downloadUri = task.getResult();
+//                    user.setUserImage(downloadUri.toString());
+//                    db.collection("users").document(user.getId()).set(user);
+//                } else {
+//                    Log.d(TAG, "onComplete: task not succeed");
+//                }
+//            }).addOnFailureListener(e -> {
+//                Log.d(TAG, "onComplete: task not succeed and not complete");
+//            });
+//
+//        } else {
+//            Log.d(TAG, "uploadImage: The user did not choose to upload a photo ");
+//        }
+//    }
 }
