@@ -10,6 +10,7 @@ import com.example.puppigram.model.post.ImagePost;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class PostsModel {
 

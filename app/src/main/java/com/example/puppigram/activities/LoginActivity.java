@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn(String email, String pass) {
+        loadingProgress.setVisibility(View.VISIBLE);
         UsersModel.instance.login(email, pass, success -> {
             if (success) {
                 loadingProgress.setVisibility(View.INVISIBLE);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class EditPostFragment extends Fragment {
     ImageView removeContentImg;
     TextView deletePostBtn;
     FirebaseUser currentUser;
+    ProgressBar spinner;
 
     public EditPostFragment() {
         // Required empty public constructor
@@ -61,6 +63,7 @@ public class EditPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
+        spinner = view.findViewById(R.id.editpost_spinner);
         uploadBtn = view.findViewById(R.id.edit_post_text);
         postImg = (ImageView) view.findViewById(R.id.edit_post_img);
         description = view.findViewById(R.id.edit_description);
@@ -69,6 +72,15 @@ public class EditPostFragment extends Fragment {
         removeContentImg = view.findViewById(R.id.edit_remove_img);
         deletePostBtn = view.findViewById(R.id.edit_delete_post_text);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        spinner.setVisibility(View.VISIBLE);
+        uploadBtn.setEnabled(false);
+        description.setEnabled(false);
+        deletePostBtn.setEnabled(false);
+        uploadBtn.setEnabled(false);
+        description.setEnabled(false);
+        deletePostBtn.setEnabled(false);
+        removeContentImg.setEnabled(false);
 
         ImageView captureBtn = view.findViewById(R.id.edit_capture_img);
 
@@ -101,6 +113,14 @@ public class EditPostFragment extends Fragment {
         deletePostBtn.setOnClickListener(v-> deletePost());
         uploadBtn.setOnClickListener(v -> editPost(view));
 
+        spinner.setVisibility(View.INVISIBLE);
+        uploadBtn.setEnabled(true);
+        description.setEnabled(true);
+        deletePostBtn.setEnabled(true);
+        uploadBtn.setEnabled(true);
+        description.setEnabled(true);
+        deletePostBtn.setEnabled(true);
+        removeContentImg.setEnabled(true);
         return view;
     }
 
@@ -129,7 +149,15 @@ public class EditPostFragment extends Fragment {
 
     @SuppressLint("WrongConstant")
     public void editPost(View view) {
+        spinner.setVisibility(View.VISIBLE);
         uploadBtn.setEnabled(false);
+        description.setEnabled(false);
+        deletePostBtn.setEnabled(false);
+        uploadBtn.setEnabled(false);
+        description.setEnabled(false);
+        deletePostBtn.setEnabled(false);
+        removeContentImg.setEnabled(false);
+
         if (postImg.getDrawable() == null) {
             Log.d("TAG", "upload_post: No image selected");
             Toast.makeText(view.getContext(), "No image selected", Toast.LENGTH_LONG).show();
@@ -148,7 +176,14 @@ public class EditPostFragment extends Fragment {
         PostsModel.instance.updatePost(new_post, () -> {
             Log.d("TAG", "editPost: Post was uploaded");
             Toast.makeText(view.getContext(), "Post was updated successfully", Toast.LENGTH_LONG).show();
+            spinner.setVisibility(View.INVISIBLE);
             uploadBtn.setEnabled(true);
+            description.setEnabled(true);
+            deletePostBtn.setEnabled(true);
+            uploadBtn.setEnabled(true);
+            description.setEnabled(true);
+            deletePostBtn.setEnabled(true);
+            removeContentImg.setEnabled(true);
         });
     }
 }

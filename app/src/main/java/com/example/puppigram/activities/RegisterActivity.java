@@ -104,15 +104,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
     private void createProfile() {
-        registerButton.setVisibility(View.INVISIBLE);
-        registerButton.setVisibility(View.INVISIBLE);
+        loadingProgress.setVisibility(View.VISIBLE);
+        registerButton.setEnabled(false);
         userName.setEnabled(false);
         userEmail.setEnabled(false);
         userBio.setEnabled(false);
         userPassword.setEnabled(false);
         userRePassword.setEnabled(false);
         userPhoto.setEnabled(false);
-        loadingProgress.setVisibility(View.VISIBLE);
 
         final String username = userName.getText().toString();
         final String email = userEmail.getText().toString();

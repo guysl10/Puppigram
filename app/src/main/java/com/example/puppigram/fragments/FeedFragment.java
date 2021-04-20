@@ -162,7 +162,8 @@ public class FeedFragment extends Fragment {
         public int getItemCount() {
             int size = 0;
             try {
-                size = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).size();
+                size = Objects.requireNonNull(
+                        postsViewModel.getImagePosts().getValue()).size();
             } catch (Exception e) {
                 e.printStackTrace();
             }
