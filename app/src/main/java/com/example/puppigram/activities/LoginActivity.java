@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                assert data != null;
                 String result = data.getStringExtra("Result");
                 if (result.equals("OK"))
                     this.onStart();
