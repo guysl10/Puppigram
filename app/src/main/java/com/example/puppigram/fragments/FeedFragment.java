@@ -65,10 +65,13 @@ public class FeedFragment extends Fragment {
 
         postsViewModel.getImagePosts().observe(
                 getViewLifecycleOwner(),
-                imagePosts -> adapter.notifyDataSetChanged()
-        );
-        reloadData();
+                imagePosts -> {
 
+                    adapter.notifyDataSetChanged();
+                }
+        );
+
+        reloadData();
         // After finish configure, disable the spinner
         ProgressBar spinner = view.findViewById(R.id.feed_spinner);
         spinner.setVisibility(View.INVISIBLE);
@@ -80,7 +83,6 @@ public class FeedFragment extends Fragment {
         @Override
     public void onStart() {
         super.onStart();
-        reloadData();
     }
 
     @SuppressLint("WrongConstant")
@@ -145,25 +147,22 @@ public class FeedFragment extends Fragment {
             //Set the holder info for the post in the recycled post.
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
-            UsersModel.instance.getUser(post.getOwnerId(), new UsersModel.GetUserListener() {
-                @Override
-                public void onComplete(User userModel) {
-                    tempUser[0] = new AtomicReference<>(userModel);
-                    holder.description.setText(post.getDescription());
-                    holder.username.setText(tempUser[0].get().getUserName());
-                    holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
-                        if (isLiked) {
-                            PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
-                        } else {
-                            PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
-                        }
-                    }));
-                    holder.likers.setText(String.valueOf(post.getLikes().size()));
-                    if (post.getPostImage() != null) {
-                        Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
+            UsersModel.instance.getUser(post.getOwnerId(), (UsersModel.GetUserListener) userModel -> {
+                tempUser[0] = new AtomicReference<>(userModel);
+                holder.description.setText(post.getDescription());
+                holder.username.setText(tempUser[0].get().getUserName());
+                holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                    if (isLiked) {
+                        PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                    } else {
+                        PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
                     }
-                    Picasso.get().load(tempUser[0].get().getUserImage()).placeholder(R.drawable.userimagereplaceable).into(holder.userImg);
+                }));
+                holder.likers.setText(String.valueOf(post.getLikes().size()));
+                if (post.getPostImage() != null) {
+                    Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
                 }
+                Picasso.get().load(tempUser[0].get().getUserImage()).placeholder(R.drawable.userimagereplaceable).into(holder.userImg);
             });
 
             holder.editBtn.setOnClickListener(v ->{
