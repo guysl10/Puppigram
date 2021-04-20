@@ -172,18 +172,18 @@ public class EditPostFragment extends Fragment {
         String userUid = this.currentUser.getUid();
         String photoUid = UUID.randomUUID().toString();
 
-        ImagePost new_post = new ImagePost(photoUid, userUid, description.getText().toString(), photoUri);
-        PostsModel.instance.updatePost(new_post, () -> {
-            Log.d("TAG", "editPost: Post was uploaded");
-            Toast.makeText(view.getContext(), "Post was updated successfully", Toast.LENGTH_LONG).show();
-            spinner.setVisibility(View.INVISIBLE);
-            uploadBtn.setEnabled(true);
-            description.setEnabled(true);
-            deletePostBtn.setEnabled(true);
-            uploadBtn.setEnabled(true);
-            description.setEnabled(true);
-            deletePostBtn.setEnabled(true);
-            removeContentImg.setEnabled(true);
-        });
+//        ImagePost new_post = new ImagePost(photoUid, userUid, description.getText().toString(), photoUri);
+//        PostsModel.instance.updatePost(new_post, () -> {
+//            Log.d("TAG", "editPost: Post was uploaded");
+//            Toast.makeText(view.getContext(), "Post was updated successfully", Toast.LENGTH_LONG).show();
+//            spinner.setVisibility(View.INVISIBLE);
+//            uploadBtn.setEnabled(true);
+//            description.setEnabled(true);
+//            deletePostBtn.setEnabled(true);
+//            uploadBtn.setEnabled(true);
+//            description.setEnabled(true);
+//            deletePostBtn.setEnabled(true);
+//            removeContentImg.setEnabled(true);
+//        });
     }
 }

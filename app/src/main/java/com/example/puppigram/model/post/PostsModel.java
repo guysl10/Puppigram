@@ -20,6 +20,7 @@ public class PostsModel {
     private LiveData<List<ImagePost>> imagePosts;
     Context context = MyApp.getAppContext();
 
+    public interface UploadPostListener{}
 
     public interface Listener<T> {
         void onComplete(T result);
@@ -44,8 +45,9 @@ public class PostsModel {
     public interface UpdatePostListener extends AddPostListener {
     }
 
-    public interface UploadImageListener extends Listener<String> {
-    }
+
+    public interface UploadImageListener extends Listener<String>{ }
+
 
     public LiveData<List<ImagePost>> getAllPosts() {
         if (imagePosts == null) {
@@ -86,8 +88,8 @@ public class PostsModel {
         modelFirebase.deletePost(imagePost.getId(), listener);
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, final UploadImageListener listener) {
-        modelFirebase.uploadImage(imageBmp, name, listener);
+    public void uploadImage(Bitmap image, String name, final UploadImageListener listener) {
+        modelFirebase.uploadImage(image, name, listener);
     }
 
     public interface SaveImageListener {

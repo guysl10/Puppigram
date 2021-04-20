@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -89,7 +90,7 @@ public class PhotoUtil {
             }
         }
     }
-    public static void setImage(Uri srcImg, ImageView dstImg, String errorMsg, Context context){
+    public static void UriToImageView(Uri srcImg, ImageView dstImg, String errorMsg, Context context){
         try {
             InputStream inputStream =
                     context.getContentResolver().openInputStream(srcImg);
@@ -105,6 +106,17 @@ public class PhotoUtil {
                     errorMsg,
                     Toast.LENGTH_LONG
             ).show();
+        }
+    }
+
+    public static Bitmap StringToBitMap(String encodedString){
+        try{
+            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+        }
+        catch(Exception e){
+            e.getMessage();
+            return null;
         }
     }
 }

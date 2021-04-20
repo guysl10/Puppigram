@@ -87,7 +87,7 @@ public class ProfileFragment extends Fragment {
                     user = userModel;
                     username.setText(user.getUserName());
                     bio.setText(user.getBio());
-                    PhotoUtil.setImage(
+                    PhotoUtil.UriToImageView(
                             Uri.parse(user.getUserImage()),
                             imageProfile,
                             "Image was not updated",

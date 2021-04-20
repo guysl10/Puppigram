@@ -30,11 +30,12 @@ public abstract class AbstractPost {
     private Long lastUpdate;
     private ArrayList<String> likes;
 
-    public AbstractPost(String id, String ownerId, String description) {
+    public AbstractPost(String id, String ownerId, String description, Long lastUpdate) {
         this.id = id;
         this.ownerId = ownerId;
         this.description = description;
         likes = new ArrayList<>();
+        this.lastUpdate = lastUpdate;
     }
 
     public AbstractPost() {

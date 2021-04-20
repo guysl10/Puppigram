@@ -26,6 +26,7 @@ import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
@@ -135,21 +136,22 @@ public class FeedFragment extends Fragment {
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             AtomicReference<User> temp_user = null;
             UsersModel.instance.getUser(post.getOwnerId(), temp_user::set);
-            PhotoUtil.setImage(
-                    post.getPostImage(),
-                    holder.postImg,
-                    "post image "+post.getId()+ "not found",
-                    getActivity().getApplicationContext()
-            );
-            PhotoUtil.setImage(
-                    Uri.parse(temp_user.get().getUserImage()),
-                    holder.userImg,
-                    "user image in post " + post.getId()+ "not found",
-                    getActivity().getApplicationContext()
-            );
+
             holder.description.setText(post.getDescription());
             holder.username.setText(temp_user.get().getUserName());
             holder.likers.setText(post.getLikes().size());
+
+            if (post.getPostImage() != null){
+                Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
+            }
+
+//            PhotoUtil.UriToImageView(
+//                    Uri.parse(temp_user.get().getUserImage()),
+//                    holder.userImg,
+//                    "user image in post " + post.getId()+ "not found",
+//                    getActivity().getApplicationContext()
+//            );
+
 
             //Check if current user own the post.
             if(UsersModel.instance.getAuthInstance().getCurrentUser().

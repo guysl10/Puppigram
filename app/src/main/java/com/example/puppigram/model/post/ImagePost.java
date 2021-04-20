@@ -19,27 +19,25 @@ public class ImagePost extends AbstractPost implements Serializable {
         super();
 
     }
-    public ImagePost(String id, String ownerId, String description, Uri postImage) {
-        super(id, ownerId, description);
-        this.postImage = postImage.toString();
+    public ImagePost(String id, String ownerId, String description, String postImage, Long lastUpdate) {
+        super(id, ownerId, description, lastUpdate);
+        this.postImage = postImage;
     }
 
-    public Map<String, Object> create() {
-        HashMap<String, Object> result = new HashMap<>();
+    public Map<String, String> create() {
+        HashMap<String, String> result = new HashMap<>();
         result.put("id", this.getId());
         result.put("ownerId", this.getOwnerId());
         result.put("description", this.getDescription());
-        result.put("postImage", postImage);
+        result.put("postImage", this.postImage);
         return result;
     }
 
-    public Uri getPostImage() {
-        return Uri.parse(postImage);
+    public String getPostImage() {
+        return postImage;
     }
 
     public void setPostImage(Uri image) {
         this.postImage = image.toString();
     }
-
-
 }

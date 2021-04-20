@@ -1,6 +1,9 @@
 package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
@@ -60,7 +64,7 @@ public class UploadPostFragment extends Fragment {
                 userModel -> {
                     currentUser = userModel;
                     username.setText(currentUser.getUserName());
-                    PhotoUtil.setImage(
+                    PhotoUtil.UriToImageView(
                             Uri.parse(currentUser.getUserImage()),
                             postImg,
                             "user image not found",
@@ -101,21 +105,45 @@ public class UploadPostFragment extends Fragment {
         if (description.getText() == null)
             description.setText("");
 
-        File tempFile = new File(this.postImg.toString());
-        Uri photoUri = Uri.fromFile(tempFile);
-
         String userUid = this.currentUser.getId();
         String photoUid = UUID.randomUUID().toString();
 
+        Bitmap postBitmap = ((BitmapDrawable)this.postImg.getDrawable()).getBitmap();
 
-        ImagePost new_post = new ImagePost(photoUid, userUid, description.getText().toString(), photoUri);
-        PostsModel.instance.addPost(new_post, () -> {
-            Log.d("TAG", "upload_post: Post was uploaded");
-            Toast.makeText(view.getContext(), "Post was uploaded", Toast.LENGTH_LONG).show();
-            captureBtn.setEnabled(true);
-            removeContentImg.setEnabled(true);
-            description.setEnabled(true);
-            spinner.setVisibility(View.INVISIBLE);
+        PostsModel.instance.uploadImage(postBitmap, photoUid, url -> {
+            if (url == null){
+                displayFailedError();
+            }else{
+                ImagePost new_post = new ImagePost(
+                        photoUid,
+                        userUid,
+                        description.getText().toString(),
+                        url,
+                        System.currentTimeMillis()
+                        );
+                PostsModel.instance.addPost(new_post, () -> {
+                    Log.d("TAG", "upload_post: Post was uploaded");
+                    Toast.makeText(view.getContext(), "Post was uploaded", Toast.LENGTH_LONG).show();
+                    removeContent();
+                    captureBtn.setEnabled(true);
+                    removeContentImg.setEnabled(true);
+                    description.setEnabled(true);
+                    spinner.setVisibility(View.INVISIBLE);
+                });
+            }
         });
+    }
+
+    private void displayFailedError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Operation Failed");
+        builder.setMessage("Saving image failed, please try again later...");
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
     }
 }
