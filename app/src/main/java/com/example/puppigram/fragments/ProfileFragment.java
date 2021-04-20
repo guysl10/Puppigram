@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
@@ -95,7 +94,6 @@ public class ProfileFragment extends Fragment {
                             getActivity().getApplicationContext()
                     );
                     reloadData();
-                    showMessage("User updated successfully");
                 }
         );
 
@@ -187,9 +185,4 @@ public class ProfileFragment extends Fragment {
             return size;
         }
     }
-
-    private void showMessage(String text) {
-        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
-    }
-
 }

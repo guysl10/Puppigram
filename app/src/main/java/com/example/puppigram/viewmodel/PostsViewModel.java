@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.puppigram.model.post.ImagePost;
-import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.post.PostsModel;
 
 import java.util.List;
 

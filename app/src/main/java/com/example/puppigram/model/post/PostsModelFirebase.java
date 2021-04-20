@@ -1,20 +1,21 @@
-package com.example.puppigram.model;
+package com.example.puppigram.model.post;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
-import com.example.puppigram.model.post.ImagePost;
-import com.example.puppigram.repos.Repo;
+import com.example.puppigram.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -23,14 +24,77 @@ import java.util.List;
 public class PostsModelFirebase {
 
     Uri imageUri = null;
-    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ImagePost imagePost = null;
+    FirebaseUser firebaseUser;
+    static FirebaseFirestore db;
     StorageReference storageRef;
+    public FirebaseAuth firebaseAuth;
     public static PostsModelFirebase instance;
     private static final String TAG = "PostsModelFirebase";
     private StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
+    public PostsModelFirebase() {
+        db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new
+                FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
+        firebaseAuth = FirebaseAuth.getInstance();
+    }
+
     interface GetAllPostsListener {
         void onComplete(List<ImagePost> imagePosts);
+    }
+
+    public FirebaseAuth getAuthInstance() {
+        return FirebaseAuth.getInstance();
+    }
+
+    public void saveImage(Bitmap imageBitmap) {
+        Log.d(TAG, "save image");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+    }
+
+    public void addLike(final String postId, final PostsModel.GetNewLikeListener listener) {
+        Log.d(TAG, "add like");
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, post -> {
+            if (post != null) {
+                post.getLikes().add(firebaseUser.getUid());
+                db.collection("posts").document(postId).set(post).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+            }
+        });
+    }
+
+    public void deleteLike(final String postId, final PostsModel.DeleteLikeListener listener) {
+        Log.d(TAG, "delete like");
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, post -> {
+            if (post != null) {
+                post.getLikes().remove(firebaseUser.getUid());
+                db.collection("posts").document(postId).set(post).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
+            }
+        });
+    }
+
+    public void isLiked(final String postId, final ImageView imageView, final PostsModel.GetIsLikedListener listener) {
+        firebaseUser = getAuthInstance().getCurrentUser();
+        PostsModelFirebase.getPost(postId, imagePost -> {
+            if (imagePost != null) {
+                this.imagePost = imagePost;
+                if (this.imagePost.getLikes().contains(firebaseUser.getUid())) {
+                    imageView.setImageResource(R.drawable.is_liked);
+                    imageView.setTag("liked");
+                } else {
+                    imageView.setImageResource(R.drawable.is_liked);
+                    imageView.setTag("like");
+                }
+                listener.onComplete(true);
+            }
+            listener.onComplete(false);
+        });
     }
 
     public void addPost(final ImagePost post, final PostsModel.AddPostListener listener) {
@@ -89,7 +153,7 @@ public class PostsModelFirebase {
         }
     }
 
-    public void editPost(final String postId, final String description, final Repo.EditPostListener listener) {
+    public void editPost(final String postId, final String description, final PostsModel.EditPostListener listener) {
         getPost(postId, post -> {
             if (post != null) {
                 post.setDescription(description);

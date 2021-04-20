@@ -1,4 +1,4 @@
-package com.example.puppigram.model.dao;
+package com.example.puppigram.model.post.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

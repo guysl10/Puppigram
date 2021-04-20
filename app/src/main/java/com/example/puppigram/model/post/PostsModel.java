@@ -1,16 +1,16 @@
-package com.example.puppigram.model;
+package com.example.puppigram.model.post;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.puppigram.model.post.ImagePost;
+import com.example.puppigram.model.MyApp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class PostsModel {
 
@@ -18,6 +18,7 @@ public class PostsModel {
     PostsModelSQL modelSQL = new PostsModelSQL();
     PostsModelFirebase modelFirebase = new PostsModelFirebase();
     private LiveData<List<ImagePost>> imagePosts;
+    Context context = MyApp.getAppContext();
 
 
     public interface Listener<T> {
@@ -87,5 +88,49 @@ public class PostsModel {
 
     public void uploadImage(Bitmap imageBmp, String name, final UploadImageListener listener) {
         modelFirebase.uploadImage(imageBmp, name, listener);
+    }
+
+    public interface SaveImageListener {
+        void onComplete(String url);
+    }
+
+    public void saveImage(Bitmap imageBitmap, SaveImageListener listener) {
+        modelFirebase.saveImage(imageBitmap);
+    }
+
+    public interface GetIsLikedListener {
+        void onComplete(boolean success);
+    }
+
+    public void isLiked(final String postId, final ImageView imageView, GetIsLikedListener listener) {
+        modelFirebase.isLiked(postId, imageView, listener);
+    }
+
+    public interface GetNewSaveListener {
+        void onComplete(boolean success);
+    }
+
+    public interface GetNewLikeListener {
+        void onComplete(boolean success);
+    }
+
+    public void addLike(final String postId, GetNewLikeListener listener) {
+        modelFirebase.addLike(postId, listener);
+    }
+
+    public interface DeleteLikeListener {
+        void onComplete(boolean success);
+    }
+
+    public void deleteLike(final String postId, DeleteLikeListener listener) {
+        modelFirebase.deleteLike(postId, listener);
+    }
+
+    public interface EditPostListener {
+        void onComplete(boolean success);
+    }
+
+    public interface EditProfileListener {
+        void onComplete(boolean success);
     }
 }

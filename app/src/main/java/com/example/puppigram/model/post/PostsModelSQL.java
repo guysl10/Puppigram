@@ -1,11 +1,9 @@
-package com.example.puppigram.model;
+package com.example.puppigram.model.post;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-
-import com.example.puppigram.model.post.ImagePost;
 
 import java.util.List;
 

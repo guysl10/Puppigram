@@ -3,7 +3,7 @@ package com.example.puppigram.model.user;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.puppigram.repos.Repo;
+import com.example.puppigram.model.post.PostsModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 public class UsersModeFirebase {
 
@@ -27,6 +28,10 @@ public class UsersModeFirebase {
     public FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "UsersModelFirebase";
     private static StorageTask<UploadTask.TaskSnapshot> uploadTask;
+
+    public interface LoginUserListener {
+        void onComplete(boolean success);
+    }
 
     public void register(final User user, String password, final UsersModel.AddUserListener listener) {
         Log.d(TAG, "register:create new user");
@@ -45,6 +50,37 @@ public class UsersModeFirebase {
                     listener.onComplete(task.isSuccessful());
                 });
     }
+
+    public void login(String email, String password, UsersModeFirebase.LoginUserListener loginUserListener) {
+        Log.d(TAG, "login current user");
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "signInWithEmail:success");
+                        firebaseUser = firebaseAuth.getCurrentUser();
+                        Log.d(TAG, "onComplete: " + firebaseUser);
+                        loginUserListener.onComplete(true);
+                    } else {
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        loginUserListener.onComplete(false);
+                    }
+                });
+    }
+
+    public void logOut(Callable<Void> onComplete) {
+        Log.d(TAG, "logout current user");
+        firebaseAuth.signOut();
+        firebaseAuth.addAuthStateListener(firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() == null) {
+                try {
+                    onComplete.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     public static void getUser(String id, UsersModel.GetUserListener listener) {
         Log.d(TAG, "getUser:get user from db");
@@ -83,7 +119,7 @@ public class UsersModeFirebase {
 
     }
 
-    public void updateProfile(final String userName, final String bio, final String pass, final Repo.EditProfileListener listener) {
+    public void updateProfile(final String userName, final String bio, final String pass, final PostsModel.EditProfileListener listener) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         getUser(firebaseUser.getUid(), userModel -> {
             if (userModel != null) {

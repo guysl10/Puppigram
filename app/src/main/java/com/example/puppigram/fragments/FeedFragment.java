@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.post.ImagePost;
-import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.PhotoUtil;

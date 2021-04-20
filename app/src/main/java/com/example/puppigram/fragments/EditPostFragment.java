@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.post.ImagePost;
-import com.example.puppigram.model.PostsModel;
+import com.example.puppigram.model.post.PostsModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
