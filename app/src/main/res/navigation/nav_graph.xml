@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_feedFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_registerActivity"
+            app:destination="@id/registerActivity" />
     </fragment>
     <fragment
         android:id="@+id/uploadPostFragment"
@@ -78,4 +81,8 @@
         android:name="com.example.puppigram.fragments.ChangeUserPasswordFragment"
         android:label="fragment_change_user_password"
         tools:layout="@layout/fragment_change_user_password" />
+    <activity
+        android:id="@+id/registerActivity"
+        android:name="com.example.puppigram.activities.RegisterActivity"
+        android:label="RegisterActivity" />
 </navigation>
