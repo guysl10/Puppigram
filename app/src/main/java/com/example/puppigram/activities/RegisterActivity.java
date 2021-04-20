@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.model.user.User;
@@ -118,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String repass = userRePassword.getText().toString();
         final String userImage =userPhoto.toString();
 
-        if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find() || pass.length() < 6 || !pass.equals(repass) || email.isEmpty() || pass != null || username.isEmpty() || bio.isEmpty()) {
+        if (!VALID_EMAIL_ADDRESS_REGEX.matcher(email).find() || pass.length() < 6 || !pass.equals(repass) || email.isEmpty() || pass.isEmpty() || username.isEmpty() || bio.isEmpty()) {
             showMessage("Please Verify all fields");
             userName.setEnabled(true);
             userEmail.setEnabled(true);
@@ -139,14 +138,14 @@ public class RegisterActivity extends AppCompatActivity {
                         displayFailedError();
                     } else {
                         user.setUserImage(url);
-                        UsersModel.instance.addUser(user, () -> Navigation.findNavController(registerButton).popBackStack());
+                        UsersModel.instance.addUser(user, () -> UsersModel.instance.login(user.getEmail(), userPassword.toString(), v -> {
+                            if (success) {
+                                navigator.navigate(MainActivity.class);
+                            } else
+                                showMessage("SignIn failed");
+                        }));
+                        ;
                     }
-                });
-                UsersModel.instance.login(user.getEmail(), userPassword.toString(), v -> {
-                    if (success) {
-                        navigator.navigate(MainActivity.class);
-                    } else
-                        showMessage("SignIn failed");
                 });
             });
         }
