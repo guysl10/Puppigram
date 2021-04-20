@@ -1,5 +1,7 @@
 package com.example.puppigram.model.user;
 
+import android.graphics.Bitmap;
+
 import com.example.puppigram.model.post.PostsModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -9,6 +11,10 @@ import java.util.concurrent.Callable;
 public class UsersModel {
     public static final UsersModel instance = new UsersModel();
     private final UsersModeFirebase usersModeFirebase;
+
+    public interface Listener<T> {
+        void onComplete(T result);
+    }
 
     public UsersModel() {
         usersModeFirebase = new UsersModeFirebase();
@@ -28,6 +34,14 @@ public class UsersModel {
 
     public interface GetUserListener {
         void onComplete(User userModel);
+    }
+
+    public interface AddStudentListener {
+        void onComplete();
+    }
+
+    public void addUser(final User student, final AddStudentListener listener) {
+        usersModeFirebase.addStudent(student, listener);
     }
 
     public void getUser(String id, GetUserListener listener) {
@@ -52,6 +66,13 @@ public class UsersModel {
 
     public void updateProfile(final String userName, final String bio, final String pass, final PostsModel.EditProfileListener listener) {
         usersModeFirebase.updateProfile(userName, bio, pass, listener);
+    }
+
+    public interface UploadImageListener extends Listener<String> {
+    }
+
+    public void uploadImage(Bitmap imageBmp, String name, final UploadImageListener listener) {
+        usersModeFirebase.uploadImage(imageBmp, name, listener);
     }
 }
 

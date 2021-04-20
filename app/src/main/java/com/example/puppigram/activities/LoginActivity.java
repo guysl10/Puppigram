@@ -43,7 +43,17 @@ public class LoginActivity extends AppCompatActivity {
             navigator.navigate(RegisterActivity.class);
         });
 
-        loginButton.setOnClickListener(v -> signIn(userEmail.getText().toString(), userPass.getText().toString()));
+        loginButton.setOnClickListener(v -> {
+            if (!userEmail.getText().toString().isEmpty() && !userPass.getText().toString().isEmpty()) {
+                signIn(userEmail.getText().toString(), userPass.getText().toString());
+            } else {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Email or password is empty",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
         newAccount.setOnClickListener(v -> navigator.navigate(RegisterActivity.class));
     }
 
