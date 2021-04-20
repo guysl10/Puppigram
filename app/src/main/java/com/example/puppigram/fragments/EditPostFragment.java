@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +25,7 @@ import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.user.UsersModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.UUID;
 
@@ -51,7 +46,6 @@ public class EditPostFragment extends Fragment {
     TextView username;
     ImageView removeContentImg;
     TextView deletePostBtn;
-    FirebaseUser currentUser;
     ProgressBar spinner;
     ImagePost editablePost;
     ImageView captureBtn;
@@ -81,8 +75,6 @@ public class EditPostFragment extends Fragment {
         deletePostBtn = view.findViewById(R.id.edit_delete_post_text);
         captureBtn = view.findViewById(R.id.edit_capture_img);
         cancelBtn = view.findViewById(R.id.edit_cancel_text);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         spinner.setVisibility(View.VISIBLE);
         editBtn.setEnabled(false);
@@ -187,7 +179,7 @@ public class EditPostFragment extends Fragment {
         if (description.getText() == null)
             description.setText("");
 
-        String userUid = this.currentUser.getUid();
+        String userUid = UsersModel.instance.getAuthInstance().getUid();
         String photoUid = UUID.randomUUID().toString();
 
         Bitmap postBitmap = ((BitmapDrawable)this.postImg.getDrawable()).getBitmap();
