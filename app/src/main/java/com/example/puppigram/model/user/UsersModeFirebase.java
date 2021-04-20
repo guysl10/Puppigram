@@ -21,7 +21,6 @@ import java.util.concurrent.Callable;
 
 public class UsersModeFirebase {
 
-    User user = null;
     FirebaseUser firebaseUser;
     static StorageReference storageRef;
     FirebaseStorage storage = FirebaseStorage.getInstance();

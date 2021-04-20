@@ -53,11 +53,6 @@ public class PostsModelFirebase {
         return FirebaseAuth.getInstance();
     }
 
-    public void saveImage(Bitmap imageBitmap) {
-        Log.d(TAG, "save image");
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-    }
 
     public void addLike(final String postId, final PostsModel.GetNewLikeListener listener) {
         Log.d(TAG, "add like");

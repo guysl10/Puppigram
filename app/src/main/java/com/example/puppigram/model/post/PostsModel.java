@@ -43,7 +43,6 @@ public class PostsModel {
     public interface UpdatePostListener extends AddPostListener {
     }
 
-
     public interface UploadImageListener extends Listener<String>{ }
 
 
@@ -92,24 +91,12 @@ public class PostsModel {
         modelFirebase.uploadImage(image, name, listener);
     }
 
-    public interface SaveImageListener {
-        void onComplete(String url);
-    }
-
-    public void saveImage(Bitmap imageBitmap, SaveImageListener listener) {
-        modelFirebase.saveImage(imageBitmap);
-    }
-
     public interface GetIsLikedListener {
         void onComplete(boolean success);
     }
 
     public void isLiked(final String postId, GetIsLikedListener listener) {
         modelFirebase.isLiked(postId, listener);
-    }
-
-    public interface GetNewSaveListener {
-        void onComplete(boolean success);
     }
 
     public interface GetNewLikeListener {
@@ -129,10 +116,6 @@ public class PostsModel {
     }
 
     public interface EditPostListener {
-        void onComplete(boolean success);
-    }
-
-    public interface EditProfileListener {
         void onComplete(boolean success);
     }
 }
