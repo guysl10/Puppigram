@@ -4,6 +4,7 @@ package com.example.puppigram.fragments;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,20 +12,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
+import com.example.puppigram.activities.MainActivity;
+import com.example.puppigram.model.MyApp;
 import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.post.PostsModel;
 import com.example.puppigram.model.user.User;
 import com.example.puppigram.model.user.UsersModel;
+import com.example.puppigram.utils.Navigator;
 import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
 import com.squareup.picasso.Picasso;
@@ -143,26 +150,29 @@ public class FeedFragment extends Fragment {
                     tempUser[0] = new AtomicReference<>(userModel);
                     holder.description.setText(post.getDescription());
                     holder.username.setText(tempUser[0].get().getUserName());
+                    //TODO: apply likes
 //                    holder.likers.setText(post.getLikes().size());
                     holder.likers.setText("0");
                     if (post.getPostImage() != null){
                         Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
                     }
+                    Picasso.get().load(tempUser[0].get().getUserImage()).placeholder(R.drawable.userimagereplaceable).into(holder.userImg);
                 }
             });
 
-//            PhotoUtil.UriToImageView(
-//                    Uri.parse(tempUser.get().getUserImage()),
-//                    holder.userImg,
-//                    "user image in post " + post.getId()+ "not found",
-//                    getActivity().getApplicationContext()
-//            );
+            holder.editBtn.setOnClickListener(v ->{
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", post);
+                Navigation.findNavController(holder.itemView).navigate(
+                        R.id.action_feedFragment_to_editPostFragment, bundle
+                );
 
-
+            });
             //Check if current user own the post.
             if(UsersModel.instance.getAuthInstance().getCurrentUser().
                     getUid().equals(post.getOwnerId())){
                 holder.editBtn.setVisibility(View.VISIBLE);
+                holder.editBtn.setEnabled(true);
             }
         }
 

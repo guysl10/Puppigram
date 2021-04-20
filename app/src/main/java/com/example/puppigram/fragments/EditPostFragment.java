@@ -3,7 +3,6 @@ package com.example.puppigram.fragments;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,13 +20,10 @@ import androidx.fragment.app.Fragment;
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
 import com.example.puppigram.model.post.ImagePost;
-import com.example.puppigram.model.post.PostsModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
@@ -39,7 +35,7 @@ import static com.example.puppigram.utils.PhotoUtil.REQUEST_IMAGE_CAPTURE;
  * create an instance of this fragment.
  */
 public class EditPostFragment extends Fragment {
-    ImageView uploadBtn;
+    TextView editBtn;
     EditText description;
     ImageView postImg;
     ImageView userImage;
@@ -64,25 +60,24 @@ public class EditPostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
         spinner = view.findViewById(R.id.editpost_spinner);
-        uploadBtn = view.findViewById(R.id.edit_post_text);
+        editBtn = view.findViewById(R.id.edit_post_text);
         postImg = (ImageView) view.findViewById(R.id.edit_post_img);
         description = view.findViewById(R.id.edit_description);
         userImage = (ImageView) view.findViewById(R.id.edit_username_img);
         username = view.findViewById(R.id.edit_username_text);
         removeContentImg = view.findViewById(R.id.edit_remove_img);
         deletePostBtn = view.findViewById(R.id.edit_delete_post_text);
+        ImageView captureBtn = view.findViewById(R.id.edit_capture_img);
+
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         spinner.setVisibility(View.VISIBLE);
-        uploadBtn.setEnabled(false);
-        description.setEnabled(false);
-        deletePostBtn.setEnabled(false);
-        uploadBtn.setEnabled(false);
+        editBtn.setEnabled(false);
         description.setEnabled(false);
         deletePostBtn.setEnabled(false);
         removeContentImg.setEnabled(false);
 
-        ImageView captureBtn = view.findViewById(R.id.edit_capture_img);
+        ImagePost editpost = getArguments().getParcelable("post");
 
         //TODO: apply getting imagePost after navigation...
 
@@ -111,13 +106,10 @@ public class EditPostFragment extends Fragment {
 
         removeContentImg.setOnClickListener(v -> removeContent());
         deletePostBtn.setOnClickListener(v-> deletePost());
-        uploadBtn.setOnClickListener(v -> editPost(view));
+        editBtn.setOnClickListener(v -> editPost(view));
 
         spinner.setVisibility(View.INVISIBLE);
-        uploadBtn.setEnabled(true);
-        description.setEnabled(true);
-        deletePostBtn.setEnabled(true);
-        uploadBtn.setEnabled(true);
+        editBtn.setEnabled(true);
         description.setEnabled(true);
         deletePostBtn.setEnabled(true);
         removeContentImg.setEnabled(true);
@@ -150,10 +142,7 @@ public class EditPostFragment extends Fragment {
     @SuppressLint("WrongConstant")
     public void editPost(View view) {
         spinner.setVisibility(View.VISIBLE);
-        uploadBtn.setEnabled(false);
-        description.setEnabled(false);
-        deletePostBtn.setEnabled(false);
-        uploadBtn.setEnabled(false);
+        editBtn.setEnabled(false);
         description.setEnabled(false);
         deletePostBtn.setEnabled(false);
         removeContentImg.setEnabled(false);
@@ -161,16 +150,16 @@ public class EditPostFragment extends Fragment {
         if (postImg.getDrawable() == null) {
             Log.d("TAG", "upload_post: No image selected");
             Toast.makeText(view.getContext(), "No image selected", Toast.LENGTH_LONG).show();
-            uploadBtn.setEnabled(true);
+            editBtn.setEnabled(true);
             return;
         }
         if (description.getText() == null)
             description.setText("");
 
-        File tempFile = new File(this.postImg.toString());
-        Uri photoUri = Uri.fromFile(tempFile);
-        String userUid = this.currentUser.getUid();
-        String photoUid = UUID.randomUUID().toString();
+//        File tempFile = new File(this.postImg.toString());
+//        Uri photoUri = Uri.fromFile(tempFile);
+//        String userUid = this.currentUser.getUid();
+//        String photoUid = UUID.randomUUID().toString();
 
 //        ImagePost new_post = new ImagePost(photoUid, userUid, description.getText().toString(), photoUri);
 //        PostsModel.instance.updatePost(new_post, () -> {

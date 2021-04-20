@@ -9,7 +9,11 @@
         android:id="@+id/feedFragment"
         android:name="com.example.puppigram.fragments.FeedFragment"
         android:label="FeedFragment"
-        tools:layout="@layout/fragment_feed"/>
+        tools:layout="@layout/fragment_feed">
+        <action
+            android:id="@+id/action_feedFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/uploadPostFragment"
         android:name="com.example.puppigram.fragments.UploadPostFragment"
@@ -31,9 +35,17 @@
             app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.puppigram.fragments.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/postFragment"
         android:name="com.example.puppigram.fragments.PostFragment"
-        android:label="PostFragment" >
+        android:label="PostFragment">
         <action
             android:id="@+id/action_postFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
@@ -42,12 +54,4 @@
         android:id="@+id/editPostFragment"
         android:name="com.example.puppigram.fragments.EditPostFragment"
         android:label="EditPostFragment" />
-    <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.puppigram.fragments.EditProfileFragment"
-        android:label="EditProfileFragment" >
-        <action
-            android:id="@+id/action_editProfileFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
 </navigation>

@@ -9,11 +9,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
+import com.example.puppigram.utils.Navigator;
 
 //Responsible to handle all simple post issues
 public class PostFragment extends Fragment {
@@ -53,6 +55,7 @@ public class PostFragment extends Fragment {
 
         //TODO: check if the user own the post.
         ImageView edit_post = view.findViewById(R.id.upload_post_img);
+
         edit_post.setOnClickListener(Navigation.createNavigateOnClickListener(
                 R.id.action_postFragment_to_editPostFragment
         ));
