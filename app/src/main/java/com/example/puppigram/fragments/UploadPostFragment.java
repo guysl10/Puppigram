@@ -92,6 +92,7 @@ public class UploadPostFragment extends Fragment {
         if (postImg.getDrawable() == null) {
             Log.d("TAG", "upload_post: No image selected");
             Toast.makeText(view.getContext(), "No image selected", Toast.LENGTH_LONG).show();
+            spinner.setVisibility(View.INVISIBLE);
             captureBtn.setEnabled(true);
             return;
         }

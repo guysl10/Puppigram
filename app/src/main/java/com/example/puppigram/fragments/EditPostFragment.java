@@ -113,7 +113,7 @@ public class EditPostFragment extends Fragment {
         deletePostBtn.setOnClickListener(v-> deletePost());
         editBtn.setOnClickListener(v -> {
             editPost(view);
-            Navigation.findNavController(view).navigate(R.id.action_editPostFragment_to_feedFragment);
+            Navigation.findNavController(view).popBackStack();
         });
 
         spinner.setVisibility(View.INVISIBLE);
@@ -128,7 +128,7 @@ public class EditPostFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
         cancelBtn.setEnabled(false);
         removeContent();
-        Navigation.findNavController(getView()).navigate(R.id.action_editPostFragment_to_feedFragment);
+        Navigation.findNavController(getView()).popBackStack();;
         cancelBtn.setEnabled(true);
         spinner.setVisibility(View.INVISIBLE);
     }
@@ -145,10 +145,8 @@ public class EditPostFragment extends Fragment {
         PostsModel.instance.deletePost(editablePost, success -> {
             removeContent();
             Toast.makeText(getContext(),"Post deleted successfully!", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getView()).navigate(R.id.action_editPostFragment_to_feedFragment);
+            Navigation.findNavController(getView()).popBackStack();
         });
-
-
     }
 
     @Override
