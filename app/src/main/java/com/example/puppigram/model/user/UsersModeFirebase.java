@@ -17,7 +17,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class UsersModeFirebase {
@@ -31,9 +30,6 @@ public class UsersModeFirebase {
     private static final String TAG = "UsersModelFirebase";
     private static StorageTask<UploadTask.TaskSnapshot> uploadTask;
 
-    public interface LoginUserListener {
-        void onComplete(boolean success);
-    }
 
     public void register(final User user, String password, final UsersModel.AddUserListener listener) {
         Log.d(TAG, "register:create new user");
@@ -52,7 +48,7 @@ public class UsersModeFirebase {
                 });
     }
 
-    public void login(String email, String password, UsersModeFirebase.LoginUserListener loginUserListener) {
+    public void login(String email, String password, UsersModel.LoginUserListener loginUserListener) {
         Log.d(TAG, "login current user");
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener((OnCompleteListener<AuthResult>) task -> {
@@ -131,9 +127,13 @@ public class UsersModeFirebase {
 
     }
 
-    public void changeUserPassword(final String pass) {
+    public void changeUserPassword(final String pass, UsersModel.ChangeUserPasswordListener listener) {
         if (!pass.isEmpty()) {
-            Objects.requireNonNull(firebaseAuth.getCurrentUser()).updatePassword(pass);
+            firebaseAuth.getCurrentUser().updatePassword(pass);
+            listener.onComplete(true);
+        }
+        else {
+            listener.onComplete(false);
         }
     }
 

@@ -3,19 +3,11 @@ package com.example.puppigram.model.post;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.puppigram.model.MyApp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostsModel {
@@ -74,7 +66,6 @@ public class PostsModel {
                         lastU = imagePost.getLastUpdate();
                     }
                 }
-                Toast.makeText(context, "sync successfully!", Toast.LENGTH_SHORT).show();
                 sp.edit().putLong("lastUpdated", lastU).apply();
                 if (listener != null) {
                     listener.onComplete(null);
@@ -111,8 +102,8 @@ public class PostsModel {
         void onComplete(boolean success);
     }
 
-    public void isLiked(final String postId, final ImageView imageView, GetIsLikedListener listener) {
-        modelFirebase.isLiked(postId, imageView, listener);
+    public void isLiked(final String postId, GetIsLikedListener listener) {
+        modelFirebase.isLiked(postId, listener);
     }
 
     public interface GetNewSaveListener {
