@@ -182,45 +182,46 @@ public class ProfileFragment extends Fragment {
                 holder.description.setText(post.getDescription());
                 if (post.getPostImage() != null) {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
-                //TODO: apply likes
+                    //TODO: apply likes
 //                    holder.likers.setText(post.getLikes().size());
-                holder.likers.setText("0");
-                if (post.getPostImage() != null){
-                    Picasso.get().load(post.getPostImage()).placeholder(
-                            R.drawable.postimagereplaceable
-                    ).into(holder.postImg);
-                }
-                PostsModel.instance.isLiked(post.getId(), isLiked -> {
-                    if (isLiked) {
-                        holder.likeBtn.setColorFilter(Color.GREEN);
+                    holder.likers.setText("0");
+                    if (post.getPostImage() != null) {
+                        Picasso.get().load(post.getPostImage()).placeholder(
+                                R.drawable.postimagereplaceable
+                        ).into(holder.postImg);
                     }
-                });
-            });
+                    PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                        if (isLiked) {
+                            holder.likeBtn.setColorFilter(Color.GREEN);
+                        }
+                    });
 
-            holder.editBtn.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("post", post);
-                Navigation.findNavController(holder.itemView).navigate(
-                        R.id.action_profileFragment_to_editPostFragment, bundle
-                );
+                    holder.editBtn.setOnClickListener(v -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("post", post);
+                        Navigation.findNavController(holder.itemView).navigate(
+                                R.id.action_profileFragment_to_editPostFragment, bundle
+                        );
 
-            });
+                    });
 
-            holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
-                if (isLiked) {
-                    PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
-                } else {
-                    PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                    holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                        if (isLiked) {
+                            PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                        } else {
+                            PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                        }
+                    }));
+                    holder.likers.setText(String.valueOf(post.getLikes().size()));
+
+                    //Check if current user own the post.
+                    if (UsersModel.instance.getAuthInstance().getCurrentUser().
+                            getUid().equals(post.getOwnerId())) {
+                        holder.editBtn.setVisibility(View.VISIBLE);
+                        holder.editBtn.setEnabled(true);
+                    }
                 }
-            }));
-            holder.likers.setText(String.valueOf(post.getLikes().size()));
-
-            //Check if current user own the post.
-            if (UsersModel.instance.getAuthInstance().getCurrentUser().
-                    getUid().equals(post.getOwnerId())) {
-                holder.editBtn.setVisibility(View.VISIBLE);
-                holder.editBtn.setEnabled(true);
-            }
+            });
         }
 
         @Override
