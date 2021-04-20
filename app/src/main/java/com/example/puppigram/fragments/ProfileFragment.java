@@ -105,7 +105,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        reloadData();
     }
 
     @SuppressLint("WrongConstant")
@@ -113,9 +112,6 @@ public class ProfileFragment extends Fragment {
         progressBarProfile.setVisibility(View.VISIBLE);
         noPosts.setVisibility(View.INVISIBLE);
         PostsModel.instance.refreshAllPosts(posts -> {
-            //TODO: change to show only user posts!
-            //TODO:view all post
-            // this.viewAllPosts.setOnClickListener();
             postsViewModel.getAllUserPosts(
                     UsersModel.instance.getAuthInstance().
                             getCurrentUser().getUid()).observe(
