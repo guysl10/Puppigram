@@ -54,6 +54,10 @@ public class PostsModel {
         return imagePosts;
     }
 
+    public LiveData<List<ImagePost>> getAllUserPosts(String userId){
+        return modelSQL.getAllUserPosts(userId);
+    }
+
     public void refreshAllPosts(final PostsModel.GetAllPostsListener listener) {
         final SharedPreferences sp = MyApp.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         modelFirebase.getAllPosts((PostsModel.GetAllPostsListener) imagePosts -> {

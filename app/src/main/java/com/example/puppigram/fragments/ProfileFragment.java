@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     PostsViewModel postsViewModel;
     ImageView editProfile;
     ProgressBar spinner;
+    List<ImagePost> allPosts;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -77,7 +78,7 @@ public class ProfileFragment extends Fragment {
         posts.setAdapter(adapter);
 
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
-        postsViewModel.getImagePosts().observe(
+        postsViewModel.getAllUserPosts(UsersModel.instance.getAuthInstance().getCurrentUser().getUid()).observe(
                 getViewLifecycleOwner(),
                 imagePosts -> adapter.notifyDataSetChanged()
         );
@@ -115,12 +116,19 @@ public class ProfileFragment extends Fragment {
             //TODO: change to show only user posts!
             //TODO:view all post
             // this.viewAllPosts.setOnClickListener();
-            List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
-            if (allPosts == null || allPosts.isEmpty())
-                noPosts.setVisibility(View.VISIBLE);
-            else
-                adapter.notifyDataSetChanged();
-            progressBarProfile.setVisibility(View.INVISIBLE);
+            postsViewModel.getAllUserPosts(
+                    UsersModel.instance.getAuthInstance().
+                            getCurrentUser().getUid()).observe(
+                    getViewLifecycleOwner(),
+                    allPosts -> {
+                        if (allPosts == null || allPosts.isEmpty())
+                            noPosts.setVisibility(View.VISIBLE);
+                        else
+                            this.allPosts = allPosts;
+                        progressBarProfile.setVisibility(View.INVISIBLE);
+                    }
+            );
+
         });
     }
 
@@ -167,53 +175,60 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ProfileFragment.PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
-            ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
+            ImagePost post = allPosts.get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
             UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
                 tempUser[0] = new AtomicReference<>(userModel);
                 holder.description.setText(post.getDescription());
                 if (post.getPostImage() != null) {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
-                }
-                PostsModel.instance.isLiked(post.getId(), isLiked -> {
-                    if (isLiked) {
-                        holder.likeBtn.setColorFilter(Color.GREEN);
+                    //TODO: apply likes
+//                    holder.likers.setText(post.getLikes().size());
+                    holder.likers.setText("0");
+                    if (post.getPostImage() != null) {
+                        Picasso.get().load(post.getPostImage()).placeholder(
+                                R.drawable.postimagereplaceable
+                        ).into(holder.postImg);
                     }
-                });
-            });
+                    PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                        if (isLiked) {
+                            holder.likeBtn.setColorFilter(Color.GREEN);
+                        }
+                    });
 
-            holder.editBtn.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("post", post);
-                Navigation.findNavController(holder.itemView).navigate(
-                        R.id.action_profileFragment_to_editPostFragment, bundle
-                );
+                    holder.editBtn.setOnClickListener(v -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("post", post);
+                        Navigation.findNavController(holder.itemView).navigate(
+                                R.id.action_profileFragment_to_editPostFragment, bundle
+                        );
 
-            });
+                    });
 
-            holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
-                if (isLiked) {
-                    PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
-                } else {
-                    PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                    holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                        if (isLiked) {
+                            PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                        } else {
+                            PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                        }
+                    }));
+                    holder.likers.setText(String.valueOf(post.getLikes().size()));
+
+                    //Check if current user own the post.
+                    if (UsersModel.instance.getAuthInstance().getCurrentUser().
+                            getUid().equals(post.getOwnerId())) {
+                        holder.editBtn.setVisibility(View.VISIBLE);
+                        holder.editBtn.setEnabled(true);
+                    }
                 }
-            }));
-            holder.likers.setText(String.valueOf(post.getLikes().size()));
-
-            //Check if current user own the post.
-            if (UsersModel.instance.getAuthInstance().getCurrentUser().
-                    getUid().equals(post.getOwnerId())) {
-                holder.editBtn.setVisibility(View.VISIBLE);
-                holder.editBtn.setEnabled(true);
-            }
+            });
         }
 
         @Override
         public int getItemCount() {
             int size = 0;
             try {
-                size = Objects.requireNonNull(
-                        postsViewModel.getImagePosts().getValue()).size();
+                size = allPosts.size();
             } catch (Exception e) {
                 e.printStackTrace();
             }

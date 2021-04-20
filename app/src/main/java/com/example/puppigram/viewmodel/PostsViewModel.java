@@ -10,6 +10,7 @@ import java.util.List;
 
 public class PostsViewModel extends ViewModel {
     private LiveData<List<ImagePost>> imagePosts;
+    private LiveData<List<ImagePost>> userImagePosts;
 
     public PostsViewModel() {
         this.imagePosts = PostsModel.instance.getAllPosts();
@@ -17,6 +18,10 @@ public class PostsViewModel extends ViewModel {
 
     public LiveData<List<ImagePost>> getImagePosts() {
         return this.imagePosts;
+    }
+
+    public LiveData<List<ImagePost>> getAllUserPosts(String userId){
+        return PostsModel.instance.getAllUserPosts(userId);
     }
 
     public void setImagePosts(LiveData<List<ImagePost>> imagePosts) {

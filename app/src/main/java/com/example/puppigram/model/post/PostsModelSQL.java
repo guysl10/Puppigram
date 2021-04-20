@@ -25,6 +25,10 @@ public class PostsModelSQL {
         return AppLocalDb.db.postDao().getAllPosts();
     }
 
+    public LiveData<List<ImagePost>> getAllUserPosts(String userId){
+        return AppLocalDb.db.postDao().getAllUserPosts(userId);
+    }
+
     public void addPost(ImagePost post, AddPostListener listener) {
         @SuppressLint("StaticFieldLeak")
         class MyAsyncTask extends AsyncTask {
