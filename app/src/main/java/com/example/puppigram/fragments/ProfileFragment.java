@@ -29,6 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProfileFragment extends Fragment {
     private User user;
@@ -93,12 +94,6 @@ public class ProfileFragment extends Fragment {
                 }
         );
 
-        editProfile.setOnClickListener(v->
-            Navigation.findNavController(view).navigate(
-                            R.id.action_profileFragment_to_editProfileFragment
-            )
-        );
-
         editProfile.setEnabled(true);
         noPosts.setEnabled(true);
         spinner.setVisibility(View.INVISIBLE);
@@ -128,23 +123,27 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    static class ProfilePostViewHolder extends RecyclerView.ViewHolder {
+    static class PostViewHolder extends RecyclerView.ViewHolder {
         /***
          * Responsible of setting all post info for post items in the recycler list.
          */
-        TextView username;
         TextView description;
         TextView likers;
-        ImageView post_img;
-        ImageView user_img;
+        ImageView postImg;
+        ImageView editBtn;
+        TextView username;
+        ImageView userImg;
 
-        public ProfilePostViewHolder(@NonNull View itemView) {
+        public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.postDescription);
             likers = itemView.findViewById(R.id.postCountLikers);
+            postImg = itemView.findViewById(R.id.postImg);
+            editBtn = itemView.findViewById(R.id.post_edit_img);
+            userImg = itemView.findViewById(R.id.post_user_img);
             username = itemView.findViewById(R.id.postOwner);
-            user_img = itemView.findViewById(R.id.post_user_img);
-            post_img = itemView.findViewById(R.id.postImg);
+            userImg.setVisibility(View.INVISIBLE);
+            username.setVisibility(View.INVISIBLE);
 
             // After finish configure, disable the spinner
             ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
@@ -154,27 +153,52 @@ public class ProfileFragment extends Fragment {
     /**
      * Responsible of recycling posts.
      */
-    class ProfilePostRecyclerAdapter extends RecyclerView.Adapter<ProfileFragment.ProfilePostViewHolder> {
+    class ProfilePostRecyclerAdapter extends RecyclerView.Adapter<ProfileFragment.PostViewHolder> {
         @NonNull
         @Override
-        public ProfileFragment.ProfilePostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public ProfileFragment.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.feed_post_row, null);
-            return new ProfileFragment.ProfilePostViewHolder(view);
+            return new ProfileFragment.PostViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ProfileFragment.ProfilePostViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull ProfileFragment.PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
-            holder.description.setText(post.getDescription());
-            //TODO: add all posts items to set for the recyclerview feed.
+            final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
+            UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
+                tempUser[0] = new AtomicReference<>(userModel);
+                holder.description.setText(post.getDescription());
+                //TODO: apply likes
+//                    holder.likers.setText(post.getLikes().size());
+                holder.likers.setText("0");
+                if (post.getPostImage() != null){
+                    Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
+                }
+            });
+
+            holder.editBtn.setOnClickListener(v ->{
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("post", post);
+                Navigation.findNavController(holder.itemView).navigate(
+                        R.id.action_profileFragment_to_editPostFragment, bundle
+                );
+
+            });
+            //Check if current user own the post.
+            if(UsersModel.instance.getAuthInstance().getCurrentUser().
+                    getUid().equals(post.getOwnerId())){
+                holder.editBtn.setVisibility(View.VISIBLE);
+                holder.editBtn.setEnabled(true);
+            }
         }
 
         @Override
         public int getItemCount() {
             int size = 0;
             try {
-                size = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).size();
+                size = Objects.requireNonNull(
+                        postsViewModel.getImagePosts().getValue()).size();
             } catch (Exception e) {
                 e.printStackTrace();
             }
