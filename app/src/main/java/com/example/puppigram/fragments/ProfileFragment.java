@@ -42,6 +42,7 @@ public class ProfileFragment extends Fragment {
     PostsViewModel postsViewModel;
     ImageView editProfile;
     ProgressBar spinner;
+    List<ImagePost> allPosts;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -76,7 +77,7 @@ public class ProfileFragment extends Fragment {
         posts.setAdapter(adapter);
 
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
-        postsViewModel.getImagePosts().observe(
+        postsViewModel.getAllUserPosts(UsersModel.instance.getAuthInstance().getCurrentUser().getUid()).observe(
                 getViewLifecycleOwner(),
                 imagePosts -> adapter.notifyDataSetChanged()
         );
@@ -114,12 +115,19 @@ public class ProfileFragment extends Fragment {
             //TODO: change to show only user posts!
             //TODO:view all post
             // this.viewAllPosts.setOnClickListener();
-            List<ImagePost> allPosts = postsViewModel.getImagePosts().getValue();
-            if (allPosts == null || allPosts.isEmpty())
-                noPosts.setVisibility(View.VISIBLE);
-            else
-                adapter.notifyDataSetChanged();
-            progressBarProfile.setVisibility(View.INVISIBLE);
+            postsViewModel.getAllUserPosts(
+                    UsersModel.instance.getAuthInstance().
+                            getCurrentUser().getUid()).observe(
+                    getViewLifecycleOwner(),
+                    allPosts -> {
+                        if (allPosts == null || allPosts.isEmpty())
+                            noPosts.setVisibility(View.VISIBLE);
+                        else
+                            this.allPosts = allPosts;
+                        progressBarProfile.setVisibility(View.INVISIBLE);
+                    }
+            );
+
         });
     }
 
@@ -164,7 +172,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ProfileFragment.PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
-            ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
+            ImagePost post = allPosts.get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
             UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
                 tempUser[0] = new AtomicReference<>(userModel);
@@ -173,7 +181,9 @@ public class ProfileFragment extends Fragment {
 //                    holder.likers.setText(post.getLikes().size());
                 holder.likers.setText("0");
                 if (post.getPostImage() != null){
-                    Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
+                    Picasso.get().load(post.getPostImage()).placeholder(
+                            R.drawable.postimagereplaceable
+                    ).into(holder.postImg);
                 }
             });
 
@@ -197,8 +207,7 @@ public class ProfileFragment extends Fragment {
         public int getItemCount() {
             int size = 0;
             try {
-                size = Objects.requireNonNull(
-                        postsViewModel.getImagePosts().getValue()).size();
+                size = allPosts.size();
             } catch (Exception e) {
                 e.printStackTrace();
             }
