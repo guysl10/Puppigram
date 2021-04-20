@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class EditProfileFragment extends Fragment {
     Button saveChanges;
     ImageView profileImg;
     User user;
+    ProgressBar spinner;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -48,6 +50,7 @@ public class EditProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        spinner = view.findViewById(R.id.editprofile_spinner);
         username = view.findViewById(R.id.editprofile_username_input);
         bio = view.findViewById(R.id.editprofile_bio_input);
         profileImg = view.findViewById(R.id.editprofile_profileimg_img);
@@ -55,7 +58,7 @@ public class EditProfileFragment extends Fragment {
         retypePassword = view.findViewById(R.id.editprofile_retype_password);
         discardBtn = view.findViewById(R.id.edit_profile_discard_btn);
         saveChanges = view.findViewById(R.id.edit_profile_save_btn);
-
+        spinner.setVisibility(View.VISIBLE);
         UsersModel.instance.getUser(
                 UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
                 userModel -> {
@@ -96,6 +99,7 @@ public class EditProfileFragment extends Fragment {
             password.setText("");
             retypePassword.setText("");
         });
+        spinner.setVisibility(View.INVISIBLE);
         return view;
     }
 
