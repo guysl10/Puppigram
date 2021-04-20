@@ -2,17 +2,13 @@ package com.example.puppigram.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -88,35 +84,6 @@ public class PhotoUtil {
                     }
                     break;
             }
-        }
-    }
-    public static void UriToImageView(Uri srcImg, ImageView dstImg, String errorMsg, Context context){
-        try {
-            InputStream inputStream =
-                    context.getContentResolver().openInputStream(srcImg);
-            dstImg.setImageDrawable(
-                    Drawable.createFromStream(
-                            inputStream,
-                            srcImg.toString()
-                    )
-            );
-        } catch (FileNotFoundException e) {
-            Toast.makeText(
-                    context,
-                    errorMsg,
-                    Toast.LENGTH_LONG
-            ).show();
-        }
-    }
-
-    public static Bitmap StringToBitMap(String encodedString){
-        try{
-            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
-            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-        }
-        catch(Exception e){
-            e.getMessage();
-            return null;
         }
     }
 }

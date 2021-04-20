@@ -2,6 +2,7 @@ package com.example.puppigram.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -141,6 +142,7 @@ public class ProfileFragment extends Fragment {
         ImageView editBtn;
         TextView username;
         ImageView userImg;
+        ImageView likeBtn;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -150,6 +152,7 @@ public class ProfileFragment extends Fragment {
             editBtn = itemView.findViewById(R.id.post_edit_img);
             userImg = itemView.findViewById(R.id.post_user_img);
             username = itemView.findViewById(R.id.postOwner);
+            likeBtn = itemView.findViewById(R.id.postLiker);
             userImg.setVisibility(View.INVISIBLE);
             username.setVisibility(View.INVISIBLE);
 
@@ -177,6 +180,8 @@ public class ProfileFragment extends Fragment {
             UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
                 tempUser[0] = new AtomicReference<>(userModel);
                 holder.description.setText(post.getDescription());
+                if (post.getPostImage() != null) {
+                    Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
                 //TODO: apply likes
 //                    holder.likers.setText(post.getLikes().size());
                 holder.likers.setText("0");
@@ -185,9 +190,14 @@ public class ProfileFragment extends Fragment {
                             R.drawable.postimagereplaceable
                     ).into(holder.postImg);
                 }
+                PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                    if (isLiked) {
+                        holder.likeBtn.setColorFilter(Color.GREEN);
+                    }
+                });
             });
 
-            holder.editBtn.setOnClickListener(v ->{
+            holder.editBtn.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("post", post);
                 Navigation.findNavController(holder.itemView).navigate(
@@ -195,9 +205,19 @@ public class ProfileFragment extends Fragment {
                 );
 
             });
+
+            holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                if (isLiked) {
+                    PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                } else {
+                    PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                }
+            }));
+            holder.likers.setText(String.valueOf(post.getLikes().size()));
+
             //Check if current user own the post.
-            if(UsersModel.instance.getAuthInstance().getCurrentUser().
-                    getUid().equals(post.getOwnerId())){
+            if (UsersModel.instance.getAuthInstance().getCurrentUser().
+                    getUid().equals(post.getOwnerId())) {
                 holder.editBtn.setVisibility(View.VISIBLE);
                 holder.editBtn.setEnabled(true);
             }

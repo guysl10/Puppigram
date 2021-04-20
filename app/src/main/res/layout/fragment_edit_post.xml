@@ -68,12 +68,14 @@
         android:id="@+id/edit_username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="20dp"
         android:text="Username"
         android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/edit_username_img"
         app:layout_constraintStart_toEndOf="@+id/edit_username_img"
-        app:layout_constraintTop_toTopOf="@+id/edit_username_img" />
+        app:layout_constraintTop_toTopOf="@+id/edit_username_img"
+        app:layout_constraintVertical_bias="0.65" />
 
     <ImageView
         android:id="@+id/edit_post_img"
@@ -115,10 +117,11 @@
         android:ems="10"
         android:hint="post description"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="Description"
         android:textColor="#000000"
         android:textColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_username_img" />
 

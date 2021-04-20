@@ -19,7 +19,6 @@ public class ChangeUserPasswordFragment extends Fragment {
     private TextView currentPassword;
     private TextView pass;
     private TextView rePass;
-    private Button updateBtn;
 
     public ChangeUserPasswordFragment() {
         // Required empty public constructor
@@ -37,7 +36,7 @@ public class ChangeUserPasswordFragment extends Fragment {
         currentPassword = view.findViewById(R.id.change_current_password);
         pass = view.findViewById(R.id.change_new_password);
         rePass = view.findViewById(R.id.change_repassword);
-        updateBtn = view.findViewById(R.id.change_save_new_password_btn);
+        Button updateBtn = view.findViewById(R.id.change_save_new_password_btn);
         updateBtn.setOnClickListener(v -> {
             if (pass.getText().toString().equals(rePass.getText().toString())) {
                 UsersModel.instance.changeUserPassword(pass.getText().toString(), success -> {
