@@ -67,12 +67,10 @@ public class FeedFragment extends Fragment {
                 getViewLifecycleOwner(),
                 imagePosts -> {
                     adapter.notifyDataSetChanged();
+                    spinner.setVisibility(View.INVISIBLE);
                 }
         );
 
-        // After finish configure, disable the spinner
-        ProgressBar spinner = view.findViewById(R.id.feed_spinner);
-        spinner.setVisibility(View.INVISIBLE);
         view.invalidate();
         return view;
     }
@@ -112,6 +110,7 @@ public class FeedFragment extends Fragment {
         ImageView userImg;
         ImageView editBtn;
         ImageView likeBtn;
+        ProgressBar spinner;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,9 +121,9 @@ public class FeedFragment extends Fragment {
             postImg = itemView.findViewById(R.id.postImg);
             editBtn = itemView.findViewById(R.id.post_edit_img);
             likeBtn = itemView.findViewById(R.id.postLiker);
-
+            spinner = itemView.findViewById(R.id.post_spinner);
             // After finish configure, disable the spinner
-            ProgressBar spinner = itemView.findViewById(R.id.post_spinner);
+
             spinner.setVisibility(View.INVISIBLE);
         }
     }
@@ -142,6 +141,7 @@ public class FeedFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
             //Set the holder info for the post in the recycled post.
+            spinner.setVisibility(View.VISIBLE);
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
             UsersModel.instance.getUser(post.getOwnerId(), (UsersModel.GetUserListener) userModel -> {
@@ -160,6 +160,7 @@ public class FeedFragment extends Fragment {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
                 }
                 Picasso.get().load(tempUser[0].get().getUserImage()).placeholder(R.drawable.userimagereplaceable).into(holder.userImg);
+                spinner.setVisibility(View.INVISIBLE);
             });
 
             holder.editBtn.setOnClickListener(v ->{
