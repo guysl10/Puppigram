@@ -1,4 +1,4 @@
-package com.example.puppigram.model;
+package com.example.puppigram.model.post;
 
 import android.net.Uri;
 

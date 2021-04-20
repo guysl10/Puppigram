@@ -1,6 +1,6 @@
 package com.example.puppigram.viewmodel;
 
-import com.example.puppigram.model.User;
+import com.example.puppigram.model.user.User;
 
 import java.util.ArrayList;
 

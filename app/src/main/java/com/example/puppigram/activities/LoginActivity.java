@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.Navigator;
 
 public class LoginActivity extends AppCompatActivity {
@@ -50,13 +50,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (UserRepo.instance.getAuthInstance().getCurrentUser() != null) {
+        if (UsersModel.instance.getAuthInstance().getCurrentUser() != null) {
             navigator.navigate(MainActivity.class);
         }
     }
 
     private void signIn(String email, String pass) {
-        UserRepo.instance.login(email, pass, success -> {
+        UsersModel.instance.login(email, pass, success -> {
             if (success) {
                 loadingProgress.setVisibility(View.INVISIBLE);
                 navigator.navigate(MainActivity.class);

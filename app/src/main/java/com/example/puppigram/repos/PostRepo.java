@@ -1,6 +1,6 @@
 package com.example.puppigram.repos;
 
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.model.PostsModelFirebase;
 

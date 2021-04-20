@@ -19,8 +19,8 @@ import androidx.navigation.Navigation;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -28,7 +28,6 @@ import java.io.InputStream;
 public class EditProfileFragment extends Fragment {
     EditText username;
     EditText bio;
-    EditText email;
     EditText password;
     EditText retypePassword;
     Button discardBtn;
@@ -57,8 +56,8 @@ public class EditProfileFragment extends Fragment {
         discardBtn = view.findViewById(R.id.edit_profile_discard_btn);
         saveChanges = view.findViewById(R.id.edit_profile_save_btn);
 
-        UserRepo.instance.getUser(
-                UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
+        UsersModel.instance.getUser(
+                UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
                 userModel -> {
                     user = userModel;
                     restoreDefaultData();
@@ -75,19 +74,15 @@ public class EditProfileFragment extends Fragment {
             //            UserRepo.instance.updateProfile();
             if(!password.getText().toString().equals(retypePassword.getText().toString()))
             {
-                Toast.makeText(getContext(),"passwords not equal",Toast.LENGTH_SHORT).show();
+                showMessage("passwords not equal");
                 return;
             }
-            UserRepo.instance.updateProfile(
+            UsersModel.instance.updateProfile(
                     username.getText().toString(),
                     bio.getText().toString(),
                     password.getText().toString(),
                     y->{
-                        Toast.makeText(
-                                getContext(),
-                                "updade profile successfully",
-                                Toast.LENGTH_SHORT
-                        ).show();
+                        showMessage("update profile successfully");
                         restoreDefaultData();
                         Navigation.findNavController(view).navigate(
                                 R.id.action_editProfileFragment_to_profileFragment
@@ -116,5 +111,9 @@ public class EditProfileFragment extends Fragment {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showMessage(String text) {
+        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
     }
 }

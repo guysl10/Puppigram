@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.puppigram.R;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.repos.Repo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;

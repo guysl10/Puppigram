@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 
 import java.util.List;
 

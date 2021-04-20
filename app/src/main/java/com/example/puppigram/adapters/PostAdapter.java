@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.puppigram.R;
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.PostsModel;
 import com.example.puppigram.repos.PostRepo;
 import com.example.puppigram.repos.Repo;

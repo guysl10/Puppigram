@@ -16,8 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.Navigator;
 import com.example.puppigram.utils.PhotoUtil;
 
@@ -133,9 +133,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         } else {
             User user = new User(username, email, bio, userImage);
-            UserRepo.instance.register(user, pass, success -> {
+            UsersModel.instance.register(user, pass, success -> {
                 showMessage("Register complete");
-                UserRepo.instance.login(user.getEmail(), userPassword.toString(), v -> {
+                UsersModel.instance.login(user.getEmail(), userPassword.toString(), v -> {
                     if (success) {
                         navigator.navigate(MainActivity.class);
                     } else

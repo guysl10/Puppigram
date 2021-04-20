@@ -1,23 +1,21 @@
-package com.example.puppigram.repos;
+package com.example.puppigram.model.user;
 
 import com.example.puppigram.model.FirebaseModel;
-import com.example.puppigram.model.User;
-import com.example.puppigram.model.UsersModelFirebase;
+import com.example.puppigram.repos.Repo;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class UserRepo {
-    public static final UserRepo instance = new UserRepo();
+public class UsersModel {
+    public static final UsersModel instance = new UsersModel();
     private final FirebaseModel firebaseModel;
-    private final UsersModelFirebase usersModelFirebase;
+    private final UsersModeFirebase usersModeFirebase;
 
-    public UserRepo() {
+    public UsersModel() {
         firebaseModel = new FirebaseModel();
-        usersModelFirebase = new UsersModelFirebase();
+        usersModeFirebase = new UsersModeFirebase();
     }
-
 
     public FirebaseAuth getAuthInstance() {
         return firebaseModel.firebaseAuth;
@@ -28,7 +26,7 @@ public class UserRepo {
     }
 
     public void getAllUsers(GetAllUsersListener listener) {
-        usersModelFirebase.getAllUsers(listener);
+        usersModeFirebase.getAllUsers(listener);
     }
 
     public interface GetUserListener {
@@ -36,7 +34,7 @@ public class UserRepo {
     }
 
     public void getUser(String id, GetUserListener listener) {
-        UsersModelFirebase.getUser(id, listener);
+        UsersModeFirebase.getUser(id, listener);
     }
 
     public interface AddUserListener {
@@ -44,7 +42,7 @@ public class UserRepo {
     }
 
     public void register(final User user, String password, AddUserListener listener) {
-        usersModelFirebase.register(user, password, listener);
+        usersModeFirebase.register(user, password, listener);
     }
 
     public void login(String email, String password, FirebaseModel.LoginUserListener loginUserListener) {
@@ -55,8 +53,8 @@ public class UserRepo {
         firebaseModel.logOut(function);
     }
 
-    public void updateProfile(final String userName, final String bio,final String pass, Repo.EditProfileListener listener) {
-        usersModelFirebase.updateProfile(userName, bio, pass, listener);
+    public void updateProfile(final String userName, final String bio,final String pass, final Repo.EditProfileListener listener) {
+        usersModeFirebase.updateProfile(userName, bio, pass, listener);
     }
 }
 

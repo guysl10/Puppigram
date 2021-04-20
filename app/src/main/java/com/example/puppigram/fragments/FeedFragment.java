@@ -2,10 +2,6 @@
 package com.example.puppigram.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,17 +19,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.puppigram.BuildConfig;
 import com.example.puppigram.R;
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.PostsModel;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -142,7 +134,7 @@ public class FeedFragment extends Fragment {
             //Set the holder info for the post in the recycled post.
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             AtomicReference<User> temp_user = null;
-            UserRepo.instance.getUser(post.getOwnerId(), temp_user::set);
+            UsersModel.instance.getUser(post.getOwnerId(), temp_user::set);
             PhotoUtil.setImage(
                     post.getPostImage(),
                     holder.postImg,
@@ -160,7 +152,7 @@ public class FeedFragment extends Fragment {
             holder.likers.setText(post.getLikes().size());
 
             //Check if current user own the post.
-            if(UserRepo.instance.getAuthInstance().getCurrentUser().
+            if(UsersModel.instance.getAuthInstance().getCurrentUser().
                     getUid().equals(post.getOwnerId())){
                 holder.editBtn.setVisibility(View.VISIBLE);
             }

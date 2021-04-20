@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
-import com.example.puppigram.model.User;
+import com.example.puppigram.model.user.User;
 import com.example.puppigram.repos.Repo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

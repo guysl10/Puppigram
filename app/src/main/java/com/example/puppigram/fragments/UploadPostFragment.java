@@ -3,7 +3,6 @@ package com.example.puppigram.fragments;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,20 +16,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.PostsModel;
-import com.example.puppigram.model.PostsModelFirebase;
-import com.example.puppigram.model.PostsModelSQL;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.Repo;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.PhotoUtil;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -59,8 +51,8 @@ public class UploadPostFragment extends Fragment {
         usernameImg = (ImageView) view.findViewById(R.id.upload_username_img);
         removeContentImg = (ImageView) view.findViewById(R.id.upload_remove_img);
 
-        UserRepo.instance.getUser(
-                UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
+        UsersModel.instance.getUser(
+                UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
                 userModel -> {
                     currentUser = userModel;
                     username.setText(currentUser.getUserName());

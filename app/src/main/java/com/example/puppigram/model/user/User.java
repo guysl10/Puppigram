@@ -1,4 +1,4 @@
-package com.example.puppigram.model;
+package com.example.puppigram.model.user;
 
 import java.io.Serializable;
 import java.util.HashMap;

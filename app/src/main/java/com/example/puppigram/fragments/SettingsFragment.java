@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.LoginActivity;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.Navigator;
 
 import java.util.concurrent.Callable;
@@ -34,7 +34,7 @@ public class SettingsFragment extends Fragment {
         navigator = new Navigator((AppCompatActivity)getActivity());
         logoutBtn = view.findViewById(R.id.logout_btn);
         logoutBtn.setOnClickListener(v -> {
-            UserRepo.instance.logOut((Callable<Void>) () -> {
+            UsersModel.instance.logOut((Callable<Void>) () -> {
                 navigator.navigate(LoginActivity.class);
                 Toast.makeText(
                         getContext(),

@@ -5,8 +5,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.puppigram.adapters.PostAdapter;
 import com.example.puppigram.model.dao.PostDao;
+import com.example.puppigram.model.post.AbstractPost;
+import com.example.puppigram.model.post.ImagePost;
 
 @Database(entities = {ImagePost.class}, version = 3)
 @TypeConverters({AbstractPost.Connverter.class})

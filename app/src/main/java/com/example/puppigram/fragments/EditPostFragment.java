@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,11 +19,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.puppigram.R;
 import com.example.puppigram.activities.MainActivity;
-import com.example.puppigram.adapters.PostAdapter;
-import com.example.puppigram.model.ImagePost;
+import com.example.puppigram.model.post.ImagePost;
 import com.example.puppigram.model.PostsModel;
-import com.example.puppigram.model.PostsModelFirebase;
-import com.example.puppigram.model.PostsModelSQL;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

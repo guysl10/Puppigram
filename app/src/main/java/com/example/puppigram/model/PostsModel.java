@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.puppigram.viewmodel.PostsViewModel;
+import com.example.puppigram.model.post.ImagePost;
 
 import java.util.ArrayList;
 import java.util.List;

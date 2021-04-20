@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,10 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.puppigram.R;
-import com.example.puppigram.model.ImagePost;
 import com.example.puppigram.model.PostsModel;
-import com.example.puppigram.model.User;
-import com.example.puppigram.repos.UserRepo;
+import com.example.puppigram.model.post.ImagePost;
+import com.example.puppigram.model.user.User;
+import com.example.puppigram.model.user.UsersModel;
 import com.example.puppigram.utils.PhotoUtil;
 import com.example.puppigram.viewmodel.PostsViewModel;
 
@@ -69,13 +70,14 @@ public class ProfileFragment extends Fragment {
         posts.setHasFixedSize(true);
         posts.setAdapter(adapter);
 
-        postsViewModel= new ViewModelProvider(this).get(PostsViewModel.class);
+        postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         postsViewModel.getImagePosts().observe(
                 getViewLifecycleOwner(),
                 imagePosts -> adapter.notifyDataSetChanged()
         );
-        UserRepo.instance.getUser(
-                UserRepo.instance.getAuthInstance().getCurrentUser().getUid(),
+        Log.d("UserRepo", "ProfileFragment:Start");
+        UsersModel.instance.getUser(
+                UsersModel.instance.getAuthInstance().getCurrentUser().getUid(),
                 userModel -> {
                     user = userModel;
                     username.setText(user.getUserName());
@@ -83,10 +85,11 @@ public class ProfileFragment extends Fragment {
                     PhotoUtil.setImage(
                             Uri.parse(user.getUserImage()),
                             imageProfile,
-                            "",
+                            "Image was not updated",
                             getActivity().getApplicationContext()
                     );
                     reloadData();
+                    showMessage("User updated successfully");
                 }
         );
 
@@ -175,6 +178,8 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
+    private void showMessage(String text) {
+        Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+    }
 
 }
