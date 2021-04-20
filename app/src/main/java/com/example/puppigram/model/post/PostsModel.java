@@ -83,7 +83,9 @@ public class PostsModel {
     }
 
     public void deletePost(final ImagePost imagePost, final DeletePostListener listener) {
-        modelFirebase.deletePost(imagePost.getId(), listener);
+        modelSQL.deletePost(imagePost, () -> {
+            modelFirebase.deletePost(imagePost.getId(), listener);
+        });
     }
 
     public void uploadImage(Bitmap image, String name, final UploadImageListener listener) {
