@@ -22,12 +22,12 @@ public class User implements Serializable {
         this.userImage = userImage;
     }
 
-    public User(String id, String userName, String email, String userImage, String bio) {
+    public User(String id, String userName, String email, String bio, String userImage) {
         this.id = id;
         this.userName = userName;
         this.email = email;
-        this.userImage = userImage;
         this.bio = bio;
+        this.userImage = userImage;
     }
 
     public void fromMap(Map<String, Object> map) {
