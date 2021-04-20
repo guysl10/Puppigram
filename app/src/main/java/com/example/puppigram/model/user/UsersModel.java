@@ -2,7 +2,6 @@ package com.example.puppigram.model.user;
 
 import android.graphics.Bitmap;
 
-import com.example.puppigram.model.post.PostsModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class UsersModel {
     }
 
     public void addUser(final User student, final AddStudentListener listener) {
-        usersModeFirebase.addStudent(student, listener);
+        usersModeFirebase.addUser(student, listener);
     }
 
     public void getUser(String id, GetUserListener listener) {
@@ -64,8 +63,8 @@ public class UsersModel {
         usersModeFirebase.logOut(function);
     }
 
-    public void updateProfile(final String userName, final String bio, final String pass, final PostsModel.EditProfileListener listener) {
-        usersModeFirebase.updateProfile(userName, bio, pass, listener);
+    public void updateUser(User user, final AddStudentListener listener) {
+        usersModeFirebase.updateUser(user, listener);
     }
 
     public interface UploadImageListener extends Listener<String> {
@@ -73,6 +72,10 @@ public class UsersModel {
 
     public void uploadImage(Bitmap imageBmp, String name, final UploadImageListener listener) {
         usersModeFirebase.uploadImage(imageBmp, name, listener);
+    }
+
+    public void changeUserPassword(final String pass) {
+        usersModeFirebase.changeUserPassword(pass);
     }
 }
 

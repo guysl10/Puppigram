@@ -24,7 +24,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.puppigram.fragments.SettingsFragment"
         android:label="SearchFragment"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_changeUserPasswordFragment"
+            app:destination="@id/changeUserPasswordFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.puppigram.fragments.ProfileFragment"
@@ -45,7 +49,7 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.puppigram.fragments.PostFragment"
-        android:label="PostFragment">
+        android:label="PostFragment" >
         <action
             android:id="@+id/action_postFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
@@ -54,4 +58,17 @@
         android:id="@+id/editPostFragment"
         android:name="com.example.puppigram.fragments.EditPostFragment"
         android:label="EditPostFragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.puppigram.fragments.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeUserPasswordFragment"
+        android:name="com.example.puppigram.fragments.ChangeUserPasswordFragment"
+        android:label="fragment_change_user_password"
+        tools:layout="@layout/fragment_change_user_password" />
 </navigation>

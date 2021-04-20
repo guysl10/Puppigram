@@ -3,7 +3,6 @@ package com.example.puppigram.model.user;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.example.puppigram.model.post.PostsModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +17,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 public class UsersModeFirebase {
@@ -97,16 +97,16 @@ public class UsersModeFirebase {
                 });
     }
 
-    public void addStudent(User user, final UsersModel.AddStudentListener listener) {
+    public void addUser(User user, final UsersModel.AddStudentListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user.getId())
                 .set(user).addOnSuccessListener(aVoid -> {
-                    Log.d("TAG", "user added successfully");
-                    listener.onComplete();
-                }).addOnFailureListener(e -> {
-                    Log.d("TAG", "fail adding user");
-                    listener.onComplete();
-                });
+            Log.d("TAG", "user added successfully");
+            listener.onComplete();
+        }).addOnFailureListener(e -> {
+            Log.d("TAG", "fail adding user");
+            listener.onComplete();
+        });
     }
 
     public void getAllUsers(final UsersModel.GetAllUsersListener listener) {
@@ -122,8 +122,8 @@ public class UsersModeFirebase {
                         doc.getString("id"),
                         doc.getString("userName"),
                         doc.getString("email"),
-                        doc.getString("userImage"),
-                        doc.getString("bio"));
+                        doc.getString("bio"),
+                        doc.getString("userImage"));
                 data.add(user);
             }
             listener.onComplete(data);
@@ -131,17 +131,14 @@ public class UsersModeFirebase {
 
     }
 
-    public void updateProfile(final String userName, final String bio, final String pass, final PostsModel.EditProfileListener listener) {
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        getUser(firebaseUser.getUid(), userModel -> {
-            if (userModel != null) {
-                user = userModel;
-                user.setUserName(userName);
-                user.setBio(bio);
-                firebaseAuth.getCurrentUser().updatePassword(pass);
-                db.collection("users").document(firebaseUser.getUid()).set(user).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
-            }
-        });
+    public void changeUserPassword(final String pass) {
+        if (!pass.isEmpty()) {
+            Objects.requireNonNull(firebaseAuth.getCurrentUser()).updatePassword(pass);
+        }
+    }
+
+    public void updateUser(User user, UsersModel.AddStudentListener listener) {
+        addUser(user, listener);
     }
 
     public void uploadImage(Bitmap imageBmp, String name, UsersModel.UploadImageListener listener) {
