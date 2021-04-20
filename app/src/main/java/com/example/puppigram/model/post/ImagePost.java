@@ -24,12 +24,19 @@ public class ImagePost extends AbstractPost implements Serializable {
         this.postImage = postImage;
     }
 
+    public void fromMap(Map<String, Object> map) {
+        this.setId((String) map.get("id"));
+        this.setOwnerId((String) map.get("ownerId"));
+        this.setPostImage((String) map.get("postImage"));
+        this.setDescription((String) map.get("description"));
+    }
+
     public Map<String, String> create() {
         HashMap<String, String> result = new HashMap<>();
         result.put("id", this.getId());
         result.put("ownerId", this.getOwnerId());
         result.put("description", this.getDescription());
-        result.put("postImage", this.postImage);
+        result.put("postImage", this.getPostImage());
         return result;
     }
 
@@ -37,7 +44,7 @@ public class ImagePost extends AbstractPost implements Serializable {
         return postImage;
     }
 
-    public void setPostImage(Uri image) {
-        this.postImage = image.toString();
+    public void setPostImage(String image) {
+        this.postImage = image;
     }
 }

@@ -4,8 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.puppigram.model.MyApp;
 
@@ -31,7 +37,7 @@ public class PostsModel {
     }
 
     public interface GetAllPostsListener {
-        void onComplete(ArrayList<ImagePost> data);
+        void onComplete(LiveData<List<ImagePost>> data);
     }
 
     public interface GetPostListener {
@@ -52,7 +58,7 @@ public class PostsModel {
     public LiveData<List<ImagePost>> getAllPosts() {
         if (imagePosts == null) {
             imagePosts = modelSQL.getAllPosts();
-            refreshAllPosts(null);
+            refreshAllPosts(data -> imagePosts = data);
         }
         return imagePosts;
     }
@@ -62,16 +68,17 @@ public class PostsModel {
         modelFirebase.getAllPosts((PostsModel.GetAllPostsListener) imagePosts -> {
             long lastU = 0;
             if(imagePosts!= null) {
-                for (ImagePost imagePost : imagePosts) {
+                for (ImagePost imagePost : imagePosts.getValue()) {
                     modelSQL.addPost(imagePost, null);
                     if (imagePost.getLastUpdate() > lastU) {
                         lastU = imagePost.getLastUpdate();
                     }
                 }
+                Toast.makeText(context, "sync successfully!", Toast.LENGTH_SHORT).show();
                 sp.edit().putLong("lastUpdated", lastU).apply();
-            }
-            if (listener != null) {
-                listener.onComplete(null);
+                if (listener != null) {
+                    listener.onComplete(null);
+                }
             }
         });
     }
