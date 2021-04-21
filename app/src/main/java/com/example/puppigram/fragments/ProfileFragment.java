@@ -241,6 +241,10 @@ public class ProfileFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if(size == 0)
+                noPosts.setVisibility(View.VISIBLE);
+            else
+                noPosts.setVisibility(View.INVISIBLE);
             Log.d("TAG", "getItemCount: posts size = " + size);
             return size;
         }

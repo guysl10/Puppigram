@@ -44,8 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> {
+            userEmail.setEnabled(false);
+            userPass.setEnabled(false);
+            loginButton.setEnabled(false);
+            newAccount.setEnabled(false);
             if (!userEmail.getText().toString().isEmpty() && !userPass.getText().toString().isEmpty()) {
                 signIn(userEmail.getText().toString(), userPass.getText().toString());
+
             } else {
                 Toast.makeText(
                         getApplicationContext(),
@@ -53,6 +58,10 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG
                 ).show();
             }
+            userEmail.setEnabled(true);
+            userPass.setEnabled(true);
+            loginButton.setEnabled(true);
+            newAccount.setEnabled(true);
         });
         newAccount.setOnClickListener(v -> navigator.navigate(RegisterActivity.class));
     }
