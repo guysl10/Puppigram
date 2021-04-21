@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/feedFragment"
+        android:icon="@drawable/dog_house"
+        android:title="@string/feed" />
+    <item
+        android:id="@+id/uploadPostFragment"
+        android:icon="@drawable/upload"
+        android:title="@string/post" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/dog"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/settings"
+        android:title="@string/settings" />
+</menu>
