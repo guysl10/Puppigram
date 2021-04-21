@@ -30,7 +30,6 @@ import com.example.puppigram.viewmodel.PostsViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ProfileFragment extends Fragment {
@@ -192,8 +191,6 @@ public class ProfileFragment extends Fragment {
                 holder.description.setText(post.getDescription());
                 if (post.getPostImage() != null) {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
-                    //TODO: apply likes
-//                    holder.likers.setText(post.getLikes().size());
                     holder.likers.setText("0");
                     if (post.getPostImage() != null) {
                         Picasso.get().load(post.getPostImage()).placeholder(
