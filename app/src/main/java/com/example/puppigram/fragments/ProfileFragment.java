@@ -197,12 +197,14 @@ public class ProfileFragment extends Fragment {
                                 R.drawable.postimagereplaceable
                         ).into(holder.postImg);
                     }
-                    PostsModel.instance.isLiked(post.getId(), isLiked -> {
-                        if (isLiked) {
-                            holder.likeBtn.setColorFilter(Color.GREEN);
-                        }
 
-                    });
+                    holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
+                        if (isLiked) {
+                            PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                        } else {
+                            PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+                        }
+                    }));
 
                     holder.editBtn.setOnClickListener(v -> {
                         Bundle bundle = new Bundle();
@@ -212,16 +214,7 @@ public class ProfileFragment extends Fragment {
                         );
 
                     });
-
-                    holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
-                        if (isLiked) {
-                            PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
-                        } else {
-                            PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
-                        }
-                    }));
                     holder.likers.setText(String.valueOf(post.getLikes().size()));
-
                     //Check if current user own the post.
                     if (UsersModel.instance.getAuthInstance().getCurrentUser().
                             getUid().equals(post.getOwnerId())) {
@@ -229,6 +222,14 @@ public class ProfileFragment extends Fragment {
                         holder.editBtn.setEnabled(true);
                     }
                 }
+            });
+            PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                if (isLiked && post.getLikes().size() != 0) {
+                    holder.likeBtn.setColorFilter(Color.GREEN);
+                } else {
+                    holder.likeBtn.setColorFilter(Color.BLACK);
+                }
+
             });
             spinner.setVisibility(View.INVISIBLE);
         }

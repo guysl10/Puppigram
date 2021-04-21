@@ -144,7 +144,7 @@ public class FeedFragment extends Fragment {
             spinner.setVisibility(View.VISIBLE);
             ImagePost post = Objects.requireNonNull(postsViewModel.getImagePosts().getValue()).get(position);
             final AtomicReference<User>[] tempUser = new AtomicReference[]{null};
-            UsersModel.instance.getUser(post.getOwnerId(), (UsersModel.GetUserListener) userModel -> {
+            UsersModel.instance.getUser(post.getOwnerId(), userModel -> {
                 tempUser[0] = new AtomicReference<>(userModel);
                 holder.description.setText(post.getDescription());
                 holder.username.setText(tempUser[0].get().getUserName());
@@ -153,12 +153,13 @@ public class FeedFragment extends Fragment {
                 }
                 Picasso.get().load(tempUser[0].get().getUserImage()).placeholder(R.drawable.userimagereplaceable).into(holder.userImg);
                 spinner.setVisibility(View.INVISIBLE);
-                PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), isLiked -> {
                     if (isLiked) {
-                        holder.likeBtn.setColorFilter(Color.GREEN);
+                        PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
+                    } else {
+                        PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
                     }
-
-                });
+                }));
             });
 
             holder.editBtn.setOnClickListener(v -> {
@@ -170,14 +171,16 @@ public class FeedFragment extends Fragment {
 
             });
 
-            holder.likeBtn.setOnClickListener(v -> PostsModel.instance.isLiked(post.getId(), (PostsModel.GetIsLikedListener) isLiked -> {
-                if (isLiked) {
-                    PostsModel.instance.deleteLike(post.getId(), success2 -> holder.likeBtn.setColorFilter(Color.BLACK));
-                } else {
-                    PostsModel.instance.addLike(post.getId(), success1 -> holder.likeBtn.setColorFilter(Color.GREEN));
+            PostsModel.instance.isLiked(post.getId(), isLiked -> {
+                if (isLiked && post.getLikes().size() != 0) {
+                    holder.likeBtn.setColorFilter(Color.GREEN);
                 }
-            }));
+                else{
+                    holder.likeBtn.setColorFilter(Color.BLACK);
+                }
+            });
             holder.likers.setText(String.valueOf(post.getLikes().size()));
+
             //Check if current user own the post.
             if (UsersModel.instance.getAuthInstance().getCurrentUser().
                     getUid().equals(post.getOwnerId())) {
