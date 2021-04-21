@@ -191,7 +191,6 @@ public class ProfileFragment extends Fragment {
                 holder.description.setText(post.getDescription());
                 if (post.getPostImage() != null) {
                     Picasso.get().load(post.getPostImage()).placeholder(R.drawable.postimagereplaceable).into(holder.postImg);
-                    holder.likers.setText("0");
                     if (post.getPostImage() != null) {
                         Picasso.get().load(post.getPostImage()).placeholder(
                                 R.drawable.postimagereplaceable

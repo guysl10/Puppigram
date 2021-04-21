@@ -79,11 +79,7 @@ public class PostsModelFirebase {
         PostsModelFirebase.getPost(postId, post -> {
             if (post != null) {
                 this.imagePost = post;
-                if (this.imagePost.getLikes().contains(firebaseUser.getUid())) {
-                    listener.onComplete(true);
-                } else {
-                    listener.onComplete(false);
-                }
+                listener.onComplete(this.imagePost.getLikes().contains(firebaseUser.getUid()));
             }
             else{
                 Log.d(TAG, "IsLiked:post is null");
